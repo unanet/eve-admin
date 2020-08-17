@@ -14,7 +14,7 @@ CUR_DIR := $(shell pwd)
 
 BUILD_IMAGE := unanet-docker.jfrog.io/node:14.0.0
 CADDY_IMAGE := unanet-docker.jfrog.io/caddy
-UNANET_IMAGE_NAME := unanet-docker-int.jfrog.io/unanet/subcontractor
+UNANET_IMAGE_NAME := unanet-docker-int.jfrog.io/unanet/cloud-admin
 BUILDER_IMAGE := subcontractor:${CI_PIPELINE_IID}
 
 LABEL_PREFIX := com.unanet
