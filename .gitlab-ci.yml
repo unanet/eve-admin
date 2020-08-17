@@ -1,0 +1,13 @@
+stages:
+  - dist
+
+dist:
+  stage: dist
+  script:
+    - make docker-dist
+  tags:
+    - linux
+  only:
+    - master
+    - /^unanet-.*$/
+
