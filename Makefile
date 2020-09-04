@@ -33,7 +33,7 @@ YARN_CACHE := ${HOME}/.docker_cache
 docker-exec = docker run --rm ${BUILD_IMAGE}
 builder-exec = docker run --rm ${BUILDER_IMAGE}
 
-.PHONY: build dist pull test
+.PHONY: build dist pull
 
 pull:
 	docker pull ${CADDY_IMAGE}
