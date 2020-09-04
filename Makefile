@@ -42,8 +42,8 @@ docker-image: pull
 	docker build ${IMAGE_LABELS} ${IMAGE_TAGS} .
 
 docker-dist: docker-image
-	docker push ${UNANET_IMAGE_NAME}:${VERSION}
 	docker push ${UNANET_IMAGE_NAME}:${VERSION_WITHOUT_BUILD}
+	docker push ${UNANET_IMAGE_NAME}:${VERSION}
 	curl --fail -H "X-JFrog-Art-Api:${JFROG_API_KEY}" \
 		-X PUT \
 		https://unanet.jfrog.io/unanet/api/storage/docker-int-local/unanet/cloud-admin/${VERSION}\?properties=version=${VERSION}%7Cgitlab-build-properties.project-id=${CI_PROJECT_ID}%7Cgitlab-build-properties.git-sha=${CI_COMMIT_SHORT_SHA}%7Cgitlab-build-properties.git-branch=${CI_COMMIT_BRANCH}	
