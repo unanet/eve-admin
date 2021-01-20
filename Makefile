@@ -14,7 +14,7 @@ CUR_DIR := $(shell pwd)
 
 BUILD_IMAGE := unanet-docker.jfrog.io/node:14.0.0
 CADDY_IMAGE := unanet-docker.jfrog.io/caddy
-UNANET_IMAGE_NAME := unanet-docker-int.jfrog.io/unanet/cloud-admin
+UNANET_IMAGE_NAME := unanet-docker-int.jfrog.io/ops/cloud-admin
 BUILDER_IMAGE := subcontractor:${CI_PIPELINE_IID}
 
 LABEL_PREFIX := com.unanet
@@ -46,4 +46,4 @@ docker-dist: docker-image
 	docker push ${UNANET_IMAGE_NAME}:${VERSION}
 	curl --fail -H "X-JFrog-Art-Api:${JFROG_API_KEY}" \
 		-X PUT \
-		https://unanet.jfrog.io/unanet/api/storage/docker-int-local/unanet/cloud-admin/${VERSION}\?properties=version=${VERSION}%7Cgitlab-build-properties.project-id=${CI_PROJECT_ID}%7Cgitlab-build-properties.git-sha=${CI_COMMIT_SHORT_SHA}%7Cgitlab-build-properties.git-branch=${CI_COMMIT_BRANCH}	
+		https://unanet.jfrog.io/unanet/api/storage/docker-int-local/ops/cloud-admin/${VERSION}\?properties=version=${VERSION}%7Cgitlab-build-properties.project-id=${CI_PROJECT_ID}%7Cgitlab-build-properties.git-sha=${CI_COMMIT_SHORT_SHA}%7Cgitlab-build-properties.git-branch=${CI_COMMIT_BRANCH}	
