@@ -10,6 +10,7 @@ VERSION := ${PATCH_VERSION}.${BUILD_NUMBER}
 DOCKER_UID = $(shell id -u)
 DOCKER_GID = $(shell id -g)
 CUR_DIR := $(shell pwd)
+NPMCACHE ?= ${CUR_DIR}/node_modules
 
 NODE_BUILD_IMAGE := unanet-docker.jfrog.io/node
 GO_BUILD_IMAGE := unanet-docker.jfrog.io/golang
@@ -41,8 +42,11 @@ docker-go-exec = docker run --rm \
 
 
 docker-node-exec = docker run --rm \
-	-v ${CUR_DIR}:/app \
+	-e DOCKER_UID=${DOCKER_UID} \
+	-e DOCKER_GID=${DOCKER_GID} \
+	-v ${CUR_DIR}/client:/app/ \
 	-v ${HOME}/.ssh/id_rsa:/home/unanet/.ssh/id_rsa \
+	-w /app \
 	${NODE_BUILD_IMAGE}
 
 
@@ -55,7 +59,8 @@ check-tag = !(git rev-parse -q --verify "refs/tags/v${PATCH_VERSION}" > /dev/nul
 
 build-client: 
 	docker pull ${NODE_BUILD_IMAGE}
-	$(docker-node-exec) npm install && npm run build
+	$(docker-node-exec) npm install
+	$(docker-node-exec) npm run build
 
 build-server: 
 	docker pull ${GO_BUILD_IMAGE}
@@ -78,3 +83,6 @@ dist: build
 	curl --fail -H "X-JFrog-Art-Api:${JFROG_API_KEY}" \
 		-X PUT \
 		https://unanet.jfrog.io/unanet/api/storage/docker-int-local/ops/cloud-admin/${PATCH_VERSION}\?properties=version=${VERSION}%7Cgitlab-build-properties.project-id=${CI_PROJECT_ID}%7Cgitlab-build-properties.git-sha=${CI_COMMIT_SHORT_SHA}%7Cgitlab-build-properties.git-branch=${CI_COMMIT_BRANCH}
+
+scan:
+	$(docker-scanner-exec)		
