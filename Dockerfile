@@ -9,6 +9,7 @@ ENV VAULT_ROLE k8s-devops
 ENV VAULT_K8S_MOUNT kubernetes
 
 ADD ./bin/cloud-admin /app/cloud-admin
+ADD ./dist /app/dist
 WORKDIR /app
 CMD ["/app/cloud-admin"]
 

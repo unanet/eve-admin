@@ -41,12 +41,9 @@ docker-go-exec = docker run --rm \
 
 
 docker-node-exec = docker run --rm \
-	-e DOCKER_UID=${DOCKER_UID} \
-	-e DOCKER_GID=${DOCKER_GID} \
-	-v ${CUR_DIR}:/src \
+	-v ${CUR_DIR}:/app \
 	-v ${HOME}/.ssh/id_rsa:/home/unanet/.ssh/id_rsa \
-	-w /src \
-	${NODE_BUILD_IMAGE}	
+	${NODE_BUILD_IMAGE}
 
 
 check-tag = !(git rev-parse -q --verify "refs/tags/v${PATCH_VERSION}" > /dev/null 2>&1) || \
@@ -55,13 +52,19 @@ check-tag = !(git rev-parse -q --verify "refs/tags/v${PATCH_VERSION}" > /dev/nul
 
 .PHONY: build dist test check_version
 
-build: check_version
-	docker pull ${GO_BUILD_IMAGE}
+
+build-client: 
 	docker pull ${NODE_BUILD_IMAGE}
-	docker pull unanet-docker.jfrog.io/alpine-base
+	$(docker-node-exec) npm install && npm run build
+
+build-server: 
+	docker pull ${GO_BUILD_IMAGE}
 	mkdir -p bin
 	$(docker-go-exec) go build -ldflags="-X 'gitlab.unanet.io/devops/cloud-admin/internal/api/api.Version=${VERSION}'" \
 		-o ./bin/cloud-admin ./cmd/cloud-admin/main.go
+
+build: check_version build-client build-server
+	docker pull unanet-docker.jfrog.io/alpine-base
 	docker build ${IMAGE_LABELS} . -t ${IMAGE_NAME}:${PATCH_VERSION}
 
 test:
