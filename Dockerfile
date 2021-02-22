@@ -7,6 +7,7 @@ ENV METRICS_PORT 3001
 ENV VAULT_ADDR https://vault.unanet.io
 ENV VAULT_ROLE k8s-devops
 ENV VAULT_K8S_MOUNT kubernetes
+ENV OPENID_CLIENT_ID cloud-api
 
 ADD ./bin/cloud-admin /app/cloud-admin
 ADD ./client/dist /app/dist

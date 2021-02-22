@@ -1,0 +1,63 @@
+version: "3.9"
+services:
+  cloud-admin:
+    container_name: cloud-admin
+    networks:
+      - cloud-net
+    env_file:
+      - .env
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+      - "3000:3000"
+      - "3001:3001"
+
+  # db:
+  #   image: postgres
+  #   networks:
+  #     - cloud-net
+  #   container_name: postgres
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     - POSTGRES_DB=cloud
+  #     - POSTGRES_USER=cloud
+  #     - POSTGRES_PASSWORD=cloud
+
+  # cloud-api:
+  #   container_name: cloud-api
+  #   networks:
+  #     - cloud-net
+  #   volumes:
+  #     - $HOME/.kube:/root/.kube
+  #   env_file:
+  #     - cloud-api.env
+  #   links:
+  #     - db:cloud-db
+  #   build:
+  #     context: .
+  #   ports:
+  #     - "8080:8080"
+  #     - "3000:3000"
+  #     - "3001:3001"
+  #   depends_on:
+  #     - db
+
+  # swagger:
+  #   image: swaggerapi/swagger-ui:latest
+  #   container_name: swagger
+  #   ports:
+  #     - "8082:8080"
+  #   links:
+  #     - cloud-api:cloud-api
+  #   volumes:
+  #     - ./swagger/dist:/docs
+  #   environment:
+  #     - SWAGGER_JSON=/docs/swagger.json
+  #     - HOST=http://cloud-api/api
+  #   networks:
+  #     - cloud-net
+
+networks:
+  cloud-net:

@@ -10,9 +10,11 @@ import (
 	"time"
 
 	"github.com/go-chi/chi"
+	"github.com/go-chi/cors"
 	"go.uber.org/zap"
 
 	"gitlab.unanet.io/devops/cloud-admin/internal/config"
+	"gitlab.unanet.io/devops/cloud-admin/internal/handler"
 	"gitlab.unanet.io/devops/go/pkg/log"
 	"gitlab.unanet.io/devops/go/pkg/metrics"
 	"gitlab.unanet.io/devops/go/pkg/middleware"
@@ -24,7 +26,7 @@ var (
 
 type Api struct {
 	r           chi.Router
-	controllers []Controller
+	controllers []handler.Controller
 	server      *http.Server
 	mServer     *http.Server
 	done        chan bool
@@ -33,7 +35,7 @@ type Api struct {
 	onShutdown  []func()
 }
 
-func NewApi(controllers []Controller, c config.Config) (*Api, error) {
+func NewApi(controllers []handler.Controller, c config.Config) (*Api, error) {
 	router := chi.NewMux()
 	return &Api{
 		r:           router,
@@ -109,7 +111,20 @@ func (a *Api) Start(onShutdown ...func()) {
 
 func (a *Api) setup() {
 	middleware.SetupMiddleware(a.r, 60*time.Second)
+
+	cors := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		AllowCredentials: true,
+		MaxAge:           300, // Maximum value not ignored by any of major browsers
+	})
+
+	a.r.Use(cors.Handler)
+
 	for _, c := range a.controllers {
-		c.Setup(a.r)
+		c.Setup(&handler.Routers{
+			Anonymous: a.r,
+		})
 	}
 }
