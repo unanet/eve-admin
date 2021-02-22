@@ -6,7 +6,6 @@ ENV PORT 8080
 ENV METRICS_PORT 3001
 ENV VAULT_ADDR https://vault.unanet.io
 ENV OPENID_CLIENT_ID cloud-api
-ENV VAULT_ROLE k8s-devops
 
 ADD ./bin/cloud-admin /app/cloud-admin
 ADD ./client/dist /app/dist
