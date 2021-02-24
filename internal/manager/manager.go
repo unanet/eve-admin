@@ -29,8 +29,8 @@ type Option func(*Service)
 
 type Service struct {
 	cbstate string
-	cfg *config.Config
-	oidc  *oidcprovider.Service
+	cfg     *config.Config
+	oidc    *oidcprovider.Service
 }
 
 func (s *Service) OpenIDService() *oidcprovider.Service {
@@ -38,7 +38,7 @@ func (s *Service) OpenIDService() *oidcprovider.Service {
 }
 
 func NewService(cfg *config.Config, opts ...Option) *Service {
-	svc := &Service{cfg: cfg, cbstate: "some_cb_state"}
+	svc := &Service{cfg: cfg, cbstate: "unanet-cloud-admin"}
 
 	for _, opt := range opts {
 		opt(svc)
@@ -48,6 +48,9 @@ func NewService(cfg *config.Config, opts ...Option) *Service {
 
 }
 
+func (s *Service) AuthCodeURL() string {
+	return s.oidc.AuthCodeURL(s.cbstate)
+}
 
 func (s *Service) AuthenticationMiddleware() func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
@@ -80,7 +83,6 @@ func (s *Service) AuthenticationMiddleware() func(http.Handler) http.Handler {
 		return http.HandlerFunc(hfn)
 	}
 }
-
 
 // GetTokenClaims returns the verified token claims
 // Returns nil if unknown
