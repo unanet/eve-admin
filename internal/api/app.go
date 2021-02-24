@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"fmt"
+	"gitlab.unanet.io/devops/cloud-admin/internal/manager"
 	"net/http"
 	"os"
 	"os/signal"
@@ -31,11 +32,12 @@ type Api struct {
 	mServer     *http.Server
 	done        chan bool
 	sigChannel  chan os.Signal
-	config      config.Config
 	onShutdown  []func()
+	config      config.Config
+	mgr         *manager.Service
 }
 
-func NewApi(controllers []handler.Controller, c config.Config) (*Api, error) {
+func NewApi(controllers []handler.Controller, c config.Config, mgr *manager.Service) (*Api, error) {
 	router := chi.NewMux()
 	return &Api{
 		r:           router,
@@ -50,6 +52,7 @@ func NewApi(controllers []handler.Controller, c config.Config) (*Api, error) {
 		},
 		done:       make(chan bool),
 		sigChannel: make(chan os.Signal, 1024),
+		mgr:        mgr,
 	}, nil
 }
 
@@ -112,7 +115,7 @@ func (a *Api) Start(onShutdown ...func()) {
 func (a *Api) setup() {
 	middleware.SetupMiddleware(a.r, 60*time.Second)
 
-	cors := cors.New(cors.Options{
+	c := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
@@ -120,10 +123,14 @@ func (a *Api) setup() {
 		MaxAge:           300, // Maximum value not ignored by any of major browsers
 	})
 
-	a.r.Use(cors.Handler)
+	a.r.Use(c.Handler)
+
+	authenticated := a.r.Group(nil)
+	authenticated.Use(a.mgr.AuthenticationMiddleware())
 
 	for _, c := range a.controllers {
 		c.Setup(&handler.Routers{
+			Auth:      authenticated,
 			Anonymous: a.r,
 		})
 	}

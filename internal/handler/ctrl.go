@@ -2,14 +2,14 @@ package handler
 
 import (
 	"gitlab.unanet.io/devops/cloud-admin/internal/config"
-	"gitlab.unanet.io/devops/go/pkg/oidcprovider"
+	"gitlab.unanet.io/devops/cloud-admin/internal/manager"
 )
 
-func InitializeControllers(config config.Config, oidc *oidcprovider.Service) ([]Controller, error) {
+func InitializeControllers(config config.Config, mgr *manager.Service) ([]Controller, error) {
 
 	return []Controller{
 		NewPingController(),
 		NewRootController(),
-		NewAuthController(oidc),
+		NewAuthController(mgr),
 	}, nil
 }

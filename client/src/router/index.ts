@@ -4,6 +4,10 @@ import Home from "../views/Home.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
+    component: Home
+  },
+  {
+    path: "/home",
     name: "Home",
     component: Home
   },

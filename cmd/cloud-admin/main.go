@@ -1,6 +1,7 @@
 package main
 
 import (
+	"gitlab.unanet.io/devops/cloud-admin/internal/manager"
 	"net/http"
 
 	"gitlab.unanet.io/devops/cloud-admin/internal/api"
@@ -15,21 +16,32 @@ import (
 func main() {
 	cfg := config.Load()
 
+	// Create the Service Deps here
 	oidcSvc, err := oidcprovider.NewService(cfg.OpenID)
 	if err != nil {
 		log.Logger.Panic("Unable to Initialize the OIDC Service Provider", zap.Error(err))
 	}
 
-	controllers, err := handler.InitializeControllers(cfg, oidcSvc)
+	// Create the Service Manager here
+	// ...wire up the deps and pass the manager to the Controller Init
+	mgr := manager.NewService(
+		&cfg,
+		manager.OpenIDConnectOpt(oidcSvc),
+	)
+
+	// Initialize the controllers
+	controllers, err := handler.InitializeControllers(cfg, mgr)
 	if err != nil {
 		log.Logger.Panic("Unable to Initialize the Controllers", zap.Error(err))
 	}
 
-	app, err := api.NewApi(controllers, cfg)
+	// Create the App (API Server/Listener)
+	app, err := api.NewApi(controllers, cfg, mgr)
 	if err != nil {
 		log.Logger.Panic("Failed to Create Cloud-Admind API", zap.Error(err))
 	}
 
+	// Start the app (listen for requests)
 	app.Start()
 }
 

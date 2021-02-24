@@ -7,6 +7,7 @@ var (
 )
 
 type Routers struct {
+	Auth      chi.Router
 	Anonymous chi.Router
 }
 
