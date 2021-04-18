@@ -1,6 +1,6 @@
 module gitlab.unanet.io/devops/cloud-admin
 
-go 1.15
+go 1.16
 
 //replace gitlab.unanet.io/devops/go => ../go
 
@@ -11,6 +11,6 @@ require (
 	github.com/go-chi/jwtauth v4.0.4+incompatible
 	github.com/go-chi/render v1.0.1
 	github.com/kelseyhightower/envconfig v1.4.0
-	gitlab.unanet.io/devops/go v1.2.2-0.20210223042344-df8e8cf2fce8
+	gitlab.unanet.io/devops/go v1.4.1-0.20210418190420-fe871593f730
 	go.uber.org/zap v1.16.0
 )

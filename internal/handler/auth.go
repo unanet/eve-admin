@@ -6,8 +6,8 @@ import (
 	"github.com/go-chi/jwtauth"
 	"github.com/go-chi/render"
 	"gitlab.unanet.io/devops/cloud-admin/internal/manager"
+	"gitlab.unanet.io/devops/go/pkg/identity"
 	"gitlab.unanet.io/devops/go/pkg/middleware"
-	"gitlab.unanet.io/devops/go/pkg/oidcprovider"
 	"net/http"
 	"time"
 )
@@ -15,7 +15,7 @@ import (
 // AuthController is the Controller/Handler for oidc callback route
 type AuthController struct {
 	state string
-	oidc  *oidcprovider.Service
+	oidc  *identity.Service
 }
 
 // NewAuthController creates a new OIDC controller

@@ -8,8 +8,8 @@ import (
 	"gitlab.unanet.io/devops/cloud-admin/internal/config"
 	"gitlab.unanet.io/devops/cloud-admin/internal/handler"
 	evehttp "gitlab.unanet.io/devops/go/pkg/http"
+	"gitlab.unanet.io/devops/go/pkg/identity"
 	"gitlab.unanet.io/devops/go/pkg/log"
-	"gitlab.unanet.io/devops/go/pkg/oidcprovider"
 	"go.uber.org/zap"
 )
 
@@ -17,16 +17,16 @@ func main() {
 	cfg := config.Load()
 
 	// Create the Service Deps here
-	oidcSvc, err := oidcprovider.NewService(cfg.OpenID)
+	idSvc, err := identity.NewService(cfg.Identity)
 	if err != nil {
-		log.Logger.Panic("Unable to Initialize the OIDC Service Provider", zap.Error(err))
+		log.Logger.Panic("Unable to Initialize the Identity Service Provider", zap.Error(err))
 	}
 
 	// Create the Service Manager here
 	// ...wire up the deps and pass the manager to the Controller Init
 	mgr := manager.NewService(
 		&cfg,
-		manager.OpenIDConnectOpt(oidcSvc),
+		manager.OpenIDConnectOpt(idSvc),
 	)
 
 	// Initialize the controllers

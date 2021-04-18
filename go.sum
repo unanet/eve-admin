@@ -156,6 +156,7 @@ github.com/hashicorp/go-cleanhttp v0.5.1/go.mod h1:JpRdi6/HCYpAwUzNwuwqhbovhLtng
 github.com/hashicorp/go-immutable-radix v1.0.0/go.mod h1:0y9vanUI8NX6FsYoO3zeMjhV/C5i9g4Q3DwcSNZ4P60=
 github.com/hashicorp/go-msgpack v0.5.3/go.mod h1:ahLV/dePpqEmjfWmKiqvPkv/twdG7iPBM1vqhUKIvfM=
 github.com/hashicorp/go-multierror v1.0.0/go.mod h1:dHtQlpGsu+cZNNAkkCN/P3hoUDHhCYQXV3UM06sGGrk=
+github.com/hashicorp/go-multierror v1.1.1/go.mod h1:iw975J/qwKPdAO1clOe2L8331t/9/fmwbPZ6JB6eMoM=
 github.com/hashicorp/go-rootcerts v1.0.0/go.mod h1:K6zTfqpRlCUIjkwsN4Z+hiSfzSTQa6eBIzfwKfwNnHU=
 github.com/hashicorp/go-sockaddr v1.0.0/go.mod h1:7Xibr9yA9JjQq1JpNB2Vw7kxv8xerXegt+ozgdvDeDU=
 github.com/hashicorp/go-syslog v1.0.0/go.mod h1:qPfqrKkXGihmCqbJM2mZgkZGvKG1dFdvsLplgctolz4=
@@ -334,6 +335,10 @@ github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q
 gitlab.unanet.io/devops/go v1.2.2-0.20210221234600-75cbff81a458/go.mod h1:ztV73hE0+l+AjoUfAbCm8w6e3YbG3Hj1r+X08nS/+DA=
 gitlab.unanet.io/devops/go v1.2.2-0.20210223042344-df8e8cf2fce8 h1:NWQuBHWspl9KmIArvZzpIaxdN/lawt9yTknFZ64g7jI=
 gitlab.unanet.io/devops/go v1.2.2-0.20210223042344-df8e8cf2fce8/go.mod h1:ztV73hE0+l+AjoUfAbCm8w6e3YbG3Hj1r+X08nS/+DA=
+gitlab.unanet.io/devops/go v1.4.1-0.20210418185306-fb20da13d593 h1:IhTpxrbOmeyDLBfs1cJqTUzW6ZeeHEeVvDMdCwDE1xM=
+gitlab.unanet.io/devops/go v1.4.1-0.20210418185306-fb20da13d593/go.mod h1:bFVPTCTfz/BRXrhwdrsMceIASZSWF5Zok9zXQmftAnY=
+gitlab.unanet.io/devops/go v1.4.1-0.20210418190420-fe871593f730 h1:hVPcZ/sIBTKTg3n9CCJlO5oTwHbd+k04bX3yKjbXjNI=
+gitlab.unanet.io/devops/go v1.4.1-0.20210418190420-fe871593f730/go.mod h1:bFVPTCTfz/BRXrhwdrsMceIASZSWF5Zok9zXQmftAnY=
 go.etcd.io/bbolt v1.3.3/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.etcd.io/etcd v0.0.0-20191023171146-3cf2f69b5738/go.mod h1:dnLIgRNXwCJa5e+c6mIZCrds/GIG4ncV9HhK5PX7jPg=
 go.opencensus.io v0.20.1/go.mod h1:6WKK9ahsWS3RSO+PY9ZHZUfv2irvY6gN279GOPZjmmk=

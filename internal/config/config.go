@@ -1,12 +1,11 @@
 package config
 
 import (
-	"sync"
-
 	"github.com/kelseyhightower/envconfig"
+	"gitlab.unanet.io/devops/go/pkg/identity"
 	"gitlab.unanet.io/devops/go/pkg/log"
-	"gitlab.unanet.io/devops/go/pkg/oidcprovider"
 	"go.uber.org/zap"
+	"sync"
 )
 
 var (
@@ -18,14 +17,14 @@ type (
 	// LogConfig is the logger config (log level, output...)
 	LogConfig = log.Config
 
-	// OpenIDConfig is the OpenID Connect Provider Configuration (i.e. Keycloak)
-	OpenIDConfig = oidcprovider.Config
+	// IdentityConfig is the OpenID Connect Provider Configuration (i.e. Keycloak)
+	IdentityConfig = identity.Config
 )
 
 // Config is the top level application config
 type Config struct {
 	LogConfig
-	OpenID      *OpenIDConfig
+	Identity    IdentityConfig
 	Port        int    `split_words:"true" default:"8080"`
 	MetricsPort int    `split_words:"true" default:"3001"`
 	ServiceName string `split_words:"true" default:"cloud-admin"`

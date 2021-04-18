@@ -7,8 +7,8 @@ import (
 	"github.com/go-chi/render"
 	"gitlab.unanet.io/devops/cloud-admin/internal/config"
 	"gitlab.unanet.io/devops/go/pkg/errors"
+	"gitlab.unanet.io/devops/go/pkg/identity"
 	"gitlab.unanet.io/devops/go/pkg/middleware"
-	"gitlab.unanet.io/devops/go/pkg/oidcprovider"
 	"go.uber.org/zap"
 	"net/http"
 )
@@ -19,9 +19,9 @@ type ctxKeyTokenClaimsID int
 // TokenClaimsRequestIDKey is the key that holds the unique Token Claims ID in a request context.
 const TokenClaimsRequestIDKey ctxKeyTokenClaimsID = 0
 
-func OpenIDConnectOpt(oidc *oidcprovider.Service) Option {
+func OpenIDConnectOpt(id *identity.Service) Option {
 	return func(svc *Service) {
-		svc.oidc = oidc
+		svc.oidc = id
 	}
 }
 
@@ -30,10 +30,10 @@ type Option func(*Service)
 type Service struct {
 	cbstate string
 	cfg     *config.Config
-	oidc    *oidcprovider.Service
+	oidc    *identity.Service
 }
 
-func (s *Service) OpenIDService() *oidcprovider.Service {
+func (s *Service) OpenIDService() *identity.Service {
 	return s.oidc
 }
 
