@@ -1,11 +1,12 @@
 package config
 
 import (
+	"sync"
+
 	"github.com/kelseyhightower/envconfig"
 	"gitlab.unanet.io/devops/go/pkg/identity"
 	"gitlab.unanet.io/devops/go/pkg/log"
 	"go.uber.org/zap"
-	"sync"
 )
 
 var (
@@ -22,6 +23,10 @@ type (
 )
 
 // Config is the top level application config
+// CLOUD_IDENTITY_CONN_URL
+// CLOUD_IDENTITY_CLIENT_ID
+// CLOUD_IDENTITY_CLIENT_SECRET
+// CLOUD_IDENTITY_REDIRECT_URL
 type Config struct {
 	LogConfig
 	Identity    IdentityConfig
@@ -39,7 +44,7 @@ func Load() Config {
 		return *cfg
 	}
 	c := Config{}
-	err := envconfig.Process("", &c)
+	err := envconfig.Process("CLOUD", &c)
 	if err != nil {
 		log.Logger.Panic("Unable to Load Config", zap.Error(err))
 	}
