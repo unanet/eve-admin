@@ -29,7 +29,7 @@ docker-scanner-exec = docker run --rm \
 	-e SONAR_HOST_URL=https://sonarqube.unanet.io \
 	-v $(CUR_DIR):/usr/src \
 	--user="${DOCKER_UID}:${DOCKER_GID}" \
-	sonarsource/sonar-scanner-cli sonar-scanner -Dsonar.projectKey=${PROJECT_NAME} -Dsonar.exclusions=**/*_test.go,**/*mock*.go
+	sonarsource/sonar-scanner-cli sonar-scanner -Dsonar.projectKey=${PROJECT_NAME} -Dsonar.exclusions=**/*_test.go,**/*mock*.go,**/_theme/*
 
 
 docker-go-exec = docker run --rm \

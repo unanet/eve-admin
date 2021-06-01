@@ -1,0 +1,26 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <!-- we will want a way to hide the create button, like on the metadata history page -->
+                    <teleport to=".top-bar-right li" v-if="(this.isForcedReadOnly()) ? false : !this.disableCreate">
+                        <button type="button" @click="this.clickedAddNew" class="modal-button btn btn-success" data-toggle="modal" data-target="#modal-xl">New <span class=" ml-1 fa fa-plus"></span></button>
+                    </teleport>
+
+                    <js-grid v-if="this.dataLoaded" :table-config="this.tableConfig">
+                        <template #afterGrid>
+                            <modal-component :title="this.formConfig.title">
+                                <form-component :config="this.formConfig" :extra-config="this.extraConfig">
+                                    <template #bottomBar v-if="!this.isForcedReadOnly()">
+                                        <button v-if="!this.formConfig.disableActions" @click.prevent="this.onDelete" class="btn btn-danger float-left">Delete</button>
+                                    </template>
+                                </form-component>
+                            </modal-component>
+                        </template>
+                    </js-grid>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

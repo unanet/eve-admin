@@ -1,0 +1,32 @@
+<form @submit.prevent="onSubmit">
+    <div v-for="field in this._config.formFields" class="form-group">
+        <span v-if="shouldShowField(field.id)">
+            <label :for="field.id">{{ field.label }}</label>
+            <template v-if="field.type === 'json'">
+                <textarea :id="field.id" class="json-form-field" :disabled="shouldDisable(field.id)" :nullable="field.nullable">
+                    {{ field.value || field.placeholder }}
+                </textarea>
+                <!--                <div>-->
+                <!--                    <vue-json-editor v-model="field.placeholder" :show-btns="true" :expandedOnStart="true" @json-change="onJsonChange"></vue-json-editor>-->
+                <!--                </div>-->
+            </template>
+
+            <template v-else-if="field.type ==='checkbox'">
+                <input :id="field.id" type="checkbox" name="my-checkbox" checked data-bootstrap-switch :disabled="shouldDisable(field.id)" :nullable="field.nullable">
+            </template>
+
+            <template v-else-if="field.type ==='datetime-local'">
+                <input class="form-control" :type="field.type" :id="field.id" :placeholder="field.placeholder"
+                      :value="getValue(field)" :original-value="field.value?.Time" :disabled="shouldDisable(field.id)" :nullable="field.nullable">
+            </template>
+
+            <template v-else>
+                <input class="form-control" :type="field.type" :id="field.id" :placeholder="field.placeholder"
+                       :value="field.value" :disabled="shouldDisable(field.id)" :nullable="field.nullable">
+            </template>
+        </span>
+    </div>
+
+    <button v-if="(isReadOnlyMode()) ? false : !this._config.disableActions" type="submit" class="btn btn-primary float-right">Submit</button>
+    <slot name="bottomBar"/>
+</form>

@@ -1,21 +1,61 @@
-import {createRouter, createWebHistory, RouteRecordRaw} from "vue-router";
-import Home from "../views/Home.vue";
+import {createRouter, createWebHashHistory} from 'vue-router'
+import publicRoutes from './publicRoutes'
+import privateRoutes from './privateRoutes'
+import store from '@/store'
 
-const routes: Array<RouteRecordRaw> = [
-  {
-    path: "/",
-    component: Home
-  },
-  {
-    path: "/home",
-    name: "Home",
-    component: Home
-  },
-];
 
+// Start vue router
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
-});
+  history: createWebHashHistory(),
+  routes: [...publicRoutes, ...privateRoutes]
+})
 
-export default router;
+// // Middlewares
+router.beforeEach((to, from, next) => {
+
+
+//   // Redirect to route
+//   const redirectToRoute = (name: string) => {
+//     if (name === from.name) {
+//       next()
+//       return
+//     }
+//
+//     next({ name: name })
+//   }
+//
+//   // Get logged user
+//   // const loggedUser = store.getters.getLoggedUser
+//
+//   // Check if access token expired
+//   // if (loggedUser) {
+//   //   const currentDateTime = new Date().getTime()
+//   //   if (currentDateTime > loggedUser.expiryDate) {
+//   //     store.dispatch('logOut')
+//   //     return redirectToRoute('admin.login')
+//   //   }
+//   // }
+//
+//   // // Auth
+//   // if (to.meta.auth) {
+//   //   if (loggedUser)
+//   //     return next()
+//   //   else
+//   //     return redirectToRoute('admin.login')
+//   // }
+//   //
+//   // // Guest
+//   // // if (to.meta.guest) {
+//   // //   if (loggedUser)
+//   //     return redirectToRoute('admin.dashboard')
+//   //   // else
+//   //   //   return next()
+//   // // }
+  (store as any).commit('changePage', to.name)
+  // (store as any).state.title = to.name
+
+  next();
+})
+
+// Export
+export default router
