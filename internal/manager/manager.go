@@ -8,6 +8,7 @@ import (
 	"gitlab.unanet.io/devops/cloud-admin/internal/config"
 	"gitlab.unanet.io/devops/go/pkg/errors"
 	"gitlab.unanet.io/devops/go/pkg/identity"
+	"gitlab.unanet.io/devops/go/pkg/log"
 	"gitlab.unanet.io/devops/go/pkg/middleware"
 	"go.uber.org/zap"
 	"net/http"
@@ -104,7 +105,7 @@ func (s *Service) ReadOnlyMiddleware() func(http.Handler) http.Handler {
 		hfn := func(w http.ResponseWriter, r *http.Request) {
 
 			ctx := r.Context()
-			middleware.Log(r.Context()).Debug("in middleware " + r.URL.String())
+			log.Logger.Info("API Listener", zap.String("in middleware", r.URL.String()))
 
 			if s.cfg.ReadOnly && r.Method != http.MethodGet {
 				err := errors.NewRestError(http.StatusServiceUnavailable, "Unable to perform action. API is in read only mode")

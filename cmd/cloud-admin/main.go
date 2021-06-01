@@ -18,7 +18,7 @@ func main() {
 	cfg := config.Load()
 
 	// TEMP!
-	fmt.Println(cfg)
+	fmt.Printf("%+v\n", cfg)
 
 	// Create the Service Deps here
 	idSvc, err := identity.NewService(cfg.Identity)

@@ -3,7 +3,8 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"gitlab.unanet.io/devops/go/pkg/middleware"
+	"gitlab.unanet.io/devops/go/pkg/log"
+	"go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -49,18 +50,17 @@ func (c APIProxyController) get(w http.ResponseWriter, r *http.Request) {
 
 	proxyToURL := fmt.Sprintf("%s%s", c.cfg.EveAPIUrl, c.stripAPIPrefix("/api/eve", r.URL))
 
-	middleware.Log(r.Context()).Info("making request to" + proxyToURL)
-
+	log.Logger.Info("API Listener", zap.String("making request to ", proxyToURL))
 	resp, err := http.Get(proxyToURL)
 	if err != nil {
-		middleware.Log(r.Context()).Error(err.Error())
+		log.Logger.Error("unable to get from proxy " + r.URL.String(), zap.Error(err))
 		render.Respond(w, r, "something went wrong")
 		return
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		middleware.Log(r.Context()).Error(err.Error())
+		log.Logger.Error("Proxy ioutil.ReadAll", zap.Error(err))
 		render.Respond(w, r, "something went wrong")
 		return
 	}
@@ -70,7 +70,7 @@ func (c APIProxyController) get(w http.ResponseWriter, r *http.Request) {
 	var returnValue interface{}
 
 	if err := json.Unmarshal([]byte(sb), &returnValue); err != nil {
-		middleware.Log(r.Context()).Error(err.Error())
+		log.Logger.Error("Proxy Unmarshal", zap.Error(err))
 		render.Respond(w, r, "something went wrong")
 		return
 	}
@@ -102,7 +102,7 @@ func (c APIProxyController) makeRequest(w http.ResponseWriter, r *http.Request) 
 	// set the HTTP method, url, and request body
 	req, err := http.NewRequest(r.Method, fmt.Sprintf("%s%s", c.cfg.EveAPIUrl, c.stripAPIPrefix("/api.eve", r.URL)), r.Body)
 	if err != nil {
-		middleware.Log(r.Context()).Error(err.Error())
+		log.Logger.Error("API new request", zap.Error(err))
 		render.Respond(w, r, err)
 		return
 	}
@@ -110,8 +110,8 @@ func (c APIProxyController) makeRequest(w http.ResponseWriter, r *http.Request) 
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	resp, err := client.Do(req)
 	if err != nil {
-			middleware.Log(r.Context()).Error(err.Error())
-			render.Respond(w, r, err)
+		log.Logger.Error("API make request", zap.Error(err))
+		render.Respond(w, r, err)
 		return
 	}
 
