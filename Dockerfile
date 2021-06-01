@@ -8,7 +8,7 @@ ENV VAULT_ADDR https://vault.unanet.io
 ENV OPENID_CLIENT_ID cloud-api
 
 ADD ./bin/cloud-admin /app/cloud-admin
-ADD ./client/dist /app/dist
+ADD ./client/dist /app/client/dist
 WORKDIR /app
 CMD ["/app/cloud-admin"]
 

@@ -57,7 +57,6 @@ check-tag = !(git rev-parse -q --verify "refs/tags/v${PATCH_VERSION}" > /dev/nul
 
 .PHONY: build dist test check_version
 
-
 build-client: 
 	docker pull ${NODE_BUILD_IMAGE}
 	$(docker-node-exec) npm install

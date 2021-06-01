@@ -1,12 +1,12 @@
 const config = {
-    EVE_API_URL: process.env.VUE_APP_EVE_API_URL || "http://localhost:8081/api",
+    API_URL: process.env.VUE_APP_API_URL || "http://localhost:8081/api",
 }
 
 class Config {
     API_URL: string
     READ_ONLY: boolean
     constructor() {
-        this.API_URL = process.env.VUE_APP_EVE_API_URL || "http://localhost:8081/api";
+        this.API_URL = process.env.VUE_APP_API_URL || "http://localhost:8081/api";
         this.READ_ONLY = (process.env.VUE_APP_READ_ONLY) ? JSON.parse(process.env.VUE_APP_READ_ONLY) : false;
     }
     isReadOnly(): boolean {
