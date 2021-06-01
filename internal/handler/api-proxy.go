@@ -26,7 +26,8 @@ func NewAPIProxyController(cfg config.Config) *APIProxyController {
 }
 
 func (c APIProxyController) Setup(r *Routers) {
-	r.Auth.Get("/eve/*", c.get)
+	r.Auth.Get("/eve/*", c.fallback)
+	//r.Auth.Get("/eve/*", c.get)
 	r.Auth.Put("/eve/*", c.put)
 	r.Auth.Post("/eve/*", c.post)
 	r.Auth.Delete("/eve/*", c.delete)
@@ -38,6 +39,19 @@ func (c APIProxyController) Setup(r *Routers) {
 	//r.Auth.Post("/cloud/*", c.post)
 	//r.Auth.Delete("/cloud/*", c.delete)
 	//r.Auth.Patch("/cloud/*", c.patch)
+}
+
+
+func (c APIProxyController) fallback(w http.ResponseWriter, r *http.Request) {
+
+	urlBeforeChange := r.URL.String()
+	proxyToURL := fmt.Sprintf("%s%s", c.cfg.EveAPIUrl, c.stripAPIPrefix("/api/eve", r.URL))
+
+	render.Respond(w, r, render.M{
+		"proxyURLBeforeChange": urlBeforeChange,
+		"proxyToURL": proxyToURL,
+		"url": r.URL,
+	})
 }
 
 func (c APIProxyController) stripAPIPrefix(pathToStrip string, url *url.URL) *url.URL {
