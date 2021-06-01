@@ -21,7 +21,8 @@ func NewRootController() *RootController {
 // Setup satisfies the EveController interface for setting up the
 func (c RootController) Setup(r *Routers) {
 	workDir, _ := os.Getwd()
-	filesDir := http.Dir(filepath.Join(workDir, "dist"))
+	path := "./client/dist" //"dist"
+	filesDir := http.Dir(filepath.Join(workDir, path))
 	FileServer(r.Anonymous, "/", filesDir)
 }
 
@@ -31,6 +32,7 @@ func FileServer(r chi.Router, path string, root http.FileSystem) {
 	if strings.ContainsAny(path, "{}*") {
 		panic("FileServer does not permit any URL parameters.")
 	}
+
 
 	if path != "/" && path[len(path)-1] != '/' {
 		r.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)

@@ -126,7 +126,13 @@ func (a *Api) setup() {
 	a.r.Use(c.Handler)
 
 	authenticated := a.r.Group(nil)
-	authenticated.Use(a.mgr.AuthenticationMiddleware())
+	fmt.Println("==============")
+	fmt.Println("AUTH IS DISABLED")
+	fmt.Println("==============")
+	//authenticated.Use(a.mgr.AuthenticationMiddleware())
+	authenticated.Use(a.mgr.ReadOnlyMiddleware())
+
+	authenticated = authenticated.Route("/api", nil)
 
 	for _, c := range a.controllers {
 		c.Setup(&handler.Routers{

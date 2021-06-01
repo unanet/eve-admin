@@ -95,3 +95,22 @@ func (s *Service) GetTokenClaims(ctx context.Context) jwt.MapClaims {
 	}
 	return nil
 }
+
+func (s *Service) ReadOnlyMiddleware() func(http.Handler) http.Handler {
+
+	return func(next http.Handler) http.Handler {
+		hfn := func(w http.ResponseWriter, r *http.Request) {
+
+			ctx := r.Context()
+			if s.cfg.ReadOnly && r.Method != http.MethodGet {
+				err := errors.NewRestError(http.StatusServiceUnavailable, "Unable to perform action. API is in read only mode")
+				middleware.Log(ctx).Debug("invalid token", zap.Error(err))
+				http.Error(w, err.Error(), err.Code)
+				return
+			}
+
+			next.ServeHTTP(w, r)
+		}
+		return http.HandlerFunc(hfn)
+	}
+}

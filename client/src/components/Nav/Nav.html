@@ -1,0 +1,87 @@
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="index3.html" class="brand-link">
+        <img src="/img/logo.png" alt="AdminLTE Logo" class="brand-image">
+        <span class="brand-text font-weight-light">EVE Admin</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar mt-2">
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar nav-legacy nav-child-indent flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+                     with font-awesome or any other icon font library -->
+                <li class="nav-item">
+                    <router-link to="/admin/dashboard" class="nav-link">
+                        <i class="nav-icon fas fa-th"></i>
+                        <p>Dashboard</p>
+                    </router-link>
+                </li>
+
+                <li class="nav-item" v-if="modelItems.length > 0">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-list-ul"></i>
+                        <p>
+                            Models
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item" v-for="item in modelItems" :key="item.url">
+                            <router-link :to="item.url">
+                                <a :href="item.url" class="nav-link">
+                                    <i class="nav-icon fas fa-circle-notch"></i>
+                                    <p>{{ item.name }}</p>
+                                </a>
+                            </router-link>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item" v-if="mappingItems.length > 0">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-map"></i>
+                        <p>
+                            Mapping Tables
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item" v-for="item in mappingItems" :key="item.url">
+                            <router-link :to="item.url">
+                                <a :href="item.url" class="nav-link">
+                                    <i class="nav-icon fas fa-map-marked-alt"></i>
+                                    <p>{{ item.name }}</p>
+                                </a>
+                            </router-link>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item" v-if="auditItems.length > 0">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-eye"></i>
+                        <p>
+                            Audit
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item" v-for="item in auditItems" :key="item.url">
+                            <router-link :to="item.url">
+                                <a :href="item.url" class="nav-link">
+                                    <i class="nav-icon fas fa-eye"></i>
+                                    <p>{{ item.name }}</p>
+                                </a>
+                            </router-link>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>

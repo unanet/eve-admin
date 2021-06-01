@@ -11,5 +11,9 @@ func InitializeControllers(config config.Config, mgr *manager.Service) ([]Contro
 		NewPingController(),
 		NewRootController(),
 		NewAuthController(mgr),
+
+		NewDashboardController(config),
+		NewAPIProxyController(config),
+
 	}, nil
 }
