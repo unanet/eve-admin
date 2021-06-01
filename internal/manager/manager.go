@@ -59,6 +59,8 @@ func (s *Service) AuthenticationMiddleware() func(http.Handler) http.Handler {
 			ctx := r.Context()
 			unknownToken := jwtauth.TokenFromHeader(r)
 
+			middleware.Log(r.Context()).Debug("in middleware " + r.URL.String())
+
 			if len(unknownToken) == 0 {
 				render.Respond(w, r, errors.ErrUnauthorized)
 				return
@@ -102,6 +104,8 @@ func (s *Service) ReadOnlyMiddleware() func(http.Handler) http.Handler {
 		hfn := func(w http.ResponseWriter, r *http.Request) {
 
 			ctx := r.Context()
+			middleware.Log(r.Context()).Debug("in middleware " + r.URL.String())
+
 			if s.cfg.ReadOnly && r.Method != http.MethodGet {
 				err := errors.NewRestError(http.StatusServiceUnavailable, "Unable to perform action. API is in read only mode")
 				middleware.Log(ctx).Debug("invalid token", zap.Error(err))

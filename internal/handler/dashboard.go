@@ -48,6 +48,7 @@ func (c DashboardController) stripAPIPrefix(pathToStrip string, url *url.URL) *u
 
 func (c DashboardController) dashboardMetrics(w http.ResponseWriter, r *http.Request) {
 
+
 	if time.Now().Before(_dashboardMetricsCache.nextFetchTime) {
 		render.Status(r, http.StatusOK)
 		render.Respond(w, r,_dashboardMetricsCache.data)

@@ -46,9 +46,10 @@ func (c APIProxyController) stripAPIPrefix(pathToStrip string, url *url.URL) *ur
 }
 
 func (c APIProxyController) get(w http.ResponseWriter, r *http.Request) {
+
 	proxyToURL := fmt.Sprintf("%s%s", c.cfg.EveAPIUrl, c.stripAPIPrefix("/api/eve", r.URL))
 
-	middleware.Log(r.Context()).Debug("making request to" + proxyToURL)
+	middleware.Log(r.Context()).Info("making request to" + proxyToURL)
 
 	resp, err := http.Get(proxyToURL)
 	if err != nil {
