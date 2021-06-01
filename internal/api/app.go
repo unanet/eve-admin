@@ -129,6 +129,7 @@ func (a *Api) setup() {
 	fmt.Println("==============")
 	fmt.Println("AUTH IS DISABLED")
 	fmt.Println("==============")
+
 	//authenticated.Use(a.mgr.AuthenticationMiddleware())
 	authenticated.Use(a.mgr.ReadOnlyMiddleware())
 
