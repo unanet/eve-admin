@@ -26,8 +26,7 @@ func NewAPIProxyController(cfg config.Config) *APIProxyController {
 }
 
 func (c APIProxyController) Setup(r *Routers) {
-	r.Auth.Get("/eve/*", c.fallback)
-	//r.Auth.Get("/eve/*", c.get)
+	r.Auth.Get("/eve/*", c.get)
 	r.Auth.Put("/eve/*", c.put)
 	r.Auth.Post("/eve/*", c.post)
 	r.Auth.Delete("/eve/*", c.delete)
@@ -41,28 +40,15 @@ func (c APIProxyController) Setup(r *Routers) {
 	//r.Auth.Patch("/cloud/*", c.patch)
 }
 
-
-func (c APIProxyController) fallback(w http.ResponseWriter, r *http.Request) {
-
-	urlBeforeChange := r.URL.String()
-	proxyToURL := fmt.Sprintf("%s%s", c.cfg.EveAPIUrl, c.stripAPIPrefix("/api/eve", r.URL))
-
-	render.Respond(w, r, render.M{
-		"proxyURLBeforeChange": urlBeforeChange,
-		"proxyToURL": proxyToURL,
-		"url": r.URL,
-	})
-}
-
 func (c APIProxyController) stripAPIPrefix(pathToStrip string, url *url.URL) *url.URL {
 	// TODO circle back and clean this up to a better way
-	url.Path = strings.Replace(url.Path, "/api/eve", "", -1)
+	url.Path = strings.Replace(url.Path, "/backend/eve", "", -1)
 	return url
 }
 
 func (c APIProxyController) get(w http.ResponseWriter, r *http.Request) {
 
-	proxyToURL := fmt.Sprintf("%s%s", c.cfg.EveAPIUrl, c.stripAPIPrefix("/api/eve", r.URL))
+	proxyToURL := fmt.Sprintf("%s%s", c.cfg.EveAPIUrl, c.stripAPIPrefix("/backend/eve", r.URL))
 
 	log.Logger.Info("API Listener", zap.String("making request to ", proxyToURL))
 	resp, err := http.Get(proxyToURL)
@@ -114,7 +100,7 @@ func (c APIProxyController) makeRequest(w http.ResponseWriter, r *http.Request) 
 	client := &http.Client{}
 
 	// set the HTTP method, url, and request body
-	req, err := http.NewRequest(r.Method, fmt.Sprintf("%s%s", c.cfg.EveAPIUrl, c.stripAPIPrefix("/api.eve", r.URL)), r.Body)
+	req, err := http.NewRequest(r.Method, fmt.Sprintf("%s%s", c.cfg.EveAPIUrl, c.stripAPIPrefix("/backend/eve", r.URL)), r.Body)
 	if err != nil {
 		log.Logger.Error("API new request", zap.Error(err))
 		render.Respond(w, r, err)

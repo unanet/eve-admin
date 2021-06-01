@@ -42,7 +42,7 @@ func (c DashboardController) Setup(r *Routers) {
 
 func (c DashboardController) stripAPIPrefix(pathToStrip string, url *url.URL) *url.URL {
 	// TODO circle back and clean this up to a better way
-	url.Path = strings.Replace(url.Path, "/api/eve", "", -1)
+	url.Path = strings.Replace(url.Path, "/backend/eve", "", -1)
 	return url
 }
 

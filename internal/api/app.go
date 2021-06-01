@@ -133,7 +133,7 @@ func (a *Api) setup() {
 	//authenticated.Use(a.mgr.AuthenticationMiddleware())
 	authenticated.Use(a.mgr.ReadOnlyMiddleware())
 
-	authenticated = authenticated.Route("/api", nil)
+	authenticated = authenticated.Route("/backend", nil)
 
 	for _, c := range a.controllers {
 		c.Setup(&handler.Routers{

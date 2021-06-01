@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"gitlab.unanet.io/devops/cloud-admin/internal/manager"
 	"net/http"
 
@@ -16,10 +15,7 @@ import (
 
 func main() {
 	cfg := config.Load()
-
-	// TEMP!
-	fmt.Printf("%+v\n", cfg)
-
+	
 	// Create the Service Deps here
 	idSvc, err := identity.NewService(cfg.Identity)
 	if err != nil {
