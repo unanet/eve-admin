@@ -6,6 +6,7 @@ import (
 	"gitlab.unanet.io/devops/cloud-admin/internal/config"
 	"gitlab.unanet.io/devops/cloud-admin/internal/models"
 	"gitlab.unanet.io/devops/go/pkg/errors"
+	"gitlab.unanet.io/devops/go/pkg/middleware"
 	"net/http"
 	"net/url"
 	"strings"
@@ -70,6 +71,7 @@ func (c DashboardController) dashboardMetrics(w http.ResponseWriter, r *http.Req
 	for _, name := range types {
 		itemArray, err := c.makeRequest("/" + strings.ToLower(name))
 		if err != nil {
+			middleware.Log(r.Context()).Error(err.Error())
 			errs = append(errs, err)
 			return
 		}

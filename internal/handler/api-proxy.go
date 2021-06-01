@@ -3,8 +3,8 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"gitlab.unanet.io/devops/go/pkg/middleware"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"strings"
@@ -46,15 +46,22 @@ func (c APIProxyController) stripAPIPrefix(pathToStrip string, url *url.URL) *ur
 }
 
 func (c APIProxyController) get(w http.ResponseWriter, r *http.Request) {
-	// Temporary proxy until routes get setup
-	resp, err := http.Get(fmt.Sprintf("%s%s", c.cfg.EveAPIUrl, c.stripAPIPrefix("/api.eve", r.URL)))
+	proxyToURL := fmt.Sprintf("%s%s", c.cfg.EveAPIUrl, c.stripAPIPrefix("/api/eve", r.URL))
+
+	middleware.Log(r.Context()).Debug("making request to" + proxyToURL)
+
+	resp, err := http.Get(proxyToURL)
 	if err != nil {
-		log.Println(err)
+		middleware.Log(r.Context()).Error(err.Error())
+		render.Respond(w, r, "something went wrong")
+		return
 	}
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println(err)
+		middleware.Log(r.Context()).Error(err.Error())
+		render.Respond(w, r, "something went wrong")
+		return
 	}
 	//Convert the body to type string
 	sb := string(body)
@@ -62,7 +69,9 @@ func (c APIProxyController) get(w http.ResponseWriter, r *http.Request) {
 	var returnValue interface{}
 
 	if err := json.Unmarshal([]byte(sb), &returnValue); err != nil {
-		log.Println(err)
+		middleware.Log(r.Context()).Error(err.Error())
+		render.Respond(w, r, "something went wrong")
+		return
 	}
 
 
@@ -92,6 +101,7 @@ func (c APIProxyController) makeRequest(w http.ResponseWriter, r *http.Request) 
 	// set the HTTP method, url, and request body
 	req, err := http.NewRequest(r.Method, fmt.Sprintf("%s%s", c.cfg.EveAPIUrl, c.stripAPIPrefix("/api.eve", r.URL)), r.Body)
 	if err != nil {
+		middleware.Log(r.Context()).Error(err.Error())
 		render.Respond(w, r, err)
 		return
 	}
@@ -99,7 +109,8 @@ func (c APIProxyController) makeRequest(w http.ResponseWriter, r *http.Request) 
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	resp, err := client.Do(req)
 	if err != nil {
-		render.Respond(w, r, err)
+			middleware.Log(r.Context()).Error(err.Error())
+			render.Respond(w, r, err)
 		return
 	}
 
