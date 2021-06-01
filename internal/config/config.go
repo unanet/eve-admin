@@ -30,12 +30,12 @@ type (
 type Config struct {
 	LogConfig
 	Identity                      IdentityConfig
-	ReadOnly                      bool   `split_words:"true" default:"false"`
+	ReadOnly                      bool   `split_words:"true" default:"true"`
 	Port                          int    `split_words:"true" default:"8080"`
 	MetricsPort                   int    `split_words:"true" default:"3001"`
 	ServiceName                   string `split_words:"true" default:"cloud-admin"`
 	RouteMount                    string `split_words:"true" default:"admin"`
-	EveAPIUrl                     string `split_words:"true" default:"https://eve-api-dev.unanet.io"`
+	EveAPIUrl                     string `split_words:"true" default:"https://eve-api.unanet.io"`
 	DashboardCacheDurationSeconds int    `split_words:"true" default:"15"`
 }
 
