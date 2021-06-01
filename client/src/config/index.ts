@@ -1,7 +1,3 @@
-const config = {
-    API_URL: process.env.VUE_APP_API_URL || "http://localhost:8081/api",
-}
-
 class Config {
     API_URL: string
     READ_ONLY: boolean
@@ -22,5 +18,5 @@ export {Roles}
 export default new Config()
 
 if (process.env.NODE_ENV === "development") {
-    console.log(config)
+    console.log(new Config())
 }
