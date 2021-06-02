@@ -2,7 +2,7 @@ class Config {
     API_URL: string
     READ_ONLY: boolean
     constructor() {
-        this.API_URL = process.env.VUE_APP_API_URL || `${window.location.protocol}//${window.location.host}/backend`;
+        this.API_URL = process.env.VUE_APP_API_URL || '/backend';
         this.READ_ONLY = (process.env.VUE_APP_READ_ONLY) ? JSON.parse(process.env.VUE_APP_READ_ONLY) : true;
     }
     isReadOnly(): boolean {
