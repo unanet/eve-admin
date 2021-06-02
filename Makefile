@@ -60,7 +60,7 @@ check-tag = !(git rev-parse -q --verify "refs/tags/v${PATCH_VERSION}" > /dev/nul
 build-client: 
 	docker pull ${NODE_BUILD_IMAGE}
 	$(docker-node-exec) npm install
-	$(docker-node-exec) npm run build
+	$(docker-node-exec) npm run build:prod
 
 build-server: 
 	docker pull ${GO_BUILD_IMAGE}
