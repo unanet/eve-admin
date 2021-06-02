@@ -122,9 +122,11 @@ const _TableBaseViewMixin = {
             this.openModal();
         },
         openModal: function() {
+            (this as any).enableModal = true;
             $('#modal-xl').modal('show');
         },
         closeModal: function () {
+            (this as any).enableModal = false;
             $('#modal-xl').modal('hide');
         },
         isForcedReadOnly: function(): boolean {
@@ -139,6 +141,7 @@ const _TableBaseViewMixin = {
             selectedItem: null,
             tableConfig: JSGridProps,
             component: FormComponent,
+            enableModal: false,
             disableCreate: false,
             extraConfig: {}, // For merging objects into the default form config values
             formConfig: {

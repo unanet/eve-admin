@@ -1,5 +1,4 @@
 import {FormFieldType} from "@/components/Form/FormProps";
-import moment from 'moment'
 
 function generateID(min: number = 1, max: number = 500): number {
     min = Math.ceil(min);
@@ -55,7 +54,15 @@ function getFormFields(fieldDeclarations: Object, obj?: any) {
 }
 
 function formatDateTimeForUI(value: string) {
-    return moment(value).format("YYYY-MM-DDTHH:mm")
+
+    // @ts-ignore ignore ts not seeing Date as a function
+    const date = new Date(value);
+
+    const firstChunk = date.toISOString().split("T")[0]
+    // @ts-ignore ignore slice call not being defined
+    const secondChunk = ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2)
+
+    return `${firstChunk}T${secondChunk}`
 
 }
 

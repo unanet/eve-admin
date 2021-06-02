@@ -15,7 +15,7 @@ import (
 
 func main() {
 	cfg := config.Load()
-	
+
 	// Create the Service Deps here
 	idSvc, err := identity.NewService(cfg.Identity)
 	if err != nil {

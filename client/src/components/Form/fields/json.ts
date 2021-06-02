@@ -1,5 +1,7 @@
 // import "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/codemirror.min.js"
 // declare const CodeMirror: any;
+
+
 declare const $: any;
 
 const JSONInitFields = ( /*updateCallback: (changes: string) => void */) => {

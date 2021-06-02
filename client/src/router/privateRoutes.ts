@@ -20,6 +20,8 @@ import {
     ServiceTable,
 } from "@/views/TableViews";
 
+import ServiceMetadataMapping from "@/views/Mapping/ServiceMetadataMapping/index.vue";
+
 import {Roles} from "@/config"
 
 export default [
@@ -215,6 +217,17 @@ export default [
         component: DeploymentCronTable,
         path: '/admin/deployment-cron',
         name: "Deployment Cron",
+        meta: {
+            roles: {
+                view: [Roles.Admin],
+                edit: [Roles.Admin]
+            }
+        }
+    },
+    {
+        component: ServiceMetadataMapping,
+        path: '/admin/service/metadata/layer',
+        name: "Service Metadata Layering",
         meta: {
             roles: {
                 view: [Roles.Admin],

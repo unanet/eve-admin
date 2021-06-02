@@ -1,0 +1,22 @@
+.json-form-field {
+  background-color: #e9ecef;
+
+  &-key {
+  }
+
+  &-string {
+    color: #2AA198;
+  }
+
+  &-number {
+    color: #D33682;
+  }
+
+  &-boolean {
+    color: #268BD2;
+  }
+
+  &-null {
+    color: #CB4B16;
+  }
+}

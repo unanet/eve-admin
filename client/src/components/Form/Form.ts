@@ -1,8 +1,9 @@
 import {defineComponent} from "vue";
 import {FormFieldType, FormSubmitResponse, IForm, IFormField} from "@/components/Form/FormProps";
-
 import {_GrowlMixin} from "@/components/Growl/Growl";
 import {formatDateTimeForUI} from "@/utils/helpers";
+import JsonEditor from "@/components/JsonEditor/index.vue";
+
 import config from "@/config";
 
 // @ts-ignore Ignore JQuery not being defined
@@ -17,6 +18,9 @@ export default defineComponent({
     mixins: [
         _GrowlMixin
     ],
+    components: {
+        JsonEditor
+    },
     props: {
         config: Object as () => IForm,
         extraConfig: Object as () => {},

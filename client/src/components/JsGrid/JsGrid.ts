@@ -7,7 +7,6 @@ import {FormFieldType} from "@/components/Form/FormProps";
 declare const $: any;
 declare let jsGrid: any;
 
-
 export default {
     name: 'JsGrid',
     props: {

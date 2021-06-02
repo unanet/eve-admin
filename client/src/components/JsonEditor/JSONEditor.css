@@ -1,0 +1,17 @@
+.json-form-field {
+  background-color: #e9ecef;
+}
+.json-form-field-string {
+  color: #2AA198;
+}
+.json-form-field-number {
+  color: #D33682;
+}
+.json-form-field-boolean {
+  color: #268BD2;
+}
+.json-form-field-null {
+  color: #CB4B16;
+}
+
+/*# sourceMappingURL=JSONEditor.css.map */
