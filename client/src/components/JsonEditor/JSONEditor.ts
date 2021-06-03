@@ -1,24 +1,36 @@
 import {defineComponent} from "vue";
 import {IFormField} from "@/components/Form/FormProps";
 
-declare const $: any;
-
 export default defineComponent({
     name: "JsonEditor",
     props: {
         config: Object as () => IFormField,
+        value: Object as () => {}
+    },
+    watch: {
+        config: function(newVal: IFormField) {
+            if (newVal != null) {
+                (this as any).initializeForm(newVal);
+            }
+        },
+        value: function(newVal: {}) {
+            if (newVal != null) {
+                (this as any).initializeForm(newVal);
+            }
+        }
+    },
+    mounted() {
+        console.log("mounted");
+        (this as any).initializeForm(this.config || this.value);
     },
     methods: {
-        mounted() {
-            (this as any).isMounted = true
-            console.log("json editor mounted")
-        },
-        initializeForm(formField: IFormField) {
-            (this as any).jsonDisplayValue = this.syntaxHighlight(formField.value)
+        initializeForm(data: IFormField|{}) {
+            (this as any).jsonDisplayValue = this.syntaxHighlight(("value" in data) ? data.value : data)
         },
         syntaxHighlight(data: any) {
+            console.log(data)
             // Method copied from here https://gist.github.com/tylerbuchea/5483512#file-json-highlight-js
-            const fieldPrefix = "json-form-field"
+            const fieldPrefix = "json-form-field";
             if (typeof data != 'string') {
                 data = JSON.stringify(data, undefined, 2);
             }
@@ -43,14 +55,6 @@ export default defineComponent({
     data() {
       return {
           jsonDisplayValue: {},
-          isMounted: false
       }
     },
-    watch: {
-        config: function(newVal: IFormField) {
-            if (newVal != null) {
-                (this as any).initializeForm(newVal);
-            }
-        }
-    }
 });

@@ -2,7 +2,7 @@ import {FormFieldType} from "@/components/Form/FormProps";
 import {mappingModelFields} from "@/models";
 import {generateID, getDefaultIDColumnSize} from "@/utils/helpers";
 import {BaseService} from "./";
-import {apiService, APIType} from "@/utils/APIType";
+import {APIResponse, apiService, APIType} from "@/utils/APIType";
 
 const definitionServiceMapService = new class extends BaseService {
     baseUrl = "/definitions/service-maps"
@@ -28,13 +28,13 @@ const definitionServiceMapService = new class extends BaseService {
     }
 
     update(data: any) {
-        return apiService.putRequest(APIType.EVE, `/definitions/${data.definition_id}/service-maps`, data).then(response => {
+        return apiService.putRequest(APIType.EVE, `/definitions/${data.definition_id}/service-maps`, data).then((response: APIResponse) => {
             return response.data
         });
     }
 
     delete(data: any) {
-        return apiService.deleteRequest(APIType.EVE, `/definitions/${data.definition_id}/service-maps/${data.desc}`, data).then(response => {
+        return apiService.deleteRequest(APIType.EVE, `/definitions/${data.definition_id}/service-maps/${data.desc}`, data).then((response: APIResponse) => {
             return response.data
         });
     }

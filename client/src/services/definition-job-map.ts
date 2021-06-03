@@ -2,7 +2,7 @@ import {FormFieldType} from "@/components/Form/FormProps";
 import {dateTimeFields, mappingModelFields} from "@/models";
 import {generateID, getDefaultIDColumnSize} from "@/utils/helpers";
 import {BaseService} from "./";
-import {apiService, APIType} from "@/utils/APIType";
+import {APIResponse, apiService, APIType} from "@/utils/APIType";
 
 const definitionJobMapService = new class extends BaseService {
     baseUrl = "/definitions/job-maps"
@@ -29,12 +29,12 @@ const definitionJobMapService = new class extends BaseService {
     }
 
     update(data: any) {
-        return apiService.putRequest(APIType.EVE, `/definitions/${data.definition_id}/job-maps`, data).then(response => {
+        return apiService.putRequest(APIType.EVE, `/definitions/${data.definition_id}/job-maps`, data).then((response: APIResponse) => {
             return response.data
         });
     }
     delete(data: any) {
-        return apiService.deleteRequest(APIType.EVE, `/definitions/${data.definition_id}/job-maps/${data.description}`, data).then(response => {
+        return apiService.deleteRequest(APIType.EVE, `/definitions/${data.definition_id}/job-maps/${data.description}`, data).then((response: APIResponse) => {
             return response.data
         });
     }

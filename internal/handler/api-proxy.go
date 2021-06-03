@@ -54,6 +54,7 @@ func (c APIProxyController) get(w http.ResponseWriter, r *http.Request) {
 	resp, err := http.Get(proxyToURL)
 	if err != nil {
 		log.Logger.Error("unable to get from proxy " + r.URL.String(), zap.Error(err))
+		render.Status(r, http.StatusNotFound)
 		render.Respond(w, r, "something went wrong")
 		return
 	}
@@ -61,6 +62,7 @@ func (c APIProxyController) get(w http.ResponseWriter, r *http.Request) {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Logger.Error("Proxy ioutil.ReadAll", zap.Error(err))
+		render.Status(r, http.StatusInternalServerError)
 		render.Respond(w, r, "something went wrong")
 		return
 	}
@@ -71,6 +73,7 @@ func (c APIProxyController) get(w http.ResponseWriter, r *http.Request) {
 
 	if err := json.Unmarshal([]byte(sb), &returnValue); err != nil {
 		log.Logger.Error("Proxy Unmarshal", zap.Error(err))
+		render.Status(r, http.StatusInternalServerError)
 		render.Respond(w, r, "something went wrong")
 		return
 	}

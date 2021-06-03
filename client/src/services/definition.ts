@@ -2,7 +2,7 @@ import {FormFieldType} from "@/components/Form/FormProps";
 import {dateTimeFields, idField} from "@/models";
 import {generateID, getDefaultIDColumnSize} from "@/utils/helpers";
 import {BaseService} from "./";
-import {apiService, APIType} from "@/utils/APIType";
+import {APIResponse, apiService, APIType} from "@/utils/APIType";
 
 const definitionService = new class extends BaseService {
     baseUrl = "/definitions"
@@ -34,13 +34,13 @@ const definitionService = new class extends BaseService {
     }
 
     create(data: any) {
-        return apiService.putRequest(APIType.EVE, this.baseUrl, data).then(response => {
+        return apiService.putRequest(APIType.EVE, this.baseUrl, data).then((response: APIResponse) => {
             return response.data
         });
     }
 
     update(data: any) {
-        return apiService.putRequest(APIType.EVE, this.baseUrl, data).then(response => {
+        return apiService.putRequest(APIType.EVE, this.baseUrl, data).then((response: APIResponse) => {
             return response.data
         });
     }

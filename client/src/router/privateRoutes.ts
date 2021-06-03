@@ -20,7 +20,7 @@ import {
     ServiceTable,
 } from "@/views/TableViews";
 
-import ServiceMetadataMapping from "@/views/Mapping/ServiceMetadataMapping/index.vue";
+import ServiceMetadataMapping from "@/views/Visualization/ServiceMetadataMapping/index.vue";
 
 import {Roles} from "@/config"
 
@@ -226,7 +226,7 @@ export default [
     },
     {
         component: ServiceMetadataMapping,
-        path: '/admin/service/metadata/layer',
+        path: '/admin/service/:id/metadata/layers',
         name: "Service Metadata Layering",
         meta: {
             roles: {

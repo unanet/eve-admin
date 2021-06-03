@@ -12,7 +12,7 @@ func InitializeControllers(config config.Config, mgr *manager.Service) ([]Contro
 		NewRootController(),
 		NewAuthController(mgr),
 
-		NewDashboardController(config),
+		NewEveController(config),
 		NewAPIProxyController(config),
 
 	}, nil

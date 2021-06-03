@@ -1,7 +1,6 @@
 <div class="container-fluid">
     <div class="row">
         <div v-for="item in items" :key="item.label" class="col-lg-3 col-6">
-            <!-- small box -->
             <div class="small-box bg-info">
                 <div class="inner">
                     <h3>{{ item.count }}</h3>
@@ -13,3 +12,5 @@
     </div>
     <chart-component :chartConfig="this.chartConfig" v-if="this.loaded"></chart-component>
 </div>
+
+<!--<router-link :to="{ path: `/admin/service/38/metadata/layers`}"><a >Read more ></a></router-link>-->

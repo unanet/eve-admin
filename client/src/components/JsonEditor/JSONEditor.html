@@ -1,4 +1,4 @@
-<input class="form-control" :type="this.config.type" :id="this.config.id" :placeholder="this.config.placeholder"
+<input v-if="this.config && this.config.id" class="form-control" :type="this.config.type" :id="this.config.id" :placeholder="this.config.placeholder"
 :value="this.config.value" hidden>
 
 <pre class="json-form-field form-control" v-html="this.jsonDisplayValue"></pre>

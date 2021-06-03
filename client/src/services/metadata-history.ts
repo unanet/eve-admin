@@ -1,5 +1,5 @@
 import {FormFieldType} from "@/components/Form/FormProps";
-import {apiService, APIType} from "@/utils/APIType";
+import {APIResponse, apiService, APIType} from "@/utils/APIType";
 import {getDefaultIDColumnSize, getFormFields, getJSTableHeaders} from "@/utils/helpers";
 
 // Metadata history is a one off since we don't want the typical CRUD actions on it
@@ -34,7 +34,6 @@ const metadataHistoryService = new class {
             title: "Deleted By"
         }
     }
-    constructor() {}
     getJSTableHeaders() {
         return getJSTableHeaders(this.fieldDeclarations)
     }
@@ -48,9 +47,9 @@ const metadataHistoryService = new class {
     }
 
     get() {
-        return apiService.getRequest(APIType.EVE, this.baseUrl).then(response => {
+        return apiService.getRequest(APIType.EVE, this.baseUrl).then((response: APIResponse) => {
             return response.data
-        }).catch(err => {
+        }).catch((err: any) => {
             return err;
         });
     }

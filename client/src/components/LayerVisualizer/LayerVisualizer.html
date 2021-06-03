@@ -1,0 +1,38 @@
+<h2 class="card-title pb-3">
+    Applied Data
+</h2>
+
+<json-editor :value="layerData.end_result"></json-editor>
+
+<div class="mb-5">
+    <h2 class="card-title">
+        Layers
+    </h2>
+</div>
+
+<div class="timeline">
+    <div class="time-label">
+        <span class="bg-green">Layers</span>
+    </div>
+    <div v-for="layer in layerData.layers">
+        <i class="fa fa-layer-group bg-green"></i>
+        <div class="timeline-item">
+            <span class="time">
+                <span class="text-bold">Stacking Order:</span> {{layer.stacking_order}}
+                <span v-if="layer.environment_id > 0" class="pl-3"><span class="text-bold">Environment ID:</span> {{layer.environment_id}}</span>
+                <span v-if="layer.artifact_id > 0" class="pl-3"><span class="text-bold">Artifact ID:</span> {{layer.artifact_id}}</span>
+                <span v-if="layer.namespace_id > 0" class="pl-3"><span class="text-bold">Namespace ID:</span> {{layer.namespace_id}}</span>
+                <span v-if="layer.cluster_id > 0" class="pl-3"><span class="text-bold">Cluster ID:</span> {{layer.cluster_id}}</span>
+                <span v-if="layer.service_id > 0" class="pl-3"><span class="text-bold">Service ID:</span> {{layer.service_id}}</span>
+            </span>
+            <h3 class="timeline-header">
+                <span class="text-bold pr-1">{{ layer.description}}</span>
+
+            </h3>
+            <div class="timeline-body">
+                <json-editor :value="getValue(layer)"></json-editor>
+            </div>
+        </div>
+    </div>
+</div>
+

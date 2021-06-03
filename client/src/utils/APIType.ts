@@ -33,7 +33,7 @@ const apiService = new class API {
                 break;
             }
             case APIType.CLOUD: {
-                apiPrefix = "/cloud";
+                apiPrefix = "/api";
                 break;
             }
         }
@@ -63,6 +63,7 @@ const apiService = new class API {
 
         const apiResponse = new APIResponse()
 
+        // @ts-ignore ignore promise, resolve and reject declarations
         return new Promise((resolve, reject) => {
             apiCall.then((response: AxiosResponse) => {
                 // JSON responses are automatically parsed.

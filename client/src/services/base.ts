@@ -1,5 +1,5 @@
 import {generateID, getFormFields, getJSTableHeaders} from "@/utils/helpers";
-import {apiService, APIType} from "@/utils/APIType";
+import {APIResponse, apiService, APIType} from "@/utils/APIType";
 
 const BaseService = class {
     public baseUrl = "/"
@@ -18,25 +18,25 @@ const BaseService = class {
     }
 
     create(data: any) {
-        return apiService.postRequest(APIType.EVE, this.baseUrl, data).then(response => {
+        return apiService.postRequest(APIType.EVE, this.baseUrl, data).then((response: APIResponse) => {
             return response.data
         });
     }
 
     get() {
-        return apiService.getRequest(APIType.EVE, this.baseUrl).then(response => {
+        return apiService.getRequest(APIType.EVE, this.baseUrl).then((response: APIResponse) => {
             return response.data
         });
     }
 
     update(data: any) {
-        return apiService.putRequest(APIType.EVE, `${this.baseUrl}/${data.id}`, data).then(response => {
+        return apiService.putRequest(APIType.EVE, `${this.baseUrl}/${data.id}`, data).then((response: APIResponse) => {
             return response.data
         });
     }
 
     delete(data: any) {
-        return apiService.deleteRequest(APIType.EVE, `${this.baseUrl}/${data.id}`, data).then(response => {
+        return apiService.deleteRequest(APIType.EVE, `${this.baseUrl}/${data.id}`, data).then((response: APIResponse) => {
             return response.data
         });
     }

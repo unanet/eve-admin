@@ -1,7 +1,7 @@
 import {FormFieldType} from "@/components/Form/FormProps";
 import {dateTimeFields, idField} from "@/models";
 import {BaseService} from "./";
-import {apiService, APIType} from "@/utils/APIType";
+import {APIResponse, apiService, APIType} from "@/utils/APIType";
 
 const metadataService = new class extends BaseService {
     baseUrl = "/metadata"
@@ -22,19 +22,19 @@ const metadataService = new class extends BaseService {
 
     create(data: any) {
         console.error("metadata create needs to be built");
-        return apiService.putRequest(APIType.EVE, this.baseUrl, data).then(response => {
+        return apiService.putRequest(APIType.EVE, this.baseUrl, data).then((response: APIResponse) => {
             return response.data
         });
     }
 
     update(data: any) {
-        return apiService.putRequest(APIType.EVE, `${this.baseUrl}`, data).then(response => {
+        return apiService.putRequest(APIType.EVE, `${this.baseUrl}`, data).then((response: APIResponse) => {
             return response.data
         });
     }
 
     delete(data: any) {
-        return apiService.deleteRequest(APIType.EVE, `${this.baseUrl}/${data.id}`, data).then(response => {
+        return apiService.deleteRequest(APIType.EVE, `${this.baseUrl}/${data.id}`, data).then((response: APIResponse) => {
             return response.data
         });
     }

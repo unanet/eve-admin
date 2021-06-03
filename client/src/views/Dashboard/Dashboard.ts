@@ -2,8 +2,9 @@ import AdminLayout from "@/layouts/AdminLayout/index.vue";
 import ChartComponent from "@/components/Chart/index.vue";
 import {IDashboardInformationEntry as type} from "@/models";
 import {dashboardService as service} from "@/services"
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
     name: 'Dashboard',
     components: {
         AdminLayout,
@@ -32,4 +33,4 @@ export default {
             items: [] as type[]
         }
     }
-}
+})

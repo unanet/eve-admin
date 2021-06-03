@@ -8,10 +8,11 @@ import {JSGridProps} from "@/components/JsGrid/JSGridProps";
 import {_GrowlMixin} from "@/components/Growl/Growl";
 
 import config from "@/config";
+import {defineComponent} from "vue";
 
 declare const $: any;
 
-const _TableBaseViewMixin = {
+const _TableBaseViewMixin = defineComponent({
     components: {
         AdminLayout,
         FormComponent,
@@ -82,6 +83,7 @@ const _TableBaseViewMixin = {
         _onSubmit: function (item: any, msg: string) {
             const self = this as any;
 
+            // @ts-ignore ignore promise, resolve and reject
             return new Promise((resolve, reject) => {
                 const method = self.formConfig.isCreate ? "create" : "update"
                 self.service[method](item).then((resp: APIResponse) => {
@@ -112,6 +114,7 @@ const _TableBaseViewMixin = {
 
             self.selectedItem = null
 
+            // @ts-ignore Object
             self.formConfig = Object.assign(self.formConfig, {
                 // Apply decorators
                 title: self.getModalName(self.selectedItem),
@@ -161,7 +164,7 @@ const _TableBaseViewMixin = {
             dataLoaded: false
         }
     }
-}
+})
 
 function NewTableBaseView(name: string, service: any, options?: { modelIDField?: string, mixin?: Object}) {
 
