@@ -10,6 +10,7 @@ import (
 	"gitlab.unanet.io/devops/go/pkg/middleware"
 	"net/http"
 	"net/url"
+	"sort"
 	"strings"
 	"time"
 
@@ -61,29 +62,71 @@ func (c EveController) dashboardMetrics(w http.ResponseWriter, r *http.Request) 
 	var errs []error
 	var dashboardMetrics []models.DashboardMetricsEntry
 
-	types := []string{
-		"artifacts",
-		"clusters",
-		"environments",
-		"feeds",
-		"metadata",
-		"namespaces",
-		"services",
-		"jobs",
+
+	types := []models.DashboardMetricsEntryMetadata {
+		{
+			APILink: "artifacts",
+			Name: "Artifacts",
+			Link: "artifact",
+			Icon: "bag",
+		},
+		{
+			APILink: "clusters",
+			Name: "Clusters",
+			Link: "cluster",
+			Icon: "bag",
+		},
+		{
+			APILink: "environments",
+			Name: "Environments",
+			Link: "environment",
+			Icon: "bag",
+		},
+		{
+			APILink: "feeds",
+			Name: "Feeds",
+			Link: "feed",
+			Icon: "bag",
+		},
+		{
+			APILink: "metadata",
+			Name: "Metadata",
+			Link: "metadata",
+			Icon: "bag",
+		},
+		{
+			APILink: "namespaces",
+			Name: "Namespaces",
+			Link: "namespace",
+			Icon: "bag",
+		},
+		{
+			APILink: "services",
+			Name: "Services",
+			Link: "service",
+			Icon: "bag",
+		},
+		{
+			APILink: "jobs",
+			Name: "Jobs",
+			Link: "job",
+			Icon: "bag",
+		},
 	}
 
-	for _, name := range types {
+	for i, metadata := range types {
 		var itemArray []interface{}
 
-		if err := c.makeRequest("/" + strings.ToLower(name), &itemArray); err != nil {
+		if err := c.makeRequest("/" + strings.ToLower(metadata.APILink), &itemArray); err != nil {
 			middleware.Log(r.Context()).Error(err.Error())
 			errs = append(errs, err)
 			return
 		}
 
 		dashboardMetrics = append(dashboardMetrics, models.DashboardMetricsEntry{
-			Label: name,
+			SortOrder: i,
 			Count: len(itemArray),
+			Metadata: metadata,
 		})
 	}
 
@@ -92,6 +135,10 @@ func (c EveController) dashboardMetrics(w http.ResponseWriter, r *http.Request) 
 		render.Respond(w, r, errs)
 		return
 	}
+
+	sort.SliceStable(dashboardMetrics, func(i, j int) bool {
+		return dashboardMetrics[i].SortOrder < dashboardMetrics[j].SortOrder
+	})
 
 	// Cache our data for later
 	_dashboardMetricsCache.nextFetchTime = time.Now().Add(c.cacheDuration)

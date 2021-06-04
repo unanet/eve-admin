@@ -1,16 +1,51 @@
 <div class="container-fluid">
-    <div class="row">
-        <div v-for="item in items" :key="item.label" class="col-lg-3 col-6">
-            <div class="small-box bg-info">
-                <div class="inner">
-                    <h3>{{ item.count }}</h3>
+    <!-- DONUT CHART -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Eve Entity Count</h3>
 
-                    <p>{{ item.label }}</p>
-                </div>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
             </div>
         </div>
+        <div class="card-body">
+            <div class="row">
+                <router-link v-for="item in items"
+                             :key="item.metadata.link"
+                             class="col-lg-3 col-6"
+                             :to="{ path: `/admin/${item.metadata.link}`}">
+                    <div class="small-box" :class="item.metadata.color ? item.metadata.color : 'bg-info'">
+                        <div class="inner">
+                            <h3>{{ item.count }}</h3>
+                            <p>{{ item.metadata.name }}</p>
+                        </div>
+                    </div>
+                </router-link>
+            </div>
+        </div>
+        <!-- /.card-body -->
     </div>
-    <chart-component :chartConfig="this.chartConfig" v-if="this.loaded"></chart-component>
+    <!-- /.card -->
+
+    <!-- DONUT CHART -->
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Entity Breakdown</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <chart-component :chartConfig="this.chartConfig" v-if="this.loaded"></chart-component>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
 </div>
 
 <!--<router-link :to="{ path: `/admin/service/38/metadata/layers`}"><a >Read more ></a></router-link>-->

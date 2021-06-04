@@ -20,7 +20,6 @@ export default defineComponent({
         }
     },
     mounted() {
-        console.log("mounted");
         (this as any).initializeForm(this.config || this.value);
     },
     methods: {

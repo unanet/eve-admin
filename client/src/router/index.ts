@@ -3,6 +3,7 @@ import publicRoutes from './publicRoutes'
 import privateRoutes from './privateRoutes'
 import store from '@/store'
 
+declare const $: any;
 
 // Start vue router
 const router = createRouter({
@@ -12,6 +13,9 @@ const router = createRouter({
 
 // // Middlewares
 router.beforeEach((to, from, next) => {
+
+  // Force close modal, this should be updated to be less of a bazooka approach
+  $('#modal-xl').modal('hide');
 
 
 //   // Redirect to route

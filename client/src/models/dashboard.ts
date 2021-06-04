@@ -1,4 +1,9 @@
 export interface IDashboardInformationEntry {
     count: number
-    label: string
+    metadata: {
+        name: string,
+        link: string
+        icon: string
+        color: string|null
+    }
 }

@@ -1,3 +1,6 @@
+import {defineComponent} from "vue";
+import config from "@/config";
+
 import AdminLayout from "@/layouts/AdminLayout/index.vue";
 import JsGrid from "@/components/JsGrid/index.vue";
 import FormComponent from "@/components/Form/index.vue";
@@ -6,9 +9,7 @@ import {FormSubmitResponse, IForm} from "@/components/Form/FormProps";
 import {APIResponse} from "@/utils/APIType";
 import {JSGridProps} from "@/components/JsGrid/JSGridProps";
 import {_GrowlMixin} from "@/components/Growl/Growl";
-
-import config from "@/config";
-import {defineComponent} from "vue";
+import {getObjectValueByKey} from "@/utils/helpers";
 
 declare const $: any;
 
@@ -23,9 +24,30 @@ const _TableBaseViewMixin = defineComponent({
         _GrowlMixin
     ],
     mounted() {
+        // we can check for other id types here
         (this as any).refreshGrid();
     },
     methods: {
+        checkURLForQueryParamAndOpenModalIfSet: function(responseData: any[]) {
+            // Make this call non blocking, not the best way to do it, but it works
+            setTimeout(() => {
+                const queryParamIDField = "id";
+                const queryParams = this.$route.query;
+                if (queryParamIDField in queryParams) {
+                    const idToOpen = getObjectValueByKey(queryParams, queryParamIDField)
+                    for(const item of responseData) {
+                        if (item[this.idField] == Number(idToOpen) || item[this.idField] == idToOpen) {
+                            // simulate a row click on the item
+                            this.onRowClick({
+                                item,
+                            })
+
+                            break;
+                        }
+                    }
+                }
+            }, 0)
+        },
         refreshGrid: function() {
             const self = this as any;
             self.getData();
@@ -47,7 +69,10 @@ const _TableBaseViewMixin = defineComponent({
                     rows: response,
                     rowClick: self.onRowClick,
                 };
+
                 self.dataLoaded = true;
+
+                self.checkURLForQueryParamAndOpenModalIfSet(response)
             })
         },
         onRowClick: function (e: any) {
@@ -62,6 +87,8 @@ const _TableBaseViewMixin = defineComponent({
                 formFields: self.service.getFormFields(e.item),
                 editItemConfig: self.formConfig.editItemConfig,
             });
+
+            this.$router.push({ query: { id: item[this.idField] }})
 
             this.openModal();
         },
@@ -81,12 +108,11 @@ const _TableBaseViewMixin = defineComponent({
             })
         },
         _onSubmit: function (item: any, msg: string) {
-            const self = this as any;
-
-            // @ts-ignore ignore promise, resolve and reject
             return new Promise((resolve, reject) => {
-                const method = self.formConfig.isCreate ? "create" : "update"
-                self.service[method](item).then((resp: APIResponse) => {
+                const method = this.formConfig.isCreate ? "create" : "update"
+
+                // @ts-ignore ignore potential null
+                this.service[method](item).then((resp: APIResponse) => {
                     resolve({
                         success: true,
                         message: msg,
@@ -110,35 +136,38 @@ const _TableBaseViewMixin = defineComponent({
             });
         },
         clickedAddNew: function () {
-            const self = this as any;
-
-            self.selectedItem = null
+            this.selectedItem = null
 
             // @ts-ignore Object
-            self.formConfig = Object.assign(self.formConfig, {
+            this.formConfig = Object.assign(this.formConfig, {
                 // Apply decorators
-                title: self.getModalName(self.selectedItem),
+                title: this.getModalName(this.selectedItem),
                 isCreate: true,
-                createNewItemConfig: self.formConfig.createNewItemConfig
+                createNewItemConfig: this.formConfig.createNewItemConfig
             } as IForm);
 
             this.openModal();
         },
+        getModalName: function(_: any) {
+            // noop
+            return
+        },
         openModal: function() {
-            (this as any).enableModal = true;
+            this.enableModal = true;
             $('#modal-xl').modal('show');
         },
         closeModal: function () {
-            (this as any).enableModal = false;
+            this.enableModal = false;
             $('#modal-xl').modal('hide');
+
+            // Clear ID out of url
+            this.$router.push({ query: { id: null }})
         },
         isForcedReadOnly: function(): boolean {
             return config.READ_ONLY;
         }
     },
     data() {
-        const self = this as any;
-
         return {
             service: null,
             selectedItem: null,
@@ -149,8 +178,8 @@ const _TableBaseViewMixin = defineComponent({
             extraConfig: {}, // For merging objects into the default form config values
             formConfig: {
                 isCreate: false,
-                onSubmit: self.onSubmit,
-                onDelete: self.onDelete,
+                onSubmit: this.onSubmit,
+                onDelete: this.onDelete,
                 formFields: [], // will be setup in config
                 createNewItemConfig: {
                     disabledFields: [],
@@ -160,13 +189,17 @@ const _TableBaseViewMixin = defineComponent({
                     disabledFields: ["id", "created_at", "updated_at"],
                     hiddenFields: []
                 }
-            } as IForm,
-            dataLoaded: false
+            },
+            dataLoaded: false,
+            // Layering data
+            showMetadataLayerLink: false,
+            showDefinitionLayerLink: false,
+            layeringModelType: null,
         }
     }
 })
 
-function NewTableBaseView(name: string, service: any, options?: { modelIDField?: string, mixin?: Object}) {
+function NewTableBaseView(name: string, service: any, options?: { modelIDField?: string, mixin?: Record<string, any>}) {
 
     const idField = options?.modelIDField || "id"
 

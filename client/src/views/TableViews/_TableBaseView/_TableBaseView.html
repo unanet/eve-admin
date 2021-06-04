@@ -11,6 +11,17 @@
                     <js-grid v-if="this.dataLoaded" :table-config="this.tableConfig">
                         <template #afterGrid>
                             <modal-component :title="this.formConfig.title">
+                                <template #modalTitle v-if="this.selectedItem && this.selectedItem.id && (this.showMetadataLayerLink || this.showDefinitionLayerLink)">
+                                    <router-link v-if="this.showMetadataLayerLink" type="button" class="ml-2"
+                                                 :to="{ path: `/admin/${this.layeringModelType}/${this.selectedItem.id}/metadata/layers`}">
+                                        <button type="button" class="btn btn-block btn-outline-primary">Metadata Layering</button>
+                                    </router-link>
+
+                                    <router-link  v-if="this.showDefinitionLayerLink" type="button" class="ml-2"
+                                                 :to="{ path: `/admin/${this.layeringModelType}/${this.selectedItem.id}/definition/layers`}">
+                                        <button type="button" class="btn btn-block btn-outline-primary">Definition Layering</button>
+                                    </router-link>
+                                </template>
                                 <form-component :config="this.formConfig" :extra-config="this.extraConfig">
                                     <template #bottomBar v-if="!this.isForcedReadOnly()">
                                         <button v-if="!this.formConfig.disableActions" @click.prevent="this.onDelete" class="btn btn-danger float-left">Delete</button>

@@ -3,6 +3,7 @@
   "version": "1.5.0",
   "private": true,
   "scripts": {
+    "ui": "vue ui",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build --mode developent",
     "build:prod": "vue-cli-service build",
