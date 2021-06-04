@@ -16,7 +16,7 @@ export default defineComponent({
             self.items = response as type[];
 
             response.forEach((item: any) => {
-                self.chartConfig.labels.push(item.label);
+                self.chartConfig.labels.push(item.metadata.name);
                 self.chartConfig.values.push(item.count);
             })
 
