@@ -2,7 +2,6 @@ import {idField, dateTimeFields} from "@/models";
 import {generateID, getDefaultIDColumnSize} from "@/utils/helpers";
 import {FormFieldType} from "@/components/Form/FormProps";
 import {BaseService} from "./base";
-import {apiService} from "@/utils/APIType";
 
 const jobService = new class extends BaseService {
     baseUrl = "/jobs"
@@ -45,7 +44,8 @@ const jobService = new class extends BaseService {
             title: "Explicit Deploy",
             type: FormFieldType.checkbox,
             placeholder: false,
-            width: 75
+            width: 75,
+            filtering: false
         },
         ...dateTimeFields
     }

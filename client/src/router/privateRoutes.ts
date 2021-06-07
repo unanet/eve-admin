@@ -227,7 +227,7 @@ export default [
     {
         component: ServiceMetadataMapping,
         path: '/admin/service/:id/metadata/layers',
-        name: "Service Metadata Layering",
+        name: "Metadata Layering",
         meta: {
             roles: {
                 view: [Roles.Admin],

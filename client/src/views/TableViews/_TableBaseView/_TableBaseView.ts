@@ -68,6 +68,7 @@ const _TableBaseViewMixin = defineComponent({
                     headers: service.getJSTableHeaders(),
                     rows: response,
                     rowClick: self.onRowClick,
+                    tableController: service.tableController
                 };
 
                 self.dataLoaded = true;
@@ -226,8 +227,7 @@ function NewTableBaseView(name: string, service: any, options?: { modelIDField?:
         },
         data() {
             return {
-                idField,
-                name,
+                idField
             }
         }
     }

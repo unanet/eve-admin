@@ -1,6 +1,10 @@
 import {FormFieldType} from "@/components/Form/FormProps";
 import {APIResponse, apiService, APIType} from "@/utils/APIType";
-import {getDefaultIDColumnSize, getFormFields, getJSTableHeaders} from "@/utils/helpers";
+import {
+    getDefaultIDColumnSize,
+    getFormFields,
+    getJSTableHeaders
+} from "@/utils/helpers";
 
 // Metadata history is a one off since we don't want the typical CRUD actions on it
 const metadataHistoryService = new class {

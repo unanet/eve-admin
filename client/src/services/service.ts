@@ -1,8 +1,12 @@
 import {FormFieldType} from "@/components/Form/FormProps";
-import {dateTimeFields, idField} from "@/models";
-import {generateID, getDefaultIDColumnSize} from "@/utils/helpers";
+import {dateTimeFields, idField, INamespace} from "@/models";
+import {
+    generateID,
+    getDefaultIDColumnSize,
+    shouldShowRowNumbersMatch,
+    shouldShowRowStringsMatch
+} from "@/utils/helpers";
 import {BaseService} from "./";
-import {apiService} from "@/utils/APIType";
 
 const serviceService = new class extends BaseService {
     baseUrl = "/services"
@@ -17,13 +21,12 @@ const serviceService = new class extends BaseService {
             title: "Namespace",
             type: FormFieldType.number,
             placeholder: generateID(),
-            width: getDefaultIDColumnSize()
+            width: getDefaultIDColumnSize(),
         },
         artifact_id: {
             title: "Artifact",
             type: FormFieldType.number,
             placeholder: generateID(),
-            width: getDefaultIDColumnSize()
         },
         override_version: {
             title: "Override Version",
@@ -44,11 +47,13 @@ const serviceService = new class extends BaseService {
             title: "Explicit Deploy",
             type: FormFieldType.checkbox,
             placeholder: false,
+            filtering: false
         },
         success_exit_codes: {
             title: "Success Exit Codes",
             type: FormFieldType.text,
-            placeholder: "0"
+            placeholder: "0",
+            filtering: false
         },
         ...dateTimeFields
     }

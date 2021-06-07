@@ -1,35 +1,51 @@
-<h2 class="card-title pb-3">
-    Applied Data
-</h2>
-
-<json-editor :value="layerData.end_result"></json-editor>
-
-<div class="mb-5">
-    <h2 class="card-title">
-        Layers
-    </h2>
+<!--
+<div class="form-group" v-for="layer in layerData.layers" :key="layer.description">
+    <div class="form-check">
+        <input class="form-check-input" type="checkbox" checked="">
+        <label class="form-check-label">{{ layer.description }}</label>
+    </div>
 </div>
 
-<div class="timeline">
+<input id="layering_slider" type="text" name="layering_slider">
+
+-->
+
+{{layerData.model.name}} in namespace {{ layerData.model.namespace_name}}
+<json-editor :value="layerData.end_result"></json-editor>
+
+<div class="timeline mt-5 mb-0">
     <div class="time-label">
         <span class="bg-green">Layers</span>
     </div>
-    <div v-for="layer in layerData.layers">
+    <div v-for="layer in layerData.layers" :key="layer.description">
         <i class="fa fa-layer-group bg-green"></i>
-        <div class="timeline-item">
-            <span class="time">
-                <span class="text-bold">Stacking Order:</span> {{layer.stacking_order}}
-                <span v-if="layer.environment_id > 0" class="pl-3"><span class="text-bold">Environment ID:</span> {{layer.environment_id}}</span>
-                <span v-if="layer.artifact_id > 0" class="pl-3"><span class="text-bold">Artifact ID:</span> {{layer.artifact_id}}</span>
-                <span v-if="layer.namespace_id > 0" class="pl-3"><span class="text-bold">Namespace ID:</span> {{layer.namespace_id}}</span>
-                <span v-if="layer.cluster_id > 0" class="pl-3"><span class="text-bold">Cluster ID:</span> {{layer.cluster_id}}</span>
-                <span v-if="layer.service_id > 0" class="pl-3"><span class="text-bold">Service ID:</span> {{layer.service_id}}</span>
-            </span>
-            <h3 class="timeline-header">
-                <span class="text-bold pr-1">{{ layer.description}}</span>
+        <div class="timeline-item card collapsed-card" :id="layer.description">
+            <div class="card-header btn border-bottom-0" data-card-widget="collapse">
+                <div class="timeline-header">
+                    <h5 class="text-bold pr-1 float-left">{{ layer.description }}</h5>
+                    <div class="card-tools float-right">
+                        <span class="time">
+                            <span v-if="layer.environment_id > 0"><span
+                                    class="text-bold">Environment ID:</span> {{ layer.environment_id }}</span>
+                            <span v-if="layer.artifact_id > 0"><span
+                                    class="text-bold">Artifact ID:</span> {{ layer.artifact_id }}</span>
+                            <span v-if="layer.namespace_id > 0"><span
+                                    class="text-bold">Namespace ID:</span> {{ layer.namespace_id }}</span>
+                            <span v-if="layer.cluster_id > 0"><span
+                                    class="text-bold">Cluster ID:</span> {{ layer.cluster_id }}</span>
+                            <span v-if="layer.service_id > 0" ><span
+                                    class="text-bold">Service ID:</span> {{ layer.service_id }}</span>
 
-            </h3>
-            <div class="timeline-body">
+                            <span class="text-bold pl-3">Stacking Order:</span> {{ layer.stacking_order }}
+                        </span>
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="timeline-body card-body">
                 <json-editor :value="getValue(layer)"></json-editor>
             </div>
         </div>

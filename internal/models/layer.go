@@ -3,6 +3,7 @@ package models
 import "time"
 
 type LayerResponse struct {
+	Model 		interface{}	  `json:"model"`
 	Layers      []LayerMap    `json:"layers"`
 	EndResult   interface{}   `json:"end_result"`
 }

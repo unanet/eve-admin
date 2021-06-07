@@ -1,8 +1,11 @@
 import {FormFieldType} from "@/components/Form/FormProps";
-import {dateTimeFields, idField} from "@/models";
-import {generateID, getDefaultIDColumnSize} from "@/utils/helpers";
+import {dateTimeFields, idField, INamespace} from "@/models";
+import {
+    generateID,
+    getDefaultIDColumnSize,
+    shouldShowRowStringsMatch, shouldShowRowNumbersMatch
+} from "@/utils/helpers";
 import {BaseService} from "./";
-import {apiService} from "@/utils/APIType";
 
 const namespaceService = new class extends BaseService {
     baseUrl = "/namespaces"
@@ -33,7 +36,8 @@ const namespaceService = new class extends BaseService {
             title: "Explicit Version",
             type: FormFieldType.checkbox,
             placeholder: false,
-            width: getDefaultIDColumnSize()
+            width: getDefaultIDColumnSize(),
+            filtering: false
         },
         cluster_id: {
             title: "Cluster ID",

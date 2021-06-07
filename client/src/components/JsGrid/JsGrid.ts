@@ -1,5 +1,5 @@
 import {IJSGridHeaderData, IJSGridOptions, JSGridProps} from "./JSGridProps";
-import {JSONField, DateTimeField} from "./fields";
+import {DateTimeField, JSONField} from "./fields";
 // Import JSGrid Lib files
 import "./third-party/jsgrid/jsgrid.min.js"
 import {FormFieldType} from "@/components/Form/FormProps";
@@ -30,17 +30,12 @@ export default {
 
         // If we enable editing, let's show the edit column
         if (tableConfig.editing) {
-            fields = fields.concat([{ name:"controls", type: "control"}])
+            fields = fields.concat([{name: "controls", type: "control"}])
         }
 
         // https://www.npmjs.com/package/jsgrid#configuration
+        // http://js-grid.com/docs/
         let jsGridObj = {
-            // controller: {
-            //     loadData: $.noop,
-            //     insertItem: $.noop,
-            //     updateItem: $.noop,
-            //     deleteItem: $.noop
-            // },
             height: tableConfig.height,
             width: tableConfig.width,
             sorting: tableConfig.sorting,
@@ -48,19 +43,33 @@ export default {
             selecting: tableConfig.selecting,
             filtering: tableConfig.filtering,
             editing: tableConfig.editing,
+            autoload: true,
             // aftersavefunc: function (rowid: any, response:any) { console.log(rowid, response) },
             // errorfunc: function (rowid:any, response:any) { console.log(rowid, response); },
             confirmDeleting: false,
             data: tableConfig.rows as [],
             fields,
             noDataContent: "No Records Found",
-            loadMessage: "Please, wait...",
+            loadMessage: "Please, wait..."
         } as IJSGridOptions;
 
+        // @ts-ignore
+        if (tableConfig?.tableController) {
+            // @ts-ignore
+            jsGridObj.controller = {
+                loadData: function(filter: any) {
+                    // @ts-ignore
+                    return tableConfig.tableController.filterGridRows(tableConfig.rows, filter)
+                },
+            }
+            jsGridObj.filtering = true
+        } else {
+            jsGridObj.filtering = false;
+        }
         if (tableConfig.rowClick) {
             jsGridObj.rowClick = tableConfig.rowClick;
         }
 
         $(`#${tableConfig.tableID}`).jsGrid(jsGridObj);
-    },
+    }
 }

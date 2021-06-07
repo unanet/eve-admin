@@ -22,7 +22,7 @@ export class JSGridProps implements IJSGridOptions {
     width = "100%"
     title = "DEFAULT TITLE"
     pageSize = 15
-    filtering = false
+    filtering = true
     pageButtonCount = 5
     paging = true
     sorting = true
@@ -40,7 +40,7 @@ export class JSGridProps implements IJSGridOptions {
 
     rowClick?(): void
 
-    constructor(obj?: JSGridProps) {
+    constructor(obj?: {}) {
         if (obj != undefined) {
             Object.assign(this, obj)
         }

@@ -27,7 +27,6 @@ export default defineComponent({
             (this as any).jsonDisplayValue = this.syntaxHighlight(("value" in data) ? data.value : data)
         },
         syntaxHighlight(data: any) {
-            console.log(data)
             // Method copied from here https://gist.github.com/tylerbuchea/5483512#file-json-highlight-js
             const fieldPrefix = "json-form-field";
             if (typeof data != 'string') {

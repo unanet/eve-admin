@@ -215,7 +215,17 @@ func (c EveController) getLayers(w http.ResponseWriter, r *http.Request, modelTy
 		return
 	}
 
+	var baseModel interface{}
+	if err := c.makeRequest(fmt.Sprintf("/%s/%s", modelType, id), &baseModel); err != nil {
+		render.Respond(w, r, errors.NotFoundf("error getting base model"))
+		return
+	}
+
+	sort.SliceStable(layers, func(i, j int) bool {
+		return layers[i].StackingOrder > layers[j].StackingOrder
+	})
 	response := models.LayerResponse{
+		Model: baseModel,
 		Layers: layers,
 		EndResult: endResult,
 	}

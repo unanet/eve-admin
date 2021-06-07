@@ -1,6 +1,9 @@
 import {FormFieldType} from "@/components/Form/FormProps";
 import {mappingModelFields} from "@/models";
-import {generateID, getDefaultIDColumnSize} from "@/utils/helpers";
+import {
+    generateID,
+    getDefaultIDColumnSize,
+} from "@/utils/helpers";
 import {BaseService} from "./";
 import {apiService, APIType, APIResponse} from "@/utils/APIType";
 
