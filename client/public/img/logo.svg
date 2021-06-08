@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="630px" height="420px" viewBox="0 0 630 420" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>logo</title>
+    <g id="UI-for-Desktop-::-Home" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="unanet-::-home" transform="translate(0.000000, -3200.000000)">
+            <g id="logo" transform="translate(0.000000, 3200.000000)">
+                <path d="M0,0 C115.979797,-2.13051432e-14 210,94.0202025 210,210 L210,420 L210,420 C94.0202025,420 1.42034288e-14,325.979797 0,210 L0,0 L0,0 Z" id="bg" fill="#52D6FF"></path>
+                <path d="M210,0 C325.979797,-2.13051432e-14 420,94.0202025 420,210 L420,420 L420,420 C304.020203,420 210,325.979797 210,210 L210,0 L210,0 Z" id="bg" fill="#39C33A" transform="translate(315.000000, 210.000000) scale(-1, 1) translate(-315.000000, -210.000000) "></path>
+                <path d="M420,0 C535.979797,-2.13051432e-14 630,94.0202025 630,210 L630,420 L630,420 C514.020203,420 420,325.979797 420,210 L420,0 L420,0 Z" id="bg" fill="#ADE83A" transform="translate(525.000000, 210.000000) scale(-1, -1) translate(-525.000000, -210.000000) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

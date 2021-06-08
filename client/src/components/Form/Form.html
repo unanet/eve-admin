@@ -1,21 +1,28 @@
 <form @submit.prevent="onSubmit">
     <div v-for="field in this._config.formFields" class="form-group">
         <span v-if="shouldShowField(field.id)">
-            <label :for="field.id">{{ field.label }}</label>
+            <label >{{ field.title }}</label>
             <template v-if="field.type === 'json'">
-<!--                <textarea  class="json-form-field" >-->
-<!--                    {{ field.value || field.placeholder }}-->
-<!--                </textarea>-->
                 <json-editor :config="field"></json-editor>
             </template>
 
             <template v-else-if="field.type ==='checkbox'">
-                <input :id="field.id" type="checkbox" name="my-checkbox" checked data-bootstrap-switch :disabled="shouldDisable(field.id)" :nullable="field.nullable">
+                <div class="custom-control custom-switch">
+                      <input :id="field.id"
+                             type="checkbox"
+                             class="custom-control-input"
+                             :checked="getValue(field)"
+                             :disabled="shouldDisable(field.id)"
+                             :nullable="field.nullable"
+                      />
+                      <label :for="field.id" class="custom-control-label"></label>
+                </div>
             </template>
 
             <template v-else-if="field.type ==='datetime-local'">
                 <input class="form-control" :type="field.type" :id="field.id" :placeholder="field.placeholder"
-                      :value="getValue(field)" :original-value="field.value?.Time" :disabled="shouldDisable(field.id)" :nullable="field.nullable">
+                       :value="getValue(field)" :original-value="field.value?.Time" :disabled="shouldDisable(field.id)"
+                       :nullable="field.nullable">
             </template>
 
             <template v-else>
@@ -25,6 +32,8 @@
         </span>
     </div>
 
-    <button v-if="(isReadOnlyMode()) ? false : !this._config.disableActions" type="submit" class="btn btn-primary float-right">Submit</button>
+    <button v-if="(isReadOnlyMode()) ? false : !this._config.disableActions" type="submit"
+            class="btn btn-primary float-right">Submit
+    </button>
     <slot name="bottomBar"/>
 </form>

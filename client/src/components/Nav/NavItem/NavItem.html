@@ -1,0 +1,20 @@
+<li class="nav-item" :class="{'has-treeview': isTree(item), 'menu-is-opening menu-open': isRouteActive(item)}">
+    <template v-if="isTree(item)">
+        <a href="#" class="nav-link" :class="{ 'active' : isRouteActive(item)}">
+            <i class="nav-icon" :class="getIconClass(item)"></i>
+            <p>
+                {{ item.name }}
+                <i class="right fas fa-angle-left"></i>
+            </p>
+        </a>
+        <ul class="nav nav-treeview" :style="{'display: block;': isRouteActive(item)}">
+            <nav-item v-for="item in item.children" :item="item"></nav-item>
+        </ul>
+    </template>
+    <template v-else>
+        <router-link :to="item.url" class="nav-link" :class="{ 'active' : isRouteActive(item)}">
+            <i class="nav-icon" :class="getIconClass(item)"></i>
+            <p>{{ item.name }}</p>
+        </router-link>
+    </template>
+</li>

@@ -15,12 +15,18 @@
                 <router-link v-for="item in items"
                              :key="item.metadata.link"
                              class="col-lg-3 col-6"
-                             :to="{ path: `/admin/${item.metadata.link}`}">
+                             :to="{ path: `/admin/models/${item.metadata.link}`}">
                     <div class="small-box" :class="item.metadata.color ? item.metadata.color : 'bg-info'">
                         <div class="inner">
                             <h3>{{ item.count }}</h3>
                             <p>{{ item.metadata.name }}</p>
                         </div>
+                        <div class="icon">
+                            <i class="ion ion-stats-bars"></i>
+                        </div>
+                        <p class="small-box-footer">
+                            View Table <i class="fas fa-arrow-circle-right"></i>
+                        </p>
                     </div>
                 </router-link>
             </div>
@@ -47,5 +53,3 @@
     </div>
     <!-- /.card -->
 </div>
-
-<!--<router-link :to="{ path: `/admin/service/38/metadata/layers`}"><a >Read more ></a></router-link>-->

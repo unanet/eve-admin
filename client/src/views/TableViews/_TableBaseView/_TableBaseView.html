@@ -13,12 +13,12 @@
                             <modal-component :title="this.formConfig.title">
                                 <template #modalTitle v-if="this.selectedItem && this.selectedItem.id && (this.showMetadataLayerLink || this.showDefinitionLayerLink)">
                                     <router-link v-if="this.showMetadataLayerLink" type="button" class="ml-2"
-                                                 :to="{ path: `/admin/${this.layeringModelType}/${this.selectedItem.id}/metadata/layers`}">
+                                                 :to="{ path: `/admin/models/${this.layeringModelType}/${this.selectedItem.id}/metadata/layers`}">
                                         <button type="button" class="btn btn-block btn-outline-primary">Metadata Layering</button>
                                     </router-link>
 
                                     <router-link  v-if="this.showDefinitionLayerLink" type="button" class="ml-2"
-                                                 :to="{ path: `/admin/${this.layeringModelType}/${this.selectedItem.id}/definition/layers`}">
+                                                 :to="{ path: `/admin/models/${this.layeringModelType}/${this.selectedItem.id}/definition/layers`}">
                                         <button type="button" class="btn btn-block btn-outline-primary">Definition Layering</button>
                                     </router-link>
                                 </template>

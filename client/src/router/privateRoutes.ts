@@ -37,7 +37,7 @@ export default [
         }
     },
     {
-        path: '/admin/namespace',
+        path: '/admin/models/namespace',
         component: NamespaceTable,
         name: 'Namespace',
         meta: {
@@ -48,7 +48,7 @@ export default [
         }
     },
     {
-        path: '/admin/environment',
+        path: '/admin/models/environment',
         component: EnvironmentTable,
         name: 'Environment',
         meta: {
@@ -59,7 +59,7 @@ export default [
         }
     },
     {
-        path: '/admin/definition',
+        path: '/admin/models/definition',
         component: DefinitionTable,
         name: 'Definition',
         meta: {
@@ -70,7 +70,7 @@ export default [
         }
     },
     {
-        path: '/admin/metadata',
+        path: '/admin/models/metadata',
         component: MetadataTable,
         name: 'Metadata',
         meta: {
@@ -81,7 +81,7 @@ export default [
         }
     },
     {
-        path: '/admin/artifact',
+        path: '/admin/models/artifact',
         component: ArtifactTable,
         name: 'Artifact',
         meta: {
@@ -92,7 +92,7 @@ export default [
         }
     },
     {
-        path: '/admin/service',
+        path: '/admin/models/service',
         component: ServiceTable,
         name: 'Service',
         meta: {
@@ -103,7 +103,7 @@ export default [
         }
     },
     {
-        path: '/admin/cluster',
+        path: '/admin/models/cluster',
         component: ClusterTable,
         name: 'Cluster',
         meta: {
@@ -115,7 +115,7 @@ export default [
     },
 
     {
-        path: '/admin/feed',
+        path: '/admin/models/feed',
         component: FeedTable,
         name: 'Feed',
         meta: {
@@ -126,7 +126,7 @@ export default [
         }
     },
     {
-        path: '/admin/job',
+        path: '/admin/models/job',
         component: JobTable,
         name: 'Job',
         meta: {
@@ -138,7 +138,7 @@ export default [
     },
     {
         component: DefinitionJobMapTable,
-        path: '/admin/definition-job-map',
+        path: '/admin/mapping/definition-job-map',
         name: "Definition Job Map",
         meta: {
             roles: {
@@ -149,7 +149,7 @@ export default [
     },
     {
         component: DefinitionServiceMapTable,
-        path: '/admin/definition-service-map',
+        path: '/admin/mapping/definition-service-map',
         name: "Definition Service Map",
         meta: {
             roles: {
@@ -160,7 +160,7 @@ export default [
     },
     {
         component: DefinitionTypeTable,
-        path: '/admin/definition-type',
+        path: '/admin/models/definition-type',
         name: "Definition Type",
         meta: {
             roles: {
@@ -171,7 +171,7 @@ export default [
     },
     {
         component: EnvironmentFeedMapTable,
-        path: '/admin/environment-feed-map',
+        path: '/admin/mapping/environment-feed-map',
         name: "Environment Feed Map",
         meta: {
             roles: {
@@ -182,7 +182,7 @@ export default [
     },
     {
         component: MetadataJobMapTable,
-        path: '/admin/metadata-job-map',
+        path: '/admin/mapping/metadata-job-map',
         name: "Metadata Job Map",
         meta: {
             roles: {
@@ -193,7 +193,7 @@ export default [
     },
     {
         component: MetadataServiceMapTable,
-        path: '/admin/metadata-service-map',
+        path: '/admin/mapping/metadata-service-map',
         name: "Metadata Service Map",
         meta: {
             roles: {
@@ -204,7 +204,7 @@ export default [
     },
     {
         component: MetadataHistoryTable,
-        path: '/admin/metadata-history',
+        path: '/admin/audit/metadata-history',
         name: "Metadata History",
         meta: {
             roles: {
@@ -215,7 +215,7 @@ export default [
     },
     {
         component: DeploymentCronTable,
-        path: '/admin/deployment-cron',
+        path: '/admin/models/deployment-cron',
         name: "Deployment Cron",
         meta: {
             roles: {
@@ -226,7 +226,7 @@ export default [
     },
     {
         component: ServiceMetadataMapping,
-        path: '/admin/service/:id/metadata/layers',
+        path: '/admin/models/service/:id/metadata/layers',
         name: "Metadata Layering",
         meta: {
             roles: {
