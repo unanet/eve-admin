@@ -7,18 +7,34 @@ export default (jsGrid: any) => {
     };
 
     LayeringControlField.prototype = new jsGrid.Field({
+        type: "control",
+        name: "Layering",
+        headercss: "layering-control jsgrid-align-left",
+        // itemTemplate: function(value: any, item: any) {
+        //     let $result = $([]);
+        //
+        //     if(item.Editable) {
+        //         $result = $result.add(this._createEditButton(item));
+        //     }
+        //
+        //     if(item.Deletable) {
+        //         $result = $result.add(this._createDeleteButton(item));
+        //     }
+        //
+        //     return $result;
+        // }
+
         itemTemplate: function(value: any, item: any) {
-            let $result = $([]);
+            console.log("itemTemplate", value, item)
+            return "<td>" + item + "</td>";
+        },
+        cellRenderer: function(item: any, value: any) {
 
-            if(item.Editable) {
-                $result = $result.add(this._createEditButton(item));
-            }
-
-            if(item.Deletable) {
-                $result = $result.add(this._createDeleteButton(item));
-            }
-
-            return $result;
+            return $("<td>")
+                .on("click", function (e: any) {
+                    // stop all clicks on our cell
+                    e.stopPropagation();
+                })
         }
     });
 

@@ -20,7 +20,6 @@ export default {
         // jsGrid.fields[FormFieldType.metadataControl] = MetadataControlField(jsGrid);
         jsGrid.fields[FormFieldType.layeringControl] = LayeringControlField(jsGrid);
 
-        console.log("before", self.tableConfig)
         // If we enable editing, let's show the edit column
         if (self.tableConfig?.editing) {
             self.tableConfig.fields = self.tableConfig.fields.concat([
@@ -64,7 +63,6 @@ export default {
             jsGridObj.filtering = false;
         }
 
-        console.log("after", self.tableConfig)
         $("#jsGrid").jsGrid(jsGridObj);
     }
 }

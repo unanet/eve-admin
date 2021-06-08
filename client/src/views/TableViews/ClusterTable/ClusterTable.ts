@@ -8,7 +8,7 @@ export default NewTableBaseView("Cluster", service, {
                 // tableConfig: {
                 //     extraFields: [
                 //         {
-                //             name: "Layering", headercss: "layering-control jsgrid-align-left", type: "metadata-control-field"
+                //             type: "layering-control"
                 //         }
                 //     ]
                 // },

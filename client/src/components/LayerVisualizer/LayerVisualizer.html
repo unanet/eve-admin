@@ -25,16 +25,14 @@
                     <h5 class="text-bold pr-1 float-left">{{ layer.description }}</h5>
                     <div class="card-tools float-right">
                         <span class="time">
-                            <span v-if="layer.environment_id > 0"><span
-                                    class="text-bold">Environment ID:</span> {{ layer.environment_id }}</span>
-                            <span v-if="layer.artifact_id > 0"><span
-                                    class="text-bold">Artifact ID:</span> {{ layer.artifact_id }}</span>
-                            <span v-if="layer.namespace_id > 0"><span
-                                    class="text-bold">Namespace ID:</span> {{ layer.namespace_id }}</span>
-                            <span v-if="layer.cluster_id > 0"><span
-                                    class="text-bold">Cluster ID:</span> {{ layer.cluster_id }}</span>
-                            <span v-if="layer.service_id > 0" ><span
-                                    class="text-bold">Service ID:</span> {{ layer.service_id }}</span>
+                            <span v-if="layer.metadata_id" class="pr-3"><span class="text-bold">Metadata ID:</span> {{ layer.metadata_id }}</span>
+                            <span v-if="layer.definition_id" class="pr-3"><span class="text-bold">Definition ID:</span> {{ layer.definition_id }}</span>
+
+                            <span v-if="layer.environment_id > 0"><span class="text-bold">Environment ID:</span> {{ layer.environment_id }}</span>
+                            <span v-if="layer.artifact_id > 0"><span class="text-bold">Artifact ID:</span> {{ layer.artifact_id }}</span>
+                            <span v-if="layer.namespace_id > 0"><span class="text-bold">Namespace ID:</span> {{ layer.namespace_id }}</span>
+                            <span v-if="layer.cluster_id > 0"><span class="text-bold">Cluster ID:</span> {{ layer.cluster_id }}</span>
+                            <span v-if="layer.service_id > 0" ><span class="text-bold">Service ID:</span> {{ layer.service_id }}</span>
 
                             <span class="text-bold pl-3">Stacking Order:</span> {{ layer.stacking_order }}
                         </span>
