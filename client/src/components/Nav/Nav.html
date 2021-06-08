@@ -1,9 +1,11 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
-        <img src="/img/logo.svg" alt="Unanet Logo" class="brand-image">
-        <span class="brand-text font-weight-light">EVE Admin</span>
-    </a>
+
+    <router-link class="brand-link"
+                 :to="{ path: `/admin/dashboard`}">
+        <img src="/img/logo.svg" alt="Unanet Logo" class="brand-image float-none">
+        <span class="brand-text font-weight-light ml-1">Cloud Admin</span>
+    </router-link>
 
     <!-- Sidebar -->
     <div class="sidebar mt-2">

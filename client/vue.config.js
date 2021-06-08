@@ -7,6 +7,5 @@ module.exports = {
         disableHostCheck: true,
         contentBase: path.join(__dirname, 'public')
     },
-
     lintOnSave: false
 }
