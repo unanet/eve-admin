@@ -7,7 +7,6 @@ import FormComponent from "@/components/Form/index.vue";
 import ModalComponent from "@/components/Modal/index.vue";
 import {FormSubmitResponse, IForm} from "@/components/Form/FormProps";
 import {APIResponse} from "@/utils/APIType";
-import {JSGridProps} from "@/components/JsGrid/JSGridProps";
 import {_GrowlMixin} from "@/components/Growl/Growl";
 import {getObjectValueByKey} from "@/utils/helpers";
 
@@ -63,13 +62,12 @@ const _TableBaseViewMixin = defineComponent({
                     response = [];
                 }
 
-                self.tableConfig = {
-                    title: self.name,
-                    headers: service.getJSTableHeaders(),
-                    rows: response,
+                self.tableConfig = Object.assign({
+                    fields: service.getJSTableHeaders(),
+                    data: response,
                     rowClick: self.onRowClick,
                     tableController: service.tableController
-                };
+                }, self.tableConfig);
 
                 self.dataLoaded = true;
 
@@ -79,11 +77,12 @@ const _TableBaseViewMixin = defineComponent({
         onRowClick: function (e: any) {
             const self = this as any;
             const item = e.item
+
             self.selectedItem = item
 
             self.formConfig = Object.assign(self.formConfig, {
                 // Apply decorators
-                title: self. getModalName(item),
+                title: self.getModalName(item),
                 isCreate: false,
                 formFields: self.service.getFormFields(e.item),
                 editItemConfig: self.formConfig.editItemConfig,
@@ -172,7 +171,7 @@ const _TableBaseViewMixin = defineComponent({
         return {
             service: null,
             selectedItem: null,
-            tableConfig: JSGridProps,
+            tableConfig: {},
             component: FormComponent,
             enableModal: false,
             disableCreate: false,

@@ -1,5 +1,4 @@
-import {IJSGridHeaderData, IJSGridOptions, JSGridProps} from "./JSGridProps";
-import {DateTimeField, JSONField} from "./fields";
+import {DateTimeField, JSONField, LayeringControlField} from "./fields";
 // Import JSGrid Lib files
 import "./third-party/jsgrid/jsgrid.min.js"
 import {FormFieldType} from "@/components/Form/FormProps";
@@ -10,7 +9,7 @@ declare let jsGrid: any;
 export default {
     name: 'JsGrid',
     props: {
-        tableConfig: Object as () => JSGridProps,
+        tableConfig: Object,
     },
     mounted() {
         const self = this as any
@@ -18,58 +17,54 @@ export default {
         // Register fields
         jsGrid.fields.json = JSONField(jsGrid);
         jsGrid.fields[FormFieldType.datetime] = DateTimeField(jsGrid);
+        // jsGrid.fields[FormFieldType.metadataControl] = MetadataControlField(jsGrid);
+        jsGrid.fields[FormFieldType.layeringControl] = LayeringControlField(jsGrid);
 
-        const tableConfig = Object.assign(new JSGridProps(), self.tableConfig as JSGridProps);
-
-        if (tableConfig.tableID != "jsGrid") {
-            console.log("table id is currently not supported")
-            tableConfig.tableID = "jsGrid"
+        console.log("before", self.tableConfig)
+        // If we enable editing, let's show the edit column
+        if (self.tableConfig?.editing) {
+            self.tableConfig.fields = self.tableConfig.fields.concat([
+                {name: "controls", type: "control"}
+            ])
         }
 
-        let fields = tableConfig.headers as IJSGridHeaderData[];
-
-        // If we enable editing, let's show the edit column
-        if (tableConfig.editing) {
-            fields = fields.concat([{name: "controls", type: "control"}])
+        if (self.tableConfig.extraFields) {
+            self.tableConfig.fields = self.tableConfig.fields.concat(self.tableConfig.extraFields)
         }
 
         // https://www.npmjs.com/package/jsgrid#configuration
         // http://js-grid.com/docs/
-        let jsGridObj = {
-            height: tableConfig.height,
-            width: tableConfig.width,
-            sorting: tableConfig.sorting,
-            paging: tableConfig.paging,
-            selecting: tableConfig.selecting,
-            filtering: tableConfig.filtering,
-            editing: tableConfig.editing,
+        const jsGridObj: Record<string, any> = Object.assign({
+            height: "auto",
+            width: "100%",
+            title: "DEFAULT TITLE",
+            pageSize: 15,
+            filtering: true,
+            pageButtonCount: 5,
+            paging: true,
+            sorting: true,
+            selecting: true,
+            editing: false,
             autoload: true,
-            // aftersavefunc: function (rowid: any, response:any) { console.log(rowid, response) },
-            // errorfunc: function (rowid:any, response:any) { console.log(rowid, response); },
-            confirmDeleting: false,
-            data: tableConfig.rows as [],
-            fields,
             noDataContent: "No Records Found",
-            loadMessage: "Please, wait..."
-        } as IJSGridOptions;
+            loadMessage: "Please, wait...",
+        }, self.tableConfig);
 
         // @ts-ignore
-        if (tableConfig?.tableController) {
+        if (self.tableConfig?.tableController) {
             // @ts-ignore
             jsGridObj.controller = {
-                loadData: function(filter: any) {
+                loadData: function (filter: any) {
                     // @ts-ignore
-                    return tableConfig.tableController.filterGridRows(tableConfig.rows, filter)
+                    return self.tableConfig.tableController.filterGridRows(self.tableConfig.data, filter)
                 },
             }
             jsGridObj.filtering = true
         } else {
             jsGridObj.filtering = false;
         }
-        if (tableConfig.rowClick) {
-            jsGridObj.rowClick = tableConfig.rowClick;
-        }
 
-        $(`#${tableConfig.tableID}`).jsGrid(jsGridObj);
+        console.log("after", self.tableConfig)
+        $("#jsGrid").jsGrid(jsGridObj);
     }
 }

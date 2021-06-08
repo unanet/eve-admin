@@ -1,6 +1,5 @@
 import {formatDateTimeForUI} from "@/utils/helpers";
 
-
 export default (jsGrid: any) => {
     const DateTimeField = function(config: any) {
         // @ts-ignore suppress the this property

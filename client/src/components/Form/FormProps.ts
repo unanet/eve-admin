@@ -26,6 +26,8 @@ export enum FormFieldType {
     week = "week",
     // Custom Properties
     json = "json",
+    metadataControl = "metadata-control-field",
+    layeringControl = "layering-control",
 }
 
 export interface FormSubmitResponse {
