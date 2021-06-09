@@ -6,6 +6,7 @@ import {
 } from "@/utils/helpers";
 import {BaseService} from "./";
 import {apiService, APIType, APIResponse} from "@/utils/APIType";
+import {GridFieldType} from "@/components/JsGrid/JsGrid";
 
 const metadataServiceMapService = new class extends BaseService {
     baseUrl = "/metadata/service-maps"
@@ -25,6 +26,7 @@ const metadataServiceMapService = new class extends BaseService {
         service_id: {
             title: "Service ID",
             type: FormFieldType.number,
+            // gridType: GridFieldType.link,
             placeholder: null,
             width: getDefaultIDColumnSize(),
             nullable: true

@@ -7,7 +7,7 @@ export default NewTableBaseView("Service", service, {
             return {
                 // Needed for how vue does mixins of objects
                 showMetadataLayerLink: true,
-                showDefinitionLayerLink: false,
+                showDefinitionLayerLink: true,
                 layeringModelType: "service",
             }
         }

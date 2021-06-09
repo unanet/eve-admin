@@ -38,6 +38,12 @@ const definitionServiceMapService = new class extends BaseService {
             return response.data
         });
     }
+
+    getLayers(id: number) {
+        return apiService.getRequest(APIType.EVE, `/services/${id}/definition-maps`).then((response: APIResponse) => {
+            return response.data
+        });
+    }
 }
 
 export {definitionServiceMapService}

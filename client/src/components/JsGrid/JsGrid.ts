@@ -1,10 +1,17 @@
-import {DateTimeField, JSONField, LayeringControlField} from "./fields";
+import {DateTimeField, JSONField, LayeringControlField, LinkField} from "./fields";
 // Import JSGrid Lib files
 import "./third-party/jsgrid/jsgrid.min.js"
 import {FormFieldType} from "@/components/Form/FormProps";
 
 declare const $: any;
 declare let jsGrid: any;
+
+export enum GridFieldType {
+    json = "json",
+    metadataControl = "metadata-control-field",
+    layeringControl = "layering-control",
+    link = "link"
+}
 
 export default {
     name: 'JsGrid',
@@ -18,7 +25,8 @@ export default {
         jsGrid.fields.json = JSONField(jsGrid);
         jsGrid.fields[FormFieldType.datetime] = DateTimeField(jsGrid);
         // jsGrid.fields[FormFieldType.metadataControl] = MetadataControlField(jsGrid);
-        jsGrid.fields[FormFieldType.layeringControl] = LayeringControlField(jsGrid);
+        jsGrid.fields[GridFieldType.layeringControl] = LayeringControlField(jsGrid);
+        jsGrid.fields[GridFieldType.link] = LinkField(jsGrid);
 
         // If we enable editing, let's show the edit column
         if (self.tableConfig?.editing) {
@@ -30,6 +38,14 @@ export default {
         if (self.tableConfig.extraFields) {
             self.tableConfig.fields = self.tableConfig.fields.concat(self.tableConfig.extraFields)
         }
+
+        self.tableConfig.fields = self.tableConfig.fields.map((field: Record<string, any>) => {
+            if (field.gridType) {
+                field.type = field.gridType
+            }
+
+            return field
+        })
 
         // https://www.npmjs.com/package/jsgrid#configuration
         // http://js-grid.com/docs/

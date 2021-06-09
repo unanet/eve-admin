@@ -21,6 +21,7 @@ import {
 } from "@/views/TableViews";
 
 import ServiceMetadataMapping from "@/views/Visualization/ServiceMetadataMapping/index.vue";
+import ServiceDefinitionMapping from "@/views/Visualization/ServiceDefinitionMapping/index.vue";
 
 import {Roles} from "@/config"
 
@@ -228,6 +229,17 @@ export default [
         component: ServiceMetadataMapping,
         path: '/admin/models/service/:id/metadata/layers',
         name: "Metadata Layering",
+        meta: {
+            roles: {
+                view: [Roles.Admin],
+                edit: [Roles.Admin]
+            }
+        }
+    },
+    {
+        component: ServiceDefinitionMapping,
+        path: '/admin/models/service/:id/definition/layers',
+        name: "Definition Layering",
         meta: {
             roles: {
                 view: [Roles.Admin],
