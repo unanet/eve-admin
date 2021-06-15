@@ -11,8 +11,11 @@ const router = createRouter({
   routes: [...publicRoutes, ...privateRoutes]
 })
 
+console.log(router.getRoutes())
 // // Middlewares
 router.beforeEach((to, from, next) => {
+  // https://stackoverflow.com/questions/53788975/vue-router-how-to-get-previous-page-url
+
 
   // Force close modal, this should be updated to be less of a bazooka approach
   $('#modal-xl').modal('hide');

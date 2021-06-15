@@ -48,6 +48,12 @@ const metadataJobMapService = new class extends BaseService {
             return response.data
         });
     }
+
+    getLayers(id: number) {
+        return apiService.getRequest(APIType.EVE, `/jobs/${id}/metadata-maps`).then((response: APIResponse) => {
+            return response.data
+        });
+    }
 }
 
 export {metadataJobMapService}

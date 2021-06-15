@@ -39,7 +39,9 @@ export default {
             self.tableConfig.fields = self.tableConfig.fields.concat(self.tableConfig.extraFields)
         }
 
-        self.tableConfig.fields = self.tableConfig.fields.map((field: Record<string, any>) => {
+        self.tableConfig.fields = self.tableConfig.fields.filter((field: Record<string, any>) => {
+            return !field.hideInTable;
+        }).map((field: Record<string, any>) => {
             if (field.gridType) {
                 field.type = field.gridType
             }

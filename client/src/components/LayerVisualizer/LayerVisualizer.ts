@@ -23,6 +23,9 @@ export default defineComponent({
         this.initSlider();
     },
     methods: {
+        getDefinitionLayers() {
+            return [];
+        },
         getValue(data: {}) {
             const self = (this as any);
             if (self.dataKey != "") {

@@ -3,19 +3,19 @@ import {Dashboard} from "@/views";
 import {
     ArtifactTable,
     ClusterTable,
-    DefinitionTable,
     DefinitionJobMapTable,
     DefinitionServiceMapTable,
+    DefinitionTable,
     DefinitionTypeTable,
     DeploymentCronTable,
-    EnvironmentTable,
     EnvironmentFeedMapTable,
+    EnvironmentTable,
     FeedTable,
     JobTable,
-    MetadataTable,
     MetadataHistoryTable,
     MetadataJobMapTable,
     MetadataServiceMapTable,
+    MetadataTable,
     NamespaceTable,
     ServiceTable,
 } from "@/views/TableViews";
@@ -24,6 +24,8 @@ import ServiceMetadataMapping from "@/views/Visualization/ServiceMetadataMapping
 import ServiceDefinitionMapping from "@/views/Visualization/ServiceDefinitionMapping/index.vue";
 
 import {Roles} from "@/config"
+import JobMetadataMapping from "@/views/Visualization/JobMetadataMapping/JobMetadataMapping";
+import JobDefinitionMapping from "@/views/Visualization/JobDefinitionMapping/JobDefinitionMapping";
 
 export default [
     {
@@ -247,4 +249,26 @@ export default [
             }
         }
     },
+    // {
+    //     component: JobMetadataMapping,
+    //     path: '/admin/models/job/:id/metadata/layers',
+    //     name: "Metadata Layering",
+    //     meta: {
+    //         roles: {
+    //             view: [Roles.Admin],
+    //             edit: [Roles.Admin]
+    //         }
+    //     }
+    // },
+    // {
+    //     component: JobDefinitionMapping,
+    //     path: '/admin/models/job/:id/definition/layers',
+    //     name: "Definition Layering",
+    //     meta: {
+    //         roles: {
+    //             view: [Roles.Admin],
+    //             edit: [Roles.Admin]
+    //         }
+    //     }
+    // },
 ]

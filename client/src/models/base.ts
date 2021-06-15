@@ -1,6 +1,10 @@
 import {FormFieldType} from "@/components/Form/FormProps";
 import {generateID, getDefaultIDColumnSize} from "@/utils/helpers";
 
+function formatTableField(name: string, id: number) {
+    return `${name} (${id})`;
+}
+
 interface IIDModel {
     id: number
 }
@@ -36,18 +40,48 @@ const idField = {
     },
 }
 
+const artifactFields = {
+    artifact_id: {
+        title: "Artifact ID",
+        type: FormFieldType.number,
+        placeholder: generateID(),
+        hideInTable: true
+    },
+    artifact_name: {
+        title: "Artifact",
+        type: FormFieldType.text,
+        hiddenInForm: true
+    },
+}
+const namespaceFields = {
+    namespace_id: {
+        title: "Namespace ID",
+        type: FormFieldType.number,
+        placeholder: generateID(),
+        width: getDefaultIDColumnSize(),
+        hideInTable: true
+    },
+    namespace_name: {
+        title: "Namespace",
+        type: FormFieldType.text,
+        hiddenInForm: true
+    },
+}
+
 const dateTimeFields = {
     updated_at: {
         title: "Updated at",
         placeholder: "2020-05-28T01:14:16.11056Z",
         type: FormFieldType.datetime,
         width: 75,
+        hideInTable: true
     },
     created_at: {
         title: "created at",
         placeholder: "2020-05-28T01:14:16.11056Z",
         type: FormFieldType.datetime,
         width: 75,
+        hideInTable: true
     },
 }
 
@@ -89,4 +123,4 @@ const mappingModelFields = {
     },
 }
 
-export {IMappingModel, IIDModel, IDateTimeModel, generateID, mappingModelFields, idField, idFieldString, dateTimeFields}
+export {IMappingModel, IIDModel, IDateTimeModel, generateID, formatTableField, mappingModelFields, idField, idFieldString, dateTimeFields, artifactFields, namespaceFields}

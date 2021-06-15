@@ -12,6 +12,16 @@
 
 {{layerData.model.name}} in namespace {{ layerData.model.namespace_name}}
 <json-editor :value="layerData.end_result"></json-editor>
+<!--
+<template v-if="typeof layerData == 'Array'">
+    Array data
+    <json-editor v-if="typeof layerData != 'Array'" :value="layerData.end_result"></json-editor>
+</template>
+
+<template v-else>
+    <json-editor :value="layerData.end_result"></json-editor>
+</template>
+-->
 
 <div class="timeline mt-5 mb-0">
     <div class="time-label">
@@ -26,8 +36,9 @@
                     <div class="card-tools float-right">
                         <span class="time">
                             <span v-if="layer.metadata_id" class="pr-3"><span class="text-bold">Metadata ID:</span> {{ layer.metadata_id }}</span>
-                            <span v-if="layer.definition_id" class="pr-3"><span class="text-bold">Definition ID:</span> {{ layer.definition_id }}</span>
+                            <span v-if="layer.id" class="pr-3"><span class="text-bold">Definition ID:</span> {{ layer.id }}</span>
 
+                            <span v-if="layer.definition_type_id > 0"><span class="text-bold">Definition Type ID:</span> {{ layer.definition_type_id }}</span>
                             <span v-if="layer.environment_id > 0"><span class="text-bold">Environment ID:</span> {{ layer.environment_id }}</span>
                             <span v-if="layer.artifact_id > 0"><span class="text-bold">Artifact ID:</span> {{ layer.artifact_id }}</span>
                             <span v-if="layer.namespace_id > 0"><span class="text-bold">Namespace ID:</span> {{ layer.namespace_id }}</span>
@@ -44,7 +55,7 @@
 
             </div>
             <div class="timeline-body card-body">
-                <json-editor :value="getValue(layer)"></json-editor>
+                <json-editor :value="layer || getValue(layer)"></json-editor>
             </div>
         </div>
     </div>

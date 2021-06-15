@@ -1,11 +1,11 @@
 import AdminLayout from "@/layouts/AdminLayout/index.vue";
 import ChartComponent from "@/components/Chart/index.vue";
-import {definitionServiceMapService as service} from "@/services"
+import {definitionJobMapService as service} from "@/services"
 import LayerVisualizer from "@/components/LayerVisualizer/index.vue"
 import {defineComponent} from "vue";
 
 export default defineComponent({
-    name: 'ServiceDefinitionMap',
+    name: 'JobDefinitionMap',
     components: {
         AdminLayout,
         ChartComponent,
