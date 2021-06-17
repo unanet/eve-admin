@@ -1,7 +1,21 @@
 import {FormFieldType} from "@/components/Form/FormProps";
-import {mappingModelFields} from "@/models";
-import {generateID, getDefaultIDColumnSize} from "@/utils/helpers";
-import {BaseService} from "./";
+import {
+    formatTableField,
+    generateTableFields,
+    IDefinitionJobMap,
+    IDefinitionServiceMap,
+    mappingModelFields
+} from "@/models";
+import {getDefaultIDColumnSize} from "@/utils/helpers";
+import {
+    artifactService,
+    BaseService,
+    clusterService,
+    definitionService,
+    environmentService,
+    jobService,
+    serviceService
+} from "./";
 import {APIResponse, apiService, APIType} from "@/utils/APIType";
 
 const definitionServiceMapService = new class extends BaseService {
@@ -12,18 +26,8 @@ const definitionServiceMapService = new class extends BaseService {
             type: FormFieldType.text,
             placeholder: "resource:base",
         },
-        definition_id: {
-            title: "Definition ID",
-            type: FormFieldType.number,
-            placeholder: generateID(),
-            width: getDefaultIDColumnSize()
-        },
-        service_id: {
-            title: "Service ID",
-            type: FormFieldType.number,
-            placeholder: null,
-            width: getDefaultIDColumnSize()
-        },
+        ...generateTableFields("Definition", "definition"),
+        ...generateTableFields("Service", "service"),
         ...mappingModelFields
     }
 
@@ -44,6 +48,47 @@ const definitionServiceMapService = new class extends BaseService {
             return response.data
         });
     }
+
+    get() {
+        return apiService.getRequest(APIType.EVE, this.baseUrl).then((response: APIResponse) => {
+
+            const rows = response.data as IDefinitionServiceMap[];
+            return Promise.all([
+                definitionService.getMappings(),
+                serviceService.getMappings(),
+                environmentService.getMappings(),
+                artifactService.getMappings(),
+                clusterService.getMappings()
+            ]).then((mappings) => {
+                const [definitionMappings, serviceMappings, environmentMappings, artifactMappings, clusterMappings] = mappings;
+
+                return rows.map(row => {
+                    if (row.definition_id != 0) {
+                        row.definition_name = formatTableField(definitionMappings[row.definition_id], row.definition_id)
+                    }
+
+                    if (row.service_id && row.service_id != 0) {
+                        row.service_name = formatTableField(serviceMappings[row.service_id], row.service_id)
+                    }
+
+                    if (row.environment_id && row.environment_id != 0) {
+                        row.environment_name = formatTableField(environmentMappings[row.environment_id], row.environment_id)
+                    }
+
+                    if (row.artifact_id && row.artifact_id != 0) {
+                        row.artifact_name = formatTableField(artifactMappings[row.artifact_id], row.artifact_id)
+                    }
+
+                    if (row.cluster_id && row.cluster_id != 0) {
+                        row.cluster_name = formatTableField(clusterMappings[row.cluster_id], row.cluster_id)
+                    }
+
+                    return row
+                });
+            });
+        });
+    }
+
 }
 
 export {definitionServiceMapService}

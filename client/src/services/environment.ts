@@ -1,5 +1,5 @@
 import {FormFieldType} from "@/components/Form/FormProps";
-import {dateTimeFields, idField} from "@/models";
+import {dateTimeFields, IDefinitionType, idField, IEnvironment} from "@/models";
 import {BaseService} from "./";
 
 const environmentService = new class extends BaseService {
@@ -23,6 +23,11 @@ const environmentService = new class extends BaseService {
             placeholder: "Eve Development Environment"
         },
         updated_at: dateTimeFields.updated_at,
+    }
+    getMappings() {
+        return this.get().then(models => {
+            return Object.fromEntries((models as IEnvironment[]).map((item: IEnvironment) => [item.id, item.name]))
+        });
     }
 }
 

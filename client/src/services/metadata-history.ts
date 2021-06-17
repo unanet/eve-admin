@@ -51,11 +51,7 @@ const metadataHistoryService = new class {
     }
 
     get() {
-        return apiService.getRequest(APIType.EVE, this.baseUrl).then((response: APIResponse) => {
-            return response.data
-        }).catch((err: any) => {
-            return err;
-        });
+        return apiService.getRequest(APIType.EVE, this.baseUrl).then((response: APIResponse) => response.data).catch((err: any) => err);
     }
 }
 

@@ -11,7 +11,6 @@ const router = createRouter({
   routes: [...publicRoutes, ...privateRoutes]
 })
 
-console.log(router.getRoutes())
 // // Middlewares
 router.beforeEach((to, from, next) => {
   // https://stackoverflow.com/questions/53788975/vue-router-how-to-get-previous-page-url
@@ -58,7 +57,7 @@ router.beforeEach((to, from, next) => {
 //   //   // else
 //   //   //   return next()
 //   // // }
-  (store as any).commit('changePage', to.name)
+  (store as Record<string, any>).commit('changePage', to.name)
   // (store as any).state.title = to.name
 
   next();

@@ -29,7 +29,7 @@ export default defineComponent({
         if(this.extraConfig) {
             this._config = merge(this.config, this.extraConfig);
         } else {
-            this._config = this.config as any
+            this._config = this.config as Record<string, any>
         }
     },
     data() {
@@ -39,7 +39,7 @@ export default defineComponent({
     },
     methods: {
         onSubmit(e: SubmitEvent) {
-            const self = this as any
+            const self = this as Record<string, any>
 
             const obj = {};
             e.currentTarget.elements.forEach((el: any) => {
@@ -86,7 +86,7 @@ export default defineComponent({
         getFieldConfig(): Record<any, any> {
             const defaultOmissionsArray = ["created_at"];
 
-            const cfg = (this._config as any)
+            const cfg = (this._config as Record<string, any>)
             return (cfg?.isCreate) ?
                 cfg?.createNewItemConfig || defaultOmissionsArray :
                 cfg?.editItemConfig || defaultOmissionsArray;

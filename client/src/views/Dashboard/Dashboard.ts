@@ -11,7 +11,7 @@ export default defineComponent({
         ChartComponent
     },
     created() {
-        const self = (this as any);
+        const self = (this as Record<string, any>);
         service.getInformation().then((response: any) => {
             self.items = response as type[];
 

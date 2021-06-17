@@ -8,7 +8,7 @@ const _GrowlMixin = {
         }
     },
     created() {
-        (this as any).toast = Swal.mixin({
+        (this as Record<string, any>).toast = Swal.mixin({
             toast: true,
             position: 'top-end',
             showConfirmButton: false,
@@ -32,7 +32,7 @@ const _GrowlMixin = {
             this._showAlert('question', message);
         },
         _showAlert(icon: string, message: string) {
-            (this as any).toast.fire({
+            (this as Record<string, any>).toast.fire({
                 icon: icon,
                 title: message,
             })

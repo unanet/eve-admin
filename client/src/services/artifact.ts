@@ -1,5 +1,5 @@
 import {FormFieldType} from "@/components/Form/FormProps";
-import {idField} from "@/models";
+import {IArtifact, idField, IFeed} from "@/models";
 import {BaseService} from "./";
 
 const artifactService = new class extends BaseService {
@@ -37,6 +37,13 @@ const artifactService = new class extends BaseService {
             placeholder: 0
         }
     }
+
+    getMappings() {
+        return this.get().then(models => {
+            return Object.fromEntries((models as IArtifact[]).map((item: IArtifact) => [item.id, item.name]))
+        });
+    }
+
 }
 
 export {artifactService}

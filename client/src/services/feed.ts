@@ -1,4 +1,4 @@
-import {idField} from "@/models";
+import {idField, IFeed, IService} from "@/models";
 import {BaseService} from "./";
 import {FormFieldType} from "@/components/Form/FormProps";
 
@@ -26,6 +26,12 @@ const feedService = new class extends BaseService {
             placeholder: "int",
             type: FormFieldType.text,
         }
+    }
+
+    getMappings() {
+        return this.get().then(models => {
+            return Object.fromEntries((models as IFeed[]).map((item: IFeed) => [item.id, item.name]))
+        });
     }
 }
 

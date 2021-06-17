@@ -1,7 +1,15 @@
 import {FormFieldType} from "@/components/Form/FormProps";
-import {dateTimeFields, idField} from "@/models";
+import {
+    dateTimeFields,
+    formatTableField,
+    generateTableFields, ICluster,
+    IDefinition,
+    IDefinitionType,
+    idField,
+    IService
+} from "@/models";
 import {generateID, getDefaultIDColumnSize} from "@/utils/helpers";
-import {BaseService} from "./";
+import {BaseService, definitionTypeService} from "./";
 import {APIResponse, apiService, APIType} from "@/utils/APIType";
 
 const definitionService = new class extends BaseService {
@@ -19,12 +27,7 @@ const definitionService = new class extends BaseService {
             type: FormFieldType.text,
             placeholder: "deployment:serviceAccount:eve-sch"
         },
-        definition_type_id: {
-            title: "Definition Type ID",
-            type: FormFieldType.number,
-            placeholder: generateID(),
-            width: getDefaultIDColumnSize()
-        },
+        ...generateTableFields("Definition Type", "definition_type"),
         data: {
             title: "Data",
             type: FormFieldType.json,
@@ -45,6 +48,24 @@ const definitionService = new class extends BaseService {
         });
     }
 
+    getMappings() {
+        return this.get().then(definitions => {
+            return Object.fromEntries((definitions as IDefinition[]).map((item: IDefinition) => [item.id, item.description]))
+        });
+    }
+
+    get() {
+        return apiService.getRequest(APIType.EVE, this.baseUrl).then((response: APIResponse) => {
+
+            return definitionTypeService.getMappings().then(definitionTypeMap => {
+
+                return (response.data as IDefinition[]).map((definition: IDefinition) => {
+                    definition.definition_type_name = formatTableField(definitionTypeMap[definition.definition_type_id], definition.definition_type_id)
+                    return definition
+                });
+            });
+        });
+    }
 }
 
 export {definitionService}

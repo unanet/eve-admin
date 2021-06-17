@@ -19,7 +19,7 @@ export default defineComponent({
       }
     },
     mounted() {
-        (store as any).commit('changePage', `Layer Details: ${this.layerData.model.name} in ${this.layerData.model.namespace_name}`);
+        (store as Record<string, any>).commit('changePage', `Layer Details: ${this.layerData.model.name} in ${this.layerData.model.namespace_name}`);
         this.initSlider();
     },
     methods: {
@@ -27,7 +27,7 @@ export default defineComponent({
             return [];
         },
         getValue(data: {}) {
-            const self = (this as any);
+            const self = (this as Record<string, any>);
             if (self.dataKey != "") {
                 return getObjectValueByKey(data, self.layerDataKey)
             } else {

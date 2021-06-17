@@ -62,7 +62,7 @@ const BaseService = class {
 
                 for (const key in tableHeaders) {
                     // @ts-ignore
-                    const field = tableHeaders[key] as any
+                    const field = tableHeaders[key] as Record<string, any>
 
                     // @ts-ignore
                     if (field.filtering != false) {

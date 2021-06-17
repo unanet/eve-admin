@@ -19,7 +19,7 @@ export default {
         tableConfig: Object,
     },
     mounted() {
-        const self = this as any
+        const self = this as Record<string, any>
 
         // Register fields
         jsGrid.fields.json = JSONField(jsGrid);

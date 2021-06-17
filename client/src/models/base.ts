@@ -1,9 +1,4 @@
-import {FormFieldType} from "@/components/Form/FormProps";
-import {generateID, getDefaultIDColumnSize} from "@/utils/helpers";
-
-function formatTableField(name: string, id: number) {
-    return `${name} (${id})`;
-}
+import {generateID} from "@/utils/helpers";
 
 interface IIDModel {
     id: number
@@ -20,107 +15,18 @@ interface IMappingModel {
     namespace_id: number | null
     cluster_id: number | null
     stacking_order: number | null
+
+
+    // Metadata
+    environment_name: string | null
+    artifact_name: string | null
+    namespace_name: string | null
+    cluster_name: string | null
 }
 
-const idFieldString = {
-    id: {
-        title: "ID",
-        type: FormFieldType.text,
-        placeholder: generateID(),
-        width: getDefaultIDColumnSize()
-    },
+export {
+    IMappingModel,
+    IIDModel,
+    IDateTimeModel,
+    generateID
 }
-
-const idField = {
-    id: {
-        title: "ID",
-        type: FormFieldType.number,
-        placeholder: generateID(),
-        width: getDefaultIDColumnSize()
-    },
-}
-
-const artifactFields = {
-    artifact_id: {
-        title: "Artifact ID",
-        type: FormFieldType.number,
-        placeholder: generateID(),
-        hideInTable: true
-    },
-    artifact_name: {
-        title: "Artifact",
-        type: FormFieldType.text,
-        hiddenInForm: true
-    },
-}
-const namespaceFields = {
-    namespace_id: {
-        title: "Namespace ID",
-        type: FormFieldType.number,
-        placeholder: generateID(),
-        width: getDefaultIDColumnSize(),
-        hideInTable: true
-    },
-    namespace_name: {
-        title: "Namespace",
-        type: FormFieldType.text,
-        hiddenInForm: true
-    },
-}
-
-const dateTimeFields = {
-    updated_at: {
-        title: "Updated at",
-        placeholder: "2020-05-28T01:14:16.11056Z",
-        type: FormFieldType.datetime,
-        width: 75,
-        hideInTable: true
-    },
-    created_at: {
-        title: "created at",
-        placeholder: "2020-05-28T01:14:16.11056Z",
-        type: FormFieldType.datetime,
-        width: 75,
-        hideInTable: true
-    },
-}
-
-const mappingModelFields = {
-    environment_id: {
-        title: "Environment ID",
-        type: FormFieldType.number,
-        placeholder: null,
-        width: getDefaultIDColumnSize(),
-        nullable: true
-    },
-    artifact_id: {
-        title: "Artifact ID",
-        type: FormFieldType.number,
-        placeholder: null,
-        width: getDefaultIDColumnSize(),
-        nullable: true
-    },
-    namespace_id: {
-        title: "Namespace ID",
-        type: FormFieldType.number,
-        placeholder: null,
-        width: getDefaultIDColumnSize(),
-        nullable: true
-    },
-    cluster_id: {
-        title: "Cluster ID",
-        type: FormFieldType.number,
-        placeholder: null,
-        width: getDefaultIDColumnSize(),
-        nullable: true
-    },
-    stacking_order: {
-        title: "Stacking Order",
-        type: FormFieldType.number,
-        placeholder: 0,
-        width: getDefaultIDColumnSize(),
-        nullable: true
-    },
-}
-
-export {IMappingModel, IIDModel, IDateTimeModel, generateID, formatTableField, mappingModelFields, idField, idFieldString, dateTimeFields, artifactFields, namespaceFields}

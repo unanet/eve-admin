@@ -1,12 +1,15 @@
 import {FormFieldType} from "@/components/Form/FormProps";
-import {dateTimeFields, ICluster, idField, INamespace, IService} from "@/models";
 import {
-    generateID,
-    getDefaultIDColumnSize,
-} from "@/utils/helpers";
+    dateTimeFields,
+    formatTableField,
+    generateTableFields,
+    ICluster,
+    idField, IMetadata,
+    INamespace
+} from "@/models";
+import {getDefaultIDColumnSize,} from "@/utils/helpers";
 import {BaseService, clusterService} from "./";
 import {APIResponse, apiService, APIType} from "@/utils/APIType";
-import {formatTableField} from "@/models/base";
 
 const namespaceService = new class extends BaseService {
     baseUrl = "/namespaces"
@@ -22,24 +25,16 @@ const namespaceService = new class extends BaseService {
         alias: {
             title: "Alias",
             type: FormFieldType.text,
-            placeholder: "current"
+            placeholder: "current",
+            width: 25
         },
-        environment_name: {
-            title: "Environment",
-            type: FormFieldType.text,
-            hiddenInForm: true
-        },
-        environment_id: {
-            title: "Environment ID",
-            type: FormFieldType.number,
-            placeholder: generateID(),
-            width: getDefaultIDColumnSize(),
-            hideInTable: true,
-        },
+        ...generateTableFields("Environment", "environment"),
+        ...generateTableFields("Cluster", "cluster"),
         requested_version: {
             title: "Requested Version",
             type: FormFieldType.text,
-            placeholder: "20.7"
+            placeholder: "20.7",
+            width: getDefaultIDColumnSize()
         },
         explicit_deploy: {
             title: "Explicit Version",
@@ -49,26 +44,18 @@ const namespaceService = new class extends BaseService {
             filtering: false,
             hideInTable: true
         },
-        cluster_name: {
-            title: "Cluster",
-            type: FormFieldType.text,
-            hiddenInForm: true
-        },
-        cluster_id: {
-            title: "Cluster ID",
-            type: FormFieldType.number,
-            placeholder: generateID(),
-            hideInTable: true
-        },
         ...dateTimeFields,
     }
+
+    getMappings() {
+        return this.get().then(models => {
+            return Object.fromEntries((models as INamespace[]).map((item: INamespace) => [item.id, item.name]))
+        });
+    }
+
     get() {
         return apiService.getRequest(APIType.EVE, this.baseUrl).then((response: APIResponse) => {
-            return clusterService.get().then((clusterData: Record<string, any>) => {
-
-                // Map cluster name to our namespaces
-                const clusterMap = Object.fromEntries(clusterData.map((item: ICluster) => [item.id, item.name]));
-
+            return clusterService.getMappings().then((clusterMap: Record<string, any>) => {
                 return (response.data as INamespace[]).map((namespace: INamespace) => {
                     namespace.cluster_name = formatTableField(clusterMap[namespace.cluster_id], namespace.cluster_id)
                     namespace.environment_name = formatTableField(namespace.environment_name, namespace.environment_id)

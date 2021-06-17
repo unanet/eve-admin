@@ -1,7 +1,6 @@
 import {FormFieldType} from "@/components/Form/FormProps";
-import {dateTimeFields, mappingModelFields} from "@/models";
-import {generateID, getDefaultIDColumnSize} from "@/utils/helpers";
-import {BaseService} from "./";
+import {dateTimeFields, formatTableField, generateTableFields, IDefinitionJobMap, mappingModelFields} from "@/models";
+import {artifactService, BaseService, clusterService, definitionService, environmentService, jobService} from "./";
 import {APIResponse, apiService, APIType} from "@/utils/APIType";
 
 const definitionJobMapService = new class extends BaseService {
@@ -12,18 +11,8 @@ const definitionJobMapService = new class extends BaseService {
             type: FormFieldType.text,
             placeholder: "job:ttl",
         },
-        definition_id: {
-            title: "Definition ID",
-            type: FormFieldType.number,
-            placeholder: generateID(),
-            width: getDefaultIDColumnSize()
-        },
-        job_id: {
-            title: "Job ID",
-            type: FormFieldType.number,
-            placeholder: null,
-            width: getDefaultIDColumnSize()
-        },
+        ...generateTableFields("Definition", "definition"),
+        ...generateTableFields("Job", "job"),
         ...mappingModelFields,
         ...dateTimeFields
     }
@@ -33,6 +22,7 @@ const definitionJobMapService = new class extends BaseService {
             return response.data
         });
     }
+
     delete(data: any) {
         return apiService.deleteRequest(APIType.EVE, `/definitions/${data.definition_id}/job-maps/${data.description}`, data).then((response: APIResponse) => {
             return response.data
@@ -42,6 +32,46 @@ const definitionJobMapService = new class extends BaseService {
     getLayers(id: number) {
         return apiService.getRequest(APIType.EVE, `/jobs/${id}/definition-maps`).then((response: APIResponse) => {
             return response.data
+        });
+    }
+
+    get() {
+        return apiService.getRequest(APIType.EVE, this.baseUrl).then((response: APIResponse) => {
+
+            const rows = response.data as IDefinitionJobMap[];
+            return Promise.all([
+                definitionService.getMappings(),
+                jobService.getMappings(),
+                environmentService.getMappings(),
+                artifactService.getMappings(),
+                clusterService.getMappings()
+            ]).then((mappings) => {
+                const [definitionMappings, jobMappings, environmentMappings, artifactMappings, clusterMappings] = mappings;
+
+                return rows.map(row => {
+                    if (row.definition_id != 0) {
+                        row.definition_name = formatTableField(definitionMappings[row.definition_id], row.definition_id)
+                    }
+
+                    if (row.job_id && row.job_id != 0) {
+                        row.job_name = formatTableField(jobMappings[row.job_id], row.job_id)
+                    }
+
+                    if (row.environment_id && row.environment_id != 0) {
+                        row.environment_name = formatTableField(environmentMappings[row.environment_id], row.environment_id)
+                    }
+
+                    if (row.artifact_id && row.artifact_id != 0) {
+                        row.artifact_name = formatTableField(artifactMappings[row.artifact_id], row.artifact_id)
+                    }
+
+                    if (row.cluster_id && row.cluster_id != 0) {
+                        row.cluster_name = formatTableField(clusterMappings[row.cluster_id], row.cluster_id)
+                    }
+
+                    return row
+                });
+            });
         });
     }
 }

@@ -1,6 +1,6 @@
 import {FormFieldType} from "@/components/Form/FormProps";
-import {idField} from "@/models/base";
 import {BaseService} from "./";
+import {idField} from "@/models";
 
 const deploymentCronService = new class extends BaseService {
     baseUrl = "/deployment-crons"

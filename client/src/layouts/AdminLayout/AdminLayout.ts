@@ -12,7 +12,7 @@ export default {
     },
     computed: {
         title: function() {
-            const self = this as any;
+            const self = this as Record<string, any>;
             return self.$store.getters.getTitle
         }
     },

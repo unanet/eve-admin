@@ -24,7 +24,7 @@ const _TableBaseViewMixin = defineComponent({
     ],
     mounted() {
         // we can check for other id types here
-        (this as any).refreshGrid();
+        (this as Record<string, any>).refreshGrid();
     },
     methods: {
         checkURLForQueryParamAndOpenModalIfSet: function(responseData: any[]) {
@@ -48,12 +48,12 @@ const _TableBaseViewMixin = defineComponent({
             }, 0)
         },
         refreshGrid: function() {
-            const self = this as any;
+            const self = this as Record<string, any>;
             self.getData();
             self.formConfig.formFields = self.service.getFormFields();
         },
         getData: function () {
-            const self = this as any;
+            const self = this as Record<string, any>;
 
             const service = self.service
             return service.get().then((response: any) => {
@@ -75,7 +75,7 @@ const _TableBaseViewMixin = defineComponent({
             })
         },
         onRowClick: function (e: any) {
-            const self = this as any;
+            const self = this as Record<string, any>;
             const item = e.item
 
             self.selectedItem = item
@@ -93,7 +93,7 @@ const _TableBaseViewMixin = defineComponent({
             this.openModal();
         },
         _onDelete: function (msg: string, model?: {}) {
-            const self = this as any;
+            const self = this as Record<string, any>;
 
             return self.service.delete(self.selectedItem, model).then((resp: APIResponse) => {
                 console.log(resp, msg)
@@ -210,14 +210,14 @@ function NewTableBaseView(name: string, service: any, options?: { modelIDField?:
             options?.mixin || {},
         ],
         created() {
-            (this as any).service = service;
+            (this as Record<string, any>).service = service;
         },
         methods: {
             onSubmit: function (item: any) {
-                return (this as any)._onSubmit(item, `${name} created!`);
+                return (this as Record<string, any>)._onSubmit(item, `${name} created!`);
             },
             onDelete: function () {
-                const selectedItem = (this as any).selectedItem
+                const selectedItem = (this as Record<string, any>).selectedItem
                 return (this as any)._onDelete(selectedItem[options?.modelIDField || idField], selectedItem)
             },
             getModalName(item?: any): string {

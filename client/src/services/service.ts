@@ -1,9 +1,9 @@
 import {FormFieldType} from "@/components/Form/FormProps";
-import {dateTimeFields, ICluster, idField, INamespace, IService} from "@/models";
-import {generateID, getDefaultIDColumnSize} from "@/utils/helpers";
-import {BaseService, clusterService} from "./";
-import {artifactFields, formatTableField, namespaceFields} from "@/models/base";
+import {generateID} from "@/utils/helpers";
+import {BaseService} from "./";
+import {dateTimeFields, formatTableField, ICluster, idField, IService} from "@/models";
 import {APIResponse, apiService, APIType} from "@/utils/APIType";
+import {generateTableFields} from "@/models/tableFields";
 
 const serviceService = new class extends BaseService {
     baseUrl = "/services"
@@ -14,8 +14,8 @@ const serviceService = new class extends BaseService {
             type: FormFieldType.text,
             placeholder: "platform",
         },
-        ...namespaceFields,
-        ...artifactFields,
+        ...generateTableFields("Namespace", "namespace"),
+        ...generateTableFields("Artifact", "artifact"),
         override_version: {
             title: "Override Version",
             type: FormFieldType.text,
@@ -48,12 +48,19 @@ const serviceService = new class extends BaseService {
         },
         ...dateTimeFields
     }
+
+    getMappings() {
+        return this.get().then(models => {
+            return Object.fromEntries((models as IService[]).map((item: IService) => [item.id, item.name]))
+        });
+    }
+
     get() {
         return apiService.getRequest(APIType.EVE, this.baseUrl).then((response: APIResponse) => {
             return (response.data as IService[]).map((service: IService) => {
                 service.artifact_name = formatTableField(service.artifact_name, service.artifact_id)
                 service.namespace_name = formatTableField(service.namespace_name, service.namespace_id)
-               return service
+                return service
             });
         });
     }

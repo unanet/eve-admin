@@ -1,12 +1,19 @@
 import {FormFieldType} from "@/components/Form/FormProps";
-import {mappingModelFields} from "@/models";
 import {
-    generateID,
-    getDefaultIDColumnSize,
-} from "@/utils/helpers";
-import {BaseService} from "./";
+    formatTableField,
+    generateTableFields,
+    mappingModelFields
+} from "@/models";
+import {
+    artifactService,
+    BaseService,
+    clusterService,
+    environmentService,
+    metadataService,
+    serviceService
+} from "./";
 import {apiService, APIType, APIResponse} from "@/utils/APIType";
-import {GridFieldType} from "@/components/JsGrid/JsGrid";
+import {IMetadataServiceMap} from "@/models/metadata-service-map";
 
 const metadataServiceMapService = new class extends BaseService {
     baseUrl = "/metadata/service-maps"
@@ -16,21 +23,9 @@ const metadataServiceMapService = new class extends BaseService {
             type: FormFieldType.text,
             placeholder: "env:una-dev",
         },
-        metadata_id: {
-            title: "Metadata ID",
-            type: FormFieldType.number,
-            placeholder: generateID(1,200),
-            width: getDefaultIDColumnSize()
-        },
+        ...generateTableFields("Metadata", "metadata"),
         ...mappingModelFields,
-        service_id: {
-            title: "Service ID",
-            type: FormFieldType.number,
-            // gridType: GridFieldType.link,
-            placeholder: null,
-            width: getDefaultIDColumnSize(),
-            nullable: true
-        },
+        ...generateTableFields("Service", "service"),
     }
 
     update(data: any) {
@@ -56,6 +51,47 @@ const metadataServiceMapService = new class extends BaseService {
            return response.data
         });
     }
+
+    get() {
+        return apiService.getRequest(APIType.EVE, this.baseUrl).then((response: APIResponse) => {
+
+            const rows = response.data as IMetadataServiceMap[];
+            return Promise.all([
+                metadataService.getMappings(),
+                serviceService.getMappings(),
+                environmentService.getMappings(),
+                artifactService.getMappings(),
+                clusterService.getMappings()
+            ]).then((mappings) => {
+                const [metadataService, serviceMappings, environmentMappings, artifactMappings, clusterMappings] = mappings;
+
+                return rows.map(row => {
+                    if (row.metadata_id != 0) {
+                        row.metadata_name = formatTableField(metadataService[row.metadata_id], row.metadata_id)
+                    }
+
+                    if (row.service_id && row.service_id != 0) {
+                        row.service_name = formatTableField(serviceMappings[row.service_id], row.service_id)
+                    }
+
+                    if (row.environment_id && row.environment_id != 0) {
+                        row.environment_name = formatTableField(environmentMappings[row.environment_id], row.environment_id)
+                    }
+
+                    if (row.artifact_id && row.artifact_id != 0) {
+                        row.artifact_name = formatTableField(artifactMappings[row.artifact_id], row.artifact_id)
+                    }
+
+                    if (row.cluster_id && row.cluster_id != 0) {
+                        row.cluster_name = formatTableField(clusterMappings[row.cluster_id], row.cluster_id)
+                    }
+
+                    return row
+                });
+            });
+        });
+    }
+
 }
 
 export {metadataServiceMapService}

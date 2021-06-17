@@ -1,5 +1,5 @@
 import {FormFieldType} from "@/components/Form/FormProps";
-import {idField} from "@/models";
+import {IDefinition, IDefinitionType, idField} from "@/models";
 import {BaseService} from "./";
 
 const definitionTypeService = new class extends BaseService {
@@ -37,6 +37,13 @@ const definitionTypeService = new class extends BaseService {
             placeholder: "main"
         }
     }
+
+    getMappings() {
+        return this.get().then(models => {
+            return Object.fromEntries((models as IDefinitionType[]).map((item: IDefinitionType) => [item.id, item.name]))
+        });
+    }
+
 }
 
 export {definitionTypeService}

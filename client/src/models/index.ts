@@ -2,11 +2,16 @@ export {
     IMappingModel,
     IIDModel,
     IDateTimeModel,
-    mappingModelFields,
-    dateTimeFields,
-    idField,
-    idFieldString
 } from './base'
+
+export {
+    generateTableFields,
+    formatTableField,
+    idField,
+    idFieldString,
+    dateTimeFields,
+    mappingModelFields,
+} from './tableFields'
 
 export {ICluster} from './cluster';
 export {IArtifact} from './artifact';
@@ -25,7 +30,7 @@ export {IDefinitionJobMap} from './definition-job-map';
 export {IDefinitionServiceMap} from './definition-service-map';
 export {IEnvironmentFeedMap} from './environment-feed-map';
 export {IMetadataJobMap} from './metadata-job-map';
-export {IMetadataServiceMaps} from './metadata-service-map';
+export {IMetadataServiceMap} from './metadata-service-map';
 
 // Auditing
 export {IMetadataHistory} from './metadata-history';

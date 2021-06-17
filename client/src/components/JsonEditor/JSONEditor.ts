@@ -10,21 +10,21 @@ export default defineComponent({
     watch: {
         config: function(newVal: IFormField) {
             if (newVal != null) {
-                (this as any).initializeForm(newVal);
+                (this as Record<string, any>).initializeForm(newVal);
             }
         },
         value: function(newVal: {}) {
             if (newVal != null) {
-                (this as any).initializeForm(newVal);
+                (this as Record<string, any>).initializeForm(newVal);
             }
         }
     },
     mounted() {
-        (this as any).initializeForm(this.config || this.value);
+        (this as Record<string, any>).initializeForm(this.config || this.value);
     },
     methods: {
         initializeForm(data: IFormField|{}) {
-            (this as any).jsonDisplayValue = this.syntaxHighlight(("value" in data) ? data.value : data)
+            (this as Record<string, any>).jsonDisplayValue = this.syntaxHighlight(("value" in data) ? data.value : data)
         },
         syntaxHighlight(data: any) {
             // Method copied from here https://gist.github.com/tylerbuchea/5483512#file-json-highlight-js

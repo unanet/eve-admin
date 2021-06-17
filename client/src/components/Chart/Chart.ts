@@ -12,7 +12,7 @@ export default defineComponent({
         chartConfig: {},
     },
     mounted() {
-        const self = (this as any);
+        const self = (this as Record<string, any>);
 
         const donutChartCanvas = $('#donutChart').get(0).getContext('2d')
         const donutData = {
