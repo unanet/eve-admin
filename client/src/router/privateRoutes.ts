@@ -20,12 +20,9 @@ import {
     ServiceTable,
 } from "@/views/TableViews";
 
-import ServiceMetadataMapping from "@/views/Visualization/ServiceMetadataMapping/index.vue";
-import ServiceDefinitionMapping from "@/views/Visualization/ServiceDefinitionMapping/index.vue";
-
 import {Roles} from "@/config"
-import JobMetadataMapping from "@/views/Visualization/JobMetadataMapping/JobMetadataMapping";
-import JobDefinitionMapping from "@/views/Visualization/JobDefinitionMapping/JobDefinitionMapping";
+
+import LayerVisualizer from "@/views/Visualization/index.vue";
 
 export default [
     {
@@ -228,47 +225,14 @@ export default [
         }
     },
     {
-        component: ServiceMetadataMapping,
-        path: '/admin/models/service/:id/metadata/layers',
-        name: "Metadata Layering",
+        component: LayerVisualizer,
+        path: '/admin/models/:model/:id/:type/layers',
+        name: "Layer Visualization",
         meta: {
             roles: {
                 view: [Roles.Admin],
                 edit: [Roles.Admin]
             }
         }
-    },
-    {
-        component: ServiceDefinitionMapping,
-        path: '/admin/models/service/:id/definition/layers',
-        name: "Definition Layering",
-        meta: {
-            roles: {
-                view: [Roles.Admin],
-                edit: [Roles.Admin]
-            }
-        }
-    },
-    // {
-    //     component: JobMetadataMapping,
-    //     path: '/admin/models/job/:id/metadata/layers',
-    //     name: "Metadata Layering",
-    //     meta: {
-    //         roles: {
-    //             view: [Roles.Admin],
-    //             edit: [Roles.Admin]
-    //         }
-    //     }
-    // },
-    // {
-    //     component: JobDefinitionMapping,
-    //     path: '/admin/models/job/:id/definition/layers',
-    //     name: "Definition Layering",
-    //     meta: {
-    //         roles: {
-    //             view: [Roles.Admin],
-    //             edit: [Roles.Admin]
-    //         }
-    //     }
-    // },
+    }
 ]

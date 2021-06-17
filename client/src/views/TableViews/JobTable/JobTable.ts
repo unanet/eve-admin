@@ -5,8 +5,7 @@ export default NewTableBaseView("Job", service, {
     mixin: {
         data() {
             return {
-                showMetadataLayerLink: false,
-                showDefinitionLayerLink: false,
+                showMetadataLayerLink: true,
                 layeringModelType: "job",
                 // Needed for how vue does mixins of objects
                 extraConfig: {

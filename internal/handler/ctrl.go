@@ -13,6 +13,7 @@ func InitializeControllers(config config.Config, mgr *manager.Service) ([]Contro
 		NewAuthController(mgr),
 
 		NewEveController(config),
+
 		NewAPIProxyController(config),
 
 	}, nil

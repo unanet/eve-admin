@@ -54,7 +54,7 @@ const definitionService = new class extends BaseService {
         });
     }
 
-    get() {
+    getTableData() {
         return apiService.getRequest(APIType.EVE, this.baseUrl).then((response: APIResponse) => {
 
             return definitionTypeService.getMappings().then(definitionTypeMap => {

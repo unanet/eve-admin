@@ -6,6 +6,7 @@ export default NewTableBaseView("Metadata Job Map", service, {
     mixin: {
         data() {
             return {
+                getDataFunction: "getTableData",
                 // Needed for how vue does mixins of objects
                 extraConfig: {
                     editItemConfig: {

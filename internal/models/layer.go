@@ -1,6 +1,8 @@
 package models
 
-import "time"
+import (
+	"time"
+)
 
 type LayerResponse struct {
 	Model 		interface{}	  `json:"model"`

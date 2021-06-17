@@ -46,13 +46,13 @@ const metadataServiceMapService = new class extends BaseService {
         });
     }
 
-    getLayers(id: number) {
-        return apiService.getRequest(APIType.EVE, `/services/${id}/metadata-maps`).then((response: APIResponse) => {
-           return response.data
-        });
-    }
+    // getLayers(id: number) {
+    //     return apiService.getRequest(APIType.EVE, `/services/${id}/metadata-maps`).then((response: APIResponse) => {
+    //        return response.data
+    //     });
+    // }
 
-    get() {
+    getTableData() {
         return apiService.getRequest(APIType.EVE, this.baseUrl).then((response: APIResponse) => {
 
             const rows = response.data as IMetadataServiceMap[];

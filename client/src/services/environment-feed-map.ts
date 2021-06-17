@@ -37,7 +37,7 @@ const environmentFeedMapService = new class extends BaseService {
         });
     }
 
-    get() {
+    getTableData() {
         return apiService.getRequest(APIType.EVE, this.baseUrl).then((response: APIResponse) => {
 
             const rows = response.data as IEnvironmentFeedMap[];

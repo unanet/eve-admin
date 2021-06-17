@@ -48,6 +48,12 @@ const BaseService = class {
         });
     }
 
+    getLayers(model: string, id: number, type: string) {
+        return apiService.getRequest(APIType.EVE, `/${model}/${id}/${type}-maps`).then((response: APIResponse) => {
+            return response.data
+        });
+    }
+
     tableController = {
         filterGridRows: (rows: any[], filter: any) => {
             // Check / cache our parsed values

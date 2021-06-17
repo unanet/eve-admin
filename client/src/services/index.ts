@@ -12,6 +12,24 @@ export {namespaceService} from './namespace';
 export {serviceService} from './service';
 export {deploymentCronService} from './deployment-cron';
 
+import {clusterService} from "@/services/cluster";
+import {artifactService} from "@/services/artifact";
+import {environmentService} from "@/services/environment";
+import {jobService} from "@/services/job";
+import {namespaceService} from "@/services/namespace";
+import {serviceService} from "@/services/service";
+
+const servicesMap = {
+    "cluster": clusterService,
+    "artifact": artifactService,
+    "job": jobService,
+    "environment": environmentService,
+    "namespace": namespaceService,
+    "service": serviceService
+}
+
+export {servicesMap}
+
 // Mappings
 export {definitionJobMapService} from './definition-job-map';
 export {definitionServiceMapService} from './definition-service-map';

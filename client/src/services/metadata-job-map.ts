@@ -3,11 +3,9 @@ import {
     dateTimeFields,
     formatTableField,
     generateTableFields,
-    IDefinitionJobMap,
     IMetadataJobMap,
     mappingModelFields
 } from "@/models";
-import {generateID, getDefaultIDColumnSize} from "@/utils/helpers";
 import {
     artifactService,
     BaseService,
@@ -18,7 +16,6 @@ import {
     metadataService
 } from "./";
 import {APIResponse, apiService, APIType} from "@/utils/APIType";
-import {GridFieldType} from "@/components/JsGrid/JsGrid";
 
 const metadataJobMapService = new class extends BaseService {
     baseUrl = "/metadata/job-maps"
@@ -46,11 +43,11 @@ const metadataJobMapService = new class extends BaseService {
         return apiService.deleteRequest(APIType.EVE, this.baseUrl, data).then((response: APIResponse) => response.data);
     }
 
-    getLayers(id: number) {
-        return apiService.getRequest(APIType.EVE, `/jobs/${id}/metadata-maps`).then((response: APIResponse) => response.data);
-    }
+    // getLayers(id: number) {
+    //     return apiService.getRequest(APIType.EVE, `/jobs/${id}/metadata-maps`).then((response: APIResponse) => response.data);
+    // }
 
-    get() {
+    getTableData() {
         return apiService.getRequest(APIType.EVE, this.baseUrl).then((response: APIResponse) => {
 
             const rows = response.data as IMetadataJobMap[];

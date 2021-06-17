@@ -56,7 +56,7 @@ const _TableBaseViewMixin = defineComponent({
             const self = this as Record<string, any>;
 
             const service = self.service
-            return service.get().then((response: any) => {
+            return service[this.getDataFunction]().then((response: any) => {
                 // Catch all to make sure we render the table appropriately, This should probably be fixed on the API side
                 if (response == null) {
                     response = [];
@@ -169,6 +169,7 @@ const _TableBaseViewMixin = defineComponent({
     },
     data() {
         return {
+            getDataFunction: "get",
             service: null,
             selectedItem: null,
             tableConfig: {},

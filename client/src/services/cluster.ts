@@ -1,5 +1,5 @@
 import {FormFieldType} from "@/components/Form/FormProps";
-import {dateTimeFields, ICluster, idFieldString, INamespace} from "@/models";
+import {idFieldString, dateTimeFields, ICluster} from "@/models";
 import {BaseService} from "./";
 
 const clusterService = new class extends BaseService {
@@ -29,7 +29,6 @@ const clusterService = new class extends BaseService {
             return Object.fromEntries((models as ICluster[]).map((item: ICluster) => [item.id, item.name]))
         });
     }
-
 }
 
 export {clusterService}
