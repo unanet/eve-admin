@@ -6,6 +6,8 @@ export default NewTableBaseView("Artifact", service, {
     mixin: {
         data() {
             return {
+                showMetadataLayerLink: true,
+                layeringModelType: "artifact",
                 // Needed for how vue does mixins of objects
                 extraConfig: {
                     createNewItemConfig: {

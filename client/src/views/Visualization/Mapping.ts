@@ -14,6 +14,8 @@ export default defineComponent({
     data() {
         return {
             fetchedData: false,
+            layerType: "",
+            modelType: "",
             layerData: {},
             layerDataKey: ["definition", "data"] as string[] | string, // Defaults to definitions, this is overwritten in the mounted function if this is a metadata call
         }
@@ -27,6 +29,9 @@ export default defineComponent({
             this.layerDataKey = "metadata"
         }
 
+        this.modelType = model
+        this.layerType = type
+
         // @ts-ignore
         const service = servicesMap[model];
 
@@ -34,5 +39,11 @@ export default defineComponent({
             self.layerData = responseData
             self.fetchedData = true
         })
+    },
+    methods: {
+        shouldShowIndividualLayer(): boolean {
+            return false
+            // return this.modelType == "service"
+        }
     }
 })

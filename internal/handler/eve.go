@@ -50,6 +50,9 @@ func (c EveController) Setup(r *Routers) {
 	r.Auth.Get("/eve/job/{id}/metadata-maps", c.getJobMetadataLayers)
 	//cluster/201/metadata-maps
 	r.Auth.Get("/eve/cluster/{id}/metadata-maps", c.getClusterMetadataLayers)
+	r.Auth.Get("/eve/artifact/{id}/metadata-maps", c.getArtifactMetadataLayers)
+
+	r.Auth.Get("/eve/{model}/{id}/metadata-maps", c.getClusterMetadataLayers)
 }
 
 func (c EveController) stripAPIPrefix(pathToStrip string, url *url.URL) *url.URL {
@@ -166,6 +169,81 @@ func (c EveController) getJobMetadataLayers(w http.ResponseWriter, r *http.Reque
 	c.getLayers(w, r, "jobs", "metadata")
 }
 
+func (c EveController) getArtifactMetadataLayers(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		render.Respond(w, r, errors.BadRequest("artifact id is not a number"))
+		return
+	}
+
+	var baseModels []eve.Artifact
+	if err := c.makeRequest(fmt.Sprintf("/artifacts"), &baseModels); err != nil {
+		render.Respond(w, r, errors.NotFound("error getting artifacts"))
+		return
+	}
+
+	var baseModel eve.Artifact
+
+	for _, model := range baseModels {
+		if model.ID == id {
+			baseModel = model
+		}
+	}
+
+	var metadataServiceMaps []eve.MetadataServiceMap
+	if err := c.makeRequest(fmt.Sprintf("/metadata/service-maps"), &metadataServiceMaps); err != nil {
+		render.Respond(w, r, errors.NotFoundf("error getting metadata"))
+		return
+	}
+
+	layers := []models.LayerMap{}
+
+	var collectedMetadata []eve.MetadataField
+
+	for _, metadataServiceMap := range metadataServiceMaps {
+		if metadataServiceMap.ArtifactID == id {
+
+			var metadata eve.Metadata
+			if err := c.makeRequest(fmt.Sprintf("/metadata/%d", metadataServiceMap.MetadataID), &metadata); err != nil {
+				render.Respond(w, r, errors.NotFoundf("error getting metadata by id %d", metadataServiceMap.MetadataID))
+				return
+			}
+
+			layers = append(layers, models.LayerMap{
+				Description: metadataServiceMap.Description,
+				MetadataID: metadataServiceMap.MetadataID,
+				StackingOrder: metadataServiceMap.StackingOrder,
+				ArtifactID: id,
+
+				Metadata: metadata,
+			})
+
+
+			collectedMetadata = append(collectedMetadata, metadata.Value)
+
+		}
+	}
+
+	sort.SliceStable(layers, func(i, j int) bool {
+		return layers[i].StackingOrder > layers[j].StackingOrder
+	})
+
+	mergedMetadata := make(map[string]interface{})
+	for _, metadata := range collectedMetadata {
+		mergedMetadata = mergemap.Merge(mergedMetadata, metadata)
+	}
+
+	response := models.LayerResponse{
+		Model: baseModel,
+		Layers: layers,
+		EndResult: mergedMetadata,
+	}
+
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, response)
+}
 func (c EveController) getClusterMetadataLayers(w http.ResponseWriter, r *http.Request) {
 
 	idStr := chi.URLParam(r, "id")
@@ -192,11 +270,11 @@ func (c EveController) getClusterMetadataLayers(w http.ResponseWriter, r *http.R
 
 	var metadataServiceMaps []eve.MetadataServiceMap
 	if err := c.makeRequest(fmt.Sprintf("/metadata/service-maps"), &metadataServiceMaps); err != nil {
-		render.Respond(w, r, errors.NotFoundf("error getting clusters"))
+		render.Respond(w, r, errors.NotFoundf("error getting metadata"))
 		return
 	}
 
-	var layers []models.LayerMap
+	layers := []models.LayerMap{}
 
 	var collectedMetadata []eve.MetadataField
 
@@ -255,7 +333,7 @@ func (c EveController) getLayers(w http.ResponseWriter, r *http.Request, modelTy
 		addedString = "s"
 	}
 
-	var layers []models.LayerMap
+	layers := []models.LayerMap{}
 	if err := c.makeRequest(fmt.Sprintf("/%s/%s/%s-maps", modelType, id, layerType), &layers); err != nil {
 		render.Respond(w, r, errors.NotFoundf("error getting maps"))
 		return
@@ -319,6 +397,23 @@ func (c EveController) getLayers(w http.ResponseWriter, r *http.Request, modelTy
 }
 
 // We can update this method to accept an enum or something to determine which api to go to and what to strip off
+func (c EveController) getMetadata(path string, model interface{}) error {
+
+	resp, err := http.Get(fmt.Sprintf("%s%s", c.cfg.EveAPIUrl, path))
+	if err != nil {
+		return errors.Wrap(err)
+	}
+
+	// Ignore error if it happens here, delete won't return anything
+	if err = json.NewDecoder(resp.Body).Decode(&model); err != nil {
+		return errors.Wrap(err)
+	}
+
+	return nil
+}
+
+
+// We can update this method to accept an enum or something to determine which api to go to and what to strip off
 func (c EveController) makeRequest(path string, model interface{}) error {
 
 	resp, err := http.Get(fmt.Sprintf("%s%s", c.cfg.EveAPIUrl, path))
@@ -333,3 +428,4 @@ func (c EveController) makeRequest(path string, model interface{}) error {
 
 	return nil
 }
+

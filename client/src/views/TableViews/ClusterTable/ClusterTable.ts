@@ -5,9 +5,9 @@ export default NewTableBaseView("Cluster", service, {
     mixin: {
         data() {
             return {
-                // Needed for how vue does mixins of objects
                 showMetadataLayerLink: true,
                 layeringModelType: "cluster",
+                // Needed for how vue does mixins of objects
                 createNewItemConfig: {
                     hiddenFields: [
                         "created_at",

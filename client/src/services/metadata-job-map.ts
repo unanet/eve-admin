@@ -43,10 +43,6 @@ const metadataJobMapService = new class extends BaseService {
         return apiService.deleteRequest(APIType.EVE, this.baseUrl, data).then((response: APIResponse) => response.data);
     }
 
-    // getLayers(id: number) {
-    //     return apiService.getRequest(APIType.EVE, `/jobs/${id}/metadata-maps`).then((response: APIResponse) => response.data);
-    // }
-
     getTableData() {
         return apiService.getRequest(APIType.EVE, this.baseUrl).then((response: APIResponse) => {
 

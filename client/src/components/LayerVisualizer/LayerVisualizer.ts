@@ -19,8 +19,14 @@ export default defineComponent({
       }
     },
     mounted() {
-        // (store as Record<string, any>).commit('changePage', `Layer Details: ${this.layerData.model.name} in ${this.layerData.model.namespace_name}`);
-        (store as Record<string, any>).commit('changePage', `Layer Details: ${this.layerData.model.name}`);
+
+        let title = this.layerData.model.name;
+
+        if (this.layerData.model.namespace_name) {
+            title = `${title} in ${this.layerData.model.namespace_name}`
+        }
+
+        (store as Record<string, any>).commit('changePage', `Layer Details: ${title}`);
         this.initSlider();
     },
     methods: {

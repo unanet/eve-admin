@@ -10,7 +10,15 @@
 
 -->
 
+<ul>
+    <li><b>Name:</b> {{layerData.model.name}}</li>
+    <li v-if="layerData.model.cluster_name"><b>Cluster:</b> {{ layerData.model.cluster_name}}</li>
+    <li v-if="layerData.model.namespace_name"><b>Namespace:</b> {{ layerData.model.namespace_name}}</li>
+</ul>
 
+<div class="alert alert-info mt-3 mb-4">
+    <i class="icon fas fa-exclamation"></i> This section is a WIP for types other than services and jobs! Metadata may or may not show up but is actually applied at this level
+</div>
 <json-editor :value="layerData.end_result"></json-editor>
 <!--
 <template v-if="typeof layerData == 'Array'">
@@ -23,7 +31,7 @@
 </template>
 -->
 
-<div class="timeline mt-5 mb-0">
+<div class="timeline mt-5 mb-0" v-if="layerData.layers.length > 0">
     <div class="time-label">
         <span class="bg-green">Layers</span>
     </div>
