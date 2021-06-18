@@ -45,14 +45,16 @@ func NewEveController(cfg config.Config) *EveController {
 func (c EveController) Setup(r *Routers) {
 	r.Auth.Get("/eve/dashboard/metrics", c.dashboardMetrics)
 
+	// Service metadata routes might need to be renamed to take into account for the end metadata layer output rather than service specific
 	r.Auth.Get("/eve/service/{id}/metadata-maps", c.getServiceMetadataLayers)
 	r.Auth.Get("/eve/service/{id}/definition-maps", c.getServiceDefinitionLayers)
 	r.Auth.Get("/eve/job/{id}/metadata-maps", c.getJobMetadataLayers)
-	//cluster/201/metadata-maps
+
+
+	// These three functions can probably be leveraged in a different way / updated to be more consistent. Maybe this is just {model}/{id}/metadata
 	r.Auth.Get("/eve/cluster/{id}/metadata-maps", c.getClusterMetadataLayers)
 	r.Auth.Get("/eve/artifact/{id}/metadata-maps", c.getArtifactMetadataLayers)
-
-	r.Auth.Get("/eve/{model}/{id}/metadata-maps", c.getClusterMetadataLayers)
+	r.Auth.Get("/eve/namespace/{id}/metadata-maps", c.getNamespaceMetadataLayers)
 }
 
 func (c EveController) stripAPIPrefix(pathToStrip string, url *url.URL) *url.URL {
@@ -169,6 +171,83 @@ func (c EveController) getJobMetadataLayers(w http.ResponseWriter, r *http.Reque
 	c.getLayers(w, r, "jobs", "metadata")
 }
 
+func (c EveController) getNamespaceMetadataLayers(w http.ResponseWriter, r *http.Request) {
+	idStr := chi.URLParam(r, "id")
+
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		render.Respond(w, r, errors.BadRequest("namespace id is not a number"))
+		return
+	}
+
+	var baseModels []eve.Namespace
+	if err := c.makeRequest(fmt.Sprintf("/namespaces"), &baseModels); err != nil {
+		render.Respond(w, r, errors.NotFound("error getting namespaces"))
+		return
+	}
+
+	var baseModel eve.Namespace
+
+	for _, model := range baseModels {
+		if model.ID == id {
+			baseModel = model
+		}
+	}
+
+	var metadataServiceMaps []eve.MetadataServiceMap
+	if err := c.makeRequest(fmt.Sprintf("/metadata/service-maps"), &metadataServiceMaps); err != nil {
+		render.Respond(w, r, errors.NotFoundf("error getting metadata"))
+		return
+	}
+
+	layers := []models.LayerMap{}
+
+	var collectedMetadata []eve.MetadataField
+
+	for _, metadataServiceMap := range metadataServiceMaps {
+		if metadataServiceMap.NamespaceID == id {
+
+			var metadata eve.Metadata
+			if err := c.makeRequest(fmt.Sprintf("/metadata/%d", metadataServiceMap.MetadataID), &metadata); err != nil {
+				render.Respond(w, r, errors.NotFoundf("error getting metadata by id %d", metadataServiceMap.MetadataID))
+				return
+			}
+
+			layers = append(layers, models.LayerMap{
+				Description: metadataServiceMap.Description,
+				MetadataID: metadataServiceMap.MetadataID,
+				StackingOrder: metadataServiceMap.StackingOrder,
+				ArtifactID: id,
+
+				Metadata: metadata,
+			})
+
+
+			collectedMetadata = append(collectedMetadata, metadata.Value)
+
+		}
+	}
+
+	sort.SliceStable(layers, func(i, j int) bool {
+		return layers[i].StackingOrder > layers[j].StackingOrder
+	})
+
+	mergedMetadata := make(map[string]interface{})
+	for _, metadata := range collectedMetadata {
+		mergedMetadata = mergemap.Merge(mergedMetadata, metadata)
+	}
+
+	response := models.LayerResponse{
+		Model: baseModel,
+		Layers: layers,
+		EndResult: mergedMetadata,
+	}
+
+	render.Status(r, http.StatusOK)
+	render.Respond(w, r, response)
+}
+
+
 func (c EveController) getArtifactMetadataLayers(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
 
@@ -244,6 +323,7 @@ func (c EveController) getArtifactMetadataLayers(w http.ResponseWriter, r *http.
 	render.Status(r, http.StatusOK)
 	render.Respond(w, r, response)
 }
+
 func (c EveController) getClusterMetadataLayers(w http.ResponseWriter, r *http.Request) {
 
 	idStr := chi.URLParam(r, "id")
