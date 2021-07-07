@@ -16,7 +16,7 @@ import {
     jobService,
     serviceService
 } from "./";
-import {APIResponse, apiService, APIType} from "@/utils/APIType";
+import {APIResponse, apiService, APIType} from "@/utils/api";
 
 const definitionServiceMapService = new class extends BaseService {
     baseUrl = "/definitions/service-maps"

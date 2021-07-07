@@ -6,7 +6,7 @@ import JsGrid from "@/components/JsGrid/index.vue";
 import FormComponent from "@/components/Form/index.vue";
 import ModalComponent from "@/components/Modal/index.vue";
 import {FormSubmitResponse, IForm} from "@/components/Form/FormProps";
-import {APIResponse} from "@/utils/APIType";
+import {APIResponse} from "@/utils/api";
 import {_GrowlMixin} from "@/components/Growl/Growl";
 import {getObjectValueByKey} from "@/utils/helpers";
 
@@ -72,6 +72,8 @@ const _TableBaseViewMixin = defineComponent({
                 self.dataLoaded = true;
 
                 self.checkURLForQueryParamAndOpenModalIfSet(response)
+            }, (err: any) => {
+                console.log("get data errored out", err)
             })
         },
         onRowClick: function (e: any) {

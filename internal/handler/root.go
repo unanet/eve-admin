@@ -41,9 +41,16 @@ func FileServer(r chi.Router, path string, root http.FileSystem) {
 	path += "*"
 
 	r.Get(path, func(w http.ResponseWriter, r *http.Request) {
-		rctx := chi.RouteContext(r.Context())
-		pathPrefix := strings.TrimSuffix(rctx.RoutePattern(), "/*")
-		fs := http.StripPrefix(pathPrefix, http.FileServer(root))
-		fs.ServeHTTP(w, r)
+		if strings.HasPrefix(r.RequestURI, "/admin") || strings.HasPrefix(r.RequestURI, "/oidc"){
+			r.RequestURI = "/"
+			r.URL.Path = "/"
+		}
+
+		http.FileServer(root).ServeHTTP(w, r)
+		//
+		//rctx := chi.RouteContext(r.Context())
+		//pathPrefix := strings.TrimSuffix(rctx.RoutePattern(), "/*")
+		//fs := http.StripPrefix(pathPrefix, http.FileServer(root))
+		//fs.ServeHTTP(w, r)
 	})
 }

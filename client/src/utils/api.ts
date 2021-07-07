@@ -1,5 +1,7 @@
-import axios, {AxiosResponse} from "axios";
+import axios, {AxiosError, AxiosRequestConfig, AxiosResponse} from "axios";
 import config from "@/config";
+import store from "@/store";
+import {getAuthToken, clearAuthTokens} from "@/utils/auth";
 
 enum HTTPMethod {
     GET = "GET",
@@ -14,20 +16,53 @@ class APIResponse {
 }
 
 enum APIType {
+    API = "API",
     EVE = "EVE",
     CLOUD = "CLOUD"
 }
 
 const apiService = new class API {
     API_URL: string
+    http: any
     constructor(API_URL = config.API_URL) {
         this.API_URL = API_URL;
+        this.http = axios.create()
+        this.addInterceptor()
+    }
+
+    addInterceptor() {
+        this.http.interceptors.request.use((config: AxiosRequestConfig) => {
+            // Add our auth header if we have it in local storage
+            const auth_token = getAuthToken();
+            if (auth_token) {
+                config.headers.common['Authorization'] = "BEARER " + auth_token;
+            }
+
+            return config
+        });
+
+        this.http.interceptors.response.use((response: AxiosResponse) => {
+            // True up our API response status codes
+            if (response.data != "") {
+                response.status = response.data.code;
+            }
+
+            if (response.data.code == 401) {
+                clearAuthTokens()
+            }
+
+            return response
+        })
     }
 
     getAPIURL(apiType: APIType) {
         let apiPrefix: string
 
         switch(apiType) {
+            case APIType.API: {
+                apiPrefix = "/";
+                break;
+            }
             case APIType.EVE: {
                 apiPrefix = "/eve";
                 break;
@@ -41,23 +76,25 @@ const apiService = new class API {
         return `${this.API_URL}${apiPrefix}`;
     }
 
-    async makeAPIRequest(apiType: APIType, method: HTTPMethod, path: string, headers?: {}, body?: {}): Promise<APIResponse> {
+    async makeAPIRequest(apiType: APIType, method: HTTPMethod, path: string, headers?: {}, body?: {}, params?: {}): Promise<APIResponse> {
 
         let apiCall: any
 
         switch (method) {
             case HTTPMethod.GET:
-                apiCall = axios.get(`${this.getAPIURL(apiType)}${path}`)
+                apiCall = this.http.get(`${this.getAPIURL(apiType)}${path}`, {
+                    params
+                })
                 break;
             case HTTPMethod.PUT:
-                apiCall = axios.put(`${this.getAPIURL(apiType)}${path}`, body)
+                apiCall = this.http.put(`${this.getAPIURL(apiType)}${path}`, body)
                 break;
             case HTTPMethod.POST:
-                apiCall = axios.post(`${this.getAPIURL(apiType)}${path}`, body)
+                apiCall = this.http.post(`${this.getAPIURL(apiType)}${path}`, body)
                 break;
             case HTTPMethod.DELETE:
                 // Axios call does not allow body content for a delete request
-                apiCall = axios.delete(`${this.getAPIURL(apiType)}${path}`, { data: body });
+                apiCall = this.http.delete(`${this.getAPIURL(apiType)}${path}`, { data: body });
                 break;
         }
 
@@ -68,8 +105,31 @@ const apiService = new class API {
             apiCall.then((response: AxiosResponse) => {
                 // JSON responses are automatically parsed.
                 apiResponse.data = response.data
+
+                // Special interceptor
+                switch (response.data.code) {
+                    case 401:
+                        response.data.code = 401;
+                        (store as Record<string, any>).commit('isLoggedIn', false)
+                        return reject(response.data)
+                }
+
+                if (response.data.code < 199 || response.data.code > 399) {
+                    return reject(response.data)
+                }
+
+                (store as Record<string, any>).commit('isLoggedIn', true)
+
                 resolve(apiResponse)
-            }).catch((e: any) => {
+            }).catch((e: AxiosError) => {
+
+                if (e.request._isRedirect) {
+                    // If we are in a redirect, resolve the redirect
+                    return resolve(axios.request({
+                        url: e.request._options.path
+                    }));
+                }
+
                 console.error(e)
                 apiResponse.error = "Error from the API, unable to perform this action, please try again later."
                 reject(apiResponse)
@@ -97,4 +157,4 @@ const apiService = new class API {
     }
 }
 
-export {APIResponse, apiService, APIType}
+export {APIResponse, apiService, APIType, HTTPMethod}

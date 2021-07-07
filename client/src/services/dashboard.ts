@@ -1,4 +1,4 @@
-import {APIResponse, apiService, APIType} from "@/utils/APIType";
+import {APIResponse, apiService, APIType} from "@/utils/api";
 
 const dashboardService = new class DashboardService {
     getInformation() {

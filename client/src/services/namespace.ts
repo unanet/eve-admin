@@ -9,7 +9,7 @@ import {
 } from "@/models";
 import {getDefaultIDColumnSize,} from "@/utils/helpers";
 import {BaseService, clusterService} from "./";
-import {APIResponse, apiService, APIType} from "@/utils/APIType";
+import {APIResponse, apiService, APIType} from "@/utils/api";
 
 const namespaceService = new class extends BaseService {
     baseUrl = "/namespaces"

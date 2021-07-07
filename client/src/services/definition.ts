@@ -10,7 +10,7 @@ import {
 } from "@/models";
 import {generateID, getDefaultIDColumnSize} from "@/utils/helpers";
 import {BaseService, definitionTypeService} from "./";
-import {APIResponse, apiService, APIType} from "@/utils/APIType";
+import {APIResponse, apiService, APIType} from "@/utils/api";
 
 const definitionService = new class extends BaseService {
     baseUrl = "/definitions"

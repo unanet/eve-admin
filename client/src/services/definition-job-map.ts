@@ -1,7 +1,7 @@
 import {FormFieldType} from "@/components/Form/FormProps";
 import {dateTimeFields, formatTableField, generateTableFields, IDefinitionJobMap, mappingModelFields} from "@/models";
 import {artifactService, BaseService, clusterService, definitionService, environmentService, jobService} from "./";
-import {APIResponse, apiService, APIType} from "@/utils/APIType";
+import {APIResponse, apiService, APIType} from "@/utils/api";
 
 const definitionJobMapService = new class extends BaseService {
     baseUrl = "/definitions/job-maps"

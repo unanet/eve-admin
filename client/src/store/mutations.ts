@@ -4,5 +4,8 @@ export default {
     },
     modalState (state: any, isOpen: boolean) {
         state.isModalOpen = isOpen
+    },
+    isLoggedIn (state: any, loggedIn: boolean) {
+        state.isLoggedIn = loggedIn
     }
 }

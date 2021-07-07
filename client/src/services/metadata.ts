@@ -1,7 +1,7 @@
 import {FormFieldType} from "@/components/Form/FormProps";
 import {dateTimeFields, idField, IJob, IMetadata} from "@/models";
 import {BaseService} from "./";
-import {APIResponse, apiService, APIType} from "@/utils/APIType";
+import {APIResponse, apiService, APIType} from "@/utils/api";
 
 const metadataService = new class extends BaseService {
     baseUrl = "/metadata"

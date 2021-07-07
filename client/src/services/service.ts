@@ -2,7 +2,7 @@ import {FormFieldType} from "@/components/Form/FormProps";
 import {generateID} from "@/utils/helpers";
 import {BaseService} from "./";
 import {dateTimeFields, formatTableField, ICluster, idField, IService} from "@/models";
-import {APIResponse, apiService, APIType} from "@/utils/APIType";
+import {APIResponse, apiService, APIType} from "@/utils/api";
 import {generateTableFields} from "@/models/tableFields";
 
 const serviceService = new class extends BaseService {

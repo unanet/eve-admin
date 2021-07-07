@@ -12,7 +12,7 @@ import {
     metadataService,
     serviceService
 } from "./";
-import {apiService, APIType, APIResponse} from "@/utils/APIType";
+import {apiService, APIType, APIResponse} from "@/utils/api";
 import {IMetadataServiceMap} from "@/models/metadata-service-map";
 
 const metadataServiceMapService = new class extends BaseService {

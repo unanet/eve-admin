@@ -4,9 +4,7 @@
  */
 
 import Dashboard from "./Dashboard/index.vue";
-import Login from "./Login/index.vue";
 
 export {
-    Dashboard,
-    Login
+    Dashboard
 }

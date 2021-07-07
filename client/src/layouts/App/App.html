@@ -1,1 +1,2 @@
-<admin-layout></admin-layout>
+<admin-layout v-if="isLoggedIn"></admin-layout>
+<guest-layout v-else></guest-layout>

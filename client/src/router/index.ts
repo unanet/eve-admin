@@ -1,4 +1,4 @@
-import {createRouter, createWebHashHistory} from 'vue-router'
+import {createRouter, createWebHistory} from 'vue-router'
 import publicRoutes from './publicRoutes'
 import privateRoutes from './privateRoutes'
 import store from '@/store'
@@ -7,7 +7,7 @@ declare const $: any;
 
 // Start vue router
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory(),
   routes: [...publicRoutes, ...privateRoutes]
 })
 
@@ -15,10 +15,8 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   // https://stackoverflow.com/questions/53788975/vue-router-how-to-get-previous-page-url
 
-
   // Force close modal, this should be updated to be less of a bazooka approach
   $('#modal-xl').modal('hide');
-
 
 //   // Redirect to route
 //   const redirectToRoute = (name: string) => {
@@ -30,7 +28,7 @@ router.beforeEach((to, from, next) => {
 //     next({ name: name })
 //   }
 //
-//   // Get logged user
+//   // Get logg
 //   // const loggedUser = store.getters.getLoggedUser
 //
 //   // Check if access token expired

@@ -2,7 +2,6 @@ package handler
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/go-chi/jwtauth"
 	"github.com/go-chi/render"
 	"gitlab.unanet.io/devops/cloud-admin/internal/manager"
@@ -28,8 +27,8 @@ func NewAuthController(mgr *manager.Service) *AuthController {
 
 // Setup satisfies the EveController interface for setting up the
 func (c AuthController) Setup(r *Routers) {
-	r.Anonymous.HandleFunc("/oidc/callback", c.callback)
-	r.Anonymous.HandleFunc("/auth", c.auth)
+	r.Anonymous.HandleFunc("/backend/oidc/callback", c.callback)
+	r.Anonymous.HandleFunc("/backend/auth", c.auth)
 }
 
 func (c AuthController) auth(w http.ResponseWriter, r *http.Request) {
@@ -49,7 +48,20 @@ func (c AuthController) auth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	render.Respond(w, r, fmt.Sprintf("hello %s %s", verifiedToken.Subject, verifiedToken.Audience))
+
+	var idTokenClaims = new(json.RawMessage)
+	if err := verifiedToken.Claims(&idTokenClaims); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	render.JSON(w, r, TokenResponse{
+		AccessToken:  unknownToken,
+		Expiry:       verifiedToken.Expiry,
+		Claims:       idTokenClaims,
+	})
+
+	//render.Respond(w, r, fmt.Sprintf("hello %s %s", verifiedToken.Subject, verifiedToken.Audience))
 }
 
 
@@ -85,6 +97,9 @@ func (c AuthController) callback(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	c.addCookie(w, "auth_token", oauth2Token.AccessToken, oauth2Token.Expiry.Sub(time.Now()))
+	c.addCookie(w, "refresh_token", oauth2Token.RefreshToken, 30*time.Minute)
+
 	render.JSON(w, r, TokenResponse{
 		AccessToken:  oauth2Token.AccessToken,
 		RefreshToken: oauth2Token.RefreshToken,
@@ -100,4 +115,15 @@ type TokenResponse struct {
 	TokenType    string           `json:"token_type"`
 	Expiry       time.Time        `json:"expiry"`
 	Claims       *json.RawMessage `json:"claims"`
+}
+
+// with the key/value specified.
+func (c AuthController) addCookie(w http.ResponseWriter, name, value string, ttl time.Duration) {
+	expire := time.Now().Add(ttl)
+	cookie := http.Cookie{
+		Name:    name,
+		Value:   value,
+		Expires: expire,
+	}
+	http.SetCookie(w, &cookie)
 }

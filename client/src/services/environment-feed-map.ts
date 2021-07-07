@@ -9,7 +9,7 @@ import {
     jobService
 } from "./";
 import {generateID, getDefaultIDColumnSize} from "@/utils/helpers";
-import {APIResponse, apiService, APIType} from "@/utils/APIType";
+import {APIResponse, apiService, APIType} from "@/utils/api";
 import {formatTableField, generateTableFields, IDefinitionJobMap, IEnvironmentFeedMap} from "@/models";
 
 const environmentFeedMapService = new class extends BaseService {

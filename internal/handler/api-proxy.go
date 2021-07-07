@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/go-chi/jwtauth"
 	"gitlab.unanet.io/devops/go/pkg/log"
 	"go.uber.org/zap"
 	"io/ioutil"
@@ -51,7 +52,14 @@ func (c APIProxyController) get(w http.ResponseWriter, r *http.Request) {
 	proxyToURL := fmt.Sprintf("%s%s", c.cfg.EveAPIUrl, c.stripAPIPrefix("/backend/eve", r.URL))
 
 	log.Logger.Info("API Listener", zap.String("making request to ", proxyToURL))
-	resp, err := http.Get(proxyToURL)
+
+	req, err := http.NewRequest(http.MethodGet, proxyToURL, nil)
+
+	c.forwardHeaders(r, req)
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+
 	if err != nil {
 		log.Logger.Error("unable to get from proxy " + r.URL.String(), zap.Error(err))
 		render.Status(r, http.StatusNotFound)
@@ -110,6 +118,8 @@ func (c APIProxyController) makeRequest(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
+	c.forwardHeaders(r, req)
+
 	req.Header.Set("Content-Type", "application/json; charset=utf-8")
 	resp, err := client.Do(req)
 	if err != nil {
@@ -130,3 +140,8 @@ func (c APIProxyController) makeRequest(w http.ResponseWriter, r *http.Request) 
 }
 
 
+
+func (c APIProxyController) forwardHeaders(req *http.Request, newRequest *http.Request) {
+	authToken := jwtauth.TokenFromHeader(req)
+	newRequest.Header.Set("Authorization", "BEARER " + authToken)
+}

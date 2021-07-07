@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/go-chi/jwtauth"
 	"gitlab.unanet.io/devops/go/pkg/mergemap"
 	"net/http"
 	"net/url"
@@ -125,10 +126,11 @@ func (c EveController) dashboardMetrics(w http.ResponseWriter, r *http.Request) 
 		},
 	}
 
+
 	for i, metadata := range types {
 		var itemArray []interface{}
 
-		if err := c.makeRequest("/"+strings.ToLower(metadata.APILink), &itemArray); err != nil {
+		if err := c.makeRequest(r, "/"+strings.ToLower(metadata.APILink), &itemArray); err != nil {
 			middleware.Log(r.Context()).Error(err.Error())
 			errs = append(errs, err)
 			return
@@ -181,7 +183,7 @@ func (c EveController) getNamespaceMetadataLayers(w http.ResponseWriter, r *http
 	}
 
 	var baseModels []eve.Namespace
-	if err := c.makeRequest(fmt.Sprintf("/namespaces"), &baseModels); err != nil {
+	if err := c.makeRequest(r, fmt.Sprintf("/namespaces"), &baseModels); err != nil {
 		render.Respond(w, r, errors.NotFound("error getting namespaces"))
 		return
 	}
@@ -195,7 +197,7 @@ func (c EveController) getNamespaceMetadataLayers(w http.ResponseWriter, r *http
 	}
 
 	var metadataServiceMaps []eve.MetadataServiceMap
-	if err := c.makeRequest(fmt.Sprintf("/metadata/service-maps"), &metadataServiceMaps); err != nil {
+	if err := c.makeRequest(r, fmt.Sprintf("/metadata/service-maps"), &metadataServiceMaps); err != nil {
 		render.Respond(w, r, errors.NotFoundf("error getting metadata"))
 		return
 	}
@@ -208,7 +210,7 @@ func (c EveController) getNamespaceMetadataLayers(w http.ResponseWriter, r *http
 		if metadataServiceMap.NamespaceID == id {
 
 			var metadata eve.Metadata
-			if err := c.makeRequest(fmt.Sprintf("/metadata/%d", metadataServiceMap.MetadataID), &metadata); err != nil {
+			if err := c.makeRequest(r, fmt.Sprintf("/metadata/%d", metadataServiceMap.MetadataID), &metadata); err != nil {
 				render.Respond(w, r, errors.NotFoundf("error getting metadata by id %d", metadataServiceMap.MetadataID))
 				return
 			}
@@ -258,7 +260,7 @@ func (c EveController) getArtifactMetadataLayers(w http.ResponseWriter, r *http.
 	}
 
 	var baseModels []eve.Artifact
-	if err := c.makeRequest(fmt.Sprintf("/artifacts"), &baseModels); err != nil {
+	if err := c.makeRequest(r, fmt.Sprintf("/artifacts"), &baseModels); err != nil {
 		render.Respond(w, r, errors.NotFound("error getting artifacts"))
 		return
 	}
@@ -272,7 +274,7 @@ func (c EveController) getArtifactMetadataLayers(w http.ResponseWriter, r *http.
 	}
 
 	var metadataServiceMaps []eve.MetadataServiceMap
-	if err := c.makeRequest(fmt.Sprintf("/metadata/service-maps"), &metadataServiceMaps); err != nil {
+	if err := c.makeRequest(r, fmt.Sprintf("/metadata/service-maps"), &metadataServiceMaps); err != nil {
 		render.Respond(w, r, errors.NotFoundf("error getting metadata"))
 		return
 	}
@@ -285,7 +287,7 @@ func (c EveController) getArtifactMetadataLayers(w http.ResponseWriter, r *http.
 		if metadataServiceMap.ArtifactID == id {
 
 			var metadata eve.Metadata
-			if err := c.makeRequest(fmt.Sprintf("/metadata/%d", metadataServiceMap.MetadataID), &metadata); err != nil {
+			if err := c.makeRequest(r, fmt.Sprintf("/metadata/%d", metadataServiceMap.MetadataID), &metadata); err != nil {
 				render.Respond(w, r, errors.NotFoundf("error getting metadata by id %d", metadataServiceMap.MetadataID))
 				return
 			}
@@ -335,7 +337,7 @@ func (c EveController) getClusterMetadataLayers(w http.ResponseWriter, r *http.R
 	}
 
 	var baseModels []eve.Cluster
-	if err := c.makeRequest(fmt.Sprintf("/clusters"), &baseModels); err != nil {
+	if err := c.makeRequest(r, fmt.Sprintf("/clusters"), &baseModels); err != nil {
 		render.Respond(w, r, errors.NotFound("error getting clusters"))
 		return
 	}
@@ -349,7 +351,7 @@ func (c EveController) getClusterMetadataLayers(w http.ResponseWriter, r *http.R
 	}
 
 	var metadataServiceMaps []eve.MetadataServiceMap
-	if err := c.makeRequest(fmt.Sprintf("/metadata/service-maps"), &metadataServiceMaps); err != nil {
+	if err := c.makeRequest(r, fmt.Sprintf("/metadata/service-maps"), &metadataServiceMaps); err != nil {
 		render.Respond(w, r, errors.NotFoundf("error getting metadata"))
 		return
 	}
@@ -362,7 +364,7 @@ func (c EveController) getClusterMetadataLayers(w http.ResponseWriter, r *http.R
 		if metadataServiceMap.ClusterID == id {
 
 			var metadata eve.Metadata
-			if err := c.makeRequest(fmt.Sprintf("/metadata/%d", metadataServiceMap.MetadataID), &metadata); err != nil {
+			if err := c.makeRequest(r, fmt.Sprintf("/metadata/%d", metadataServiceMap.MetadataID), &metadata); err != nil {
 				render.Respond(w, r, errors.NotFoundf("error getting metadata by id %d", metadataServiceMap.MetadataID))
 				return
 			}
@@ -414,7 +416,7 @@ func (c EveController) getLayers(w http.ResponseWriter, r *http.Request, modelTy
 	}
 
 	layers := []models.LayerMap{}
-	if err := c.makeRequest(fmt.Sprintf("/%s/%s/%s-maps", modelType, id, layerType), &layers); err != nil {
+	if err := c.makeRequest(r, fmt.Sprintf("/%s/%s/%s-maps", modelType, id, layerType), &layers); err != nil {
 		render.Respond(w, r, errors.NotFoundf("error getting maps"))
 		return
 	}
@@ -430,7 +432,7 @@ func (c EveController) getLayers(w http.ResponseWriter, r *http.Request, modelTy
 		}
 
 		var data interface{}
-		if err := c.makeRequest(fmt.Sprintf("/%s%s/%d", layerType, addedString, id), &data); err != nil {
+		if err := c.makeRequest(r, fmt.Sprintf("/%s%s/%d", layerType, addedString, id), &data); err != nil {
 			middleware.Log(r.Context()).Error(err.Error())
 			errs = append(errs, err)
 			return
@@ -451,13 +453,13 @@ func (c EveController) getLayers(w http.ResponseWriter, r *http.Request, modelTy
 	}
 
 	var endResult interface{}
-	if err := c.makeRequest(fmt.Sprintf("/%s/%s/%s%s", modelType, id, layerType, addedString), &endResult); err != nil {
+	if err := c.makeRequest(r, fmt.Sprintf("/%s/%s/%s%s", modelType, id, layerType, addedString), &endResult); err != nil {
 		render.Respond(w, r, errors.NotFoundf("error getting end result data"))
 		return
 	}
 
 	var baseModel interface{}
-	if err := c.makeRequest(fmt.Sprintf("/%s/%s", modelType, id), &baseModel); err != nil {
+	if err := c.makeRequest(r, fmt.Sprintf("/%s/%s", modelType, id), &baseModel); err != nil {
 		render.Respond(w, r, errors.NotFoundf("error getting base model"))
 		return
 	}
@@ -494,9 +496,19 @@ func (c EveController) getMetadata(path string, model interface{}) error {
 
 
 // We can update this method to accept an enum or something to determine which api to go to and what to strip off
-func (c EveController) makeRequest(path string, model interface{}) error {
+func (c EveController) makeRequest(r *http.Request, path string, model interface{}) error {
 
-	resp, err := http.Get(fmt.Sprintf("%s%s", c.cfg.EveAPIUrl, path))
+	client := &http.Client{}
+
+	req, err := http.NewRequest(r.Method, fmt.Sprintf("%s%s", c.cfg.EveAPIUrl, path), nil)
+	if err != nil {
+		return err
+	}
+
+	authToken := jwtauth.TokenFromHeader(r)
+	req.Header.Set("Authorization", "BEARER " + authToken)
+
+	resp, err := client.Do(req)
 	if err != nil {
 		return errors.Wrap(err)
 	}
@@ -508,4 +520,6 @@ func (c EveController) makeRequest(path string, model interface{}) error {
 
 	return nil
 }
+
+
 

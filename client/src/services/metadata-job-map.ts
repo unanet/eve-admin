@@ -15,7 +15,7 @@ import {
     jobService,
     metadataService
 } from "./";
-import {APIResponse, apiService, APIType} from "@/utils/APIType";
+import {APIResponse, apiService, APIType} from "@/utils/api";
 
 const metadataJobMapService = new class extends BaseService {
     baseUrl = "/metadata/job-maps"

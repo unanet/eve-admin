@@ -5,7 +5,7 @@ import {
     shouldShowRowNumbersMatch,
     shouldShowRowStringsMatch
 } from "@/utils/helpers";
-import {APIResponse, apiService, APIType} from "@/utils/APIType";
+import {APIResponse, apiService, APIType} from "@/utils/api";
 
 const BaseService = class {
     public baseUrl = "/"

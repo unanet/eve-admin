@@ -7,7 +7,7 @@ import {
 } from "@/models";
 import {FormFieldType} from "@/components/Form/FormProps";
 import {BaseService} from "./base";
-import {APIResponse, apiService, APIType} from "@/utils/APIType";
+import {APIResponse, apiService, APIType} from "@/utils/api";
 
 const jobService = new class extends BaseService {
     baseUrl = "/jobs"
