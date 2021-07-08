@@ -3,6 +3,9 @@ export default {
         return state.title
     },
     isLoggedIn: (state: any) => {
-        return  state.isLoggedIn
+        return state.isLoggedIn
+    },
+    getUserInfo: (state: any) => {
+        return state.userInfo
     }
 }

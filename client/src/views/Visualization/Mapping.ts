@@ -17,7 +17,7 @@ export default defineComponent({
             layerType: "",
             modelType: "",
             layerData: {},
-            layerDataKey: ["definition", "data"] as string[] | string, // Defaults to definitions, this is overwritten in the mounted function if this is a metadata call
+            layerDataKey: ["definition"] as string[] | string, // Defaults to definitions, this is overwritten in the mounted function if this is a metadata call
         }
     },
     mounted() {

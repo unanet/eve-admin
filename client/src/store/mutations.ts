@@ -7,5 +7,8 @@ export default {
     },
     isLoggedIn (state: any, loggedIn: boolean) {
         state.isLoggedIn = loggedIn
+    },
+    userInfo(state: any, userInfo: any) {
+        state.userInfo = userInfo
     }
 }

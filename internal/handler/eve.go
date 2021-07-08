@@ -51,7 +51,6 @@ func (c EveController) Setup(r *Routers) {
 	r.Auth.Get("/eve/service/{id}/definition-maps", c.getServiceDefinitionLayers)
 	r.Auth.Get("/eve/job/{id}/metadata-maps", c.getJobMetadataLayers)
 
-
 	// These three functions can probably be leveraged in a different way / updated to be more consistent. Maybe this is just {model}/{id}/metadata
 	r.Auth.Get("/eve/cluster/{id}/metadata-maps", c.getClusterMetadataLayers)
 	r.Auth.Get("/eve/artifact/{id}/metadata-maps", c.getArtifactMetadataLayers)
