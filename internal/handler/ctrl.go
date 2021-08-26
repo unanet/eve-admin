@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"gitlab.unanet.io/devops/cloud-admin/internal/config"
-	"gitlab.unanet.io/devops/cloud-admin/internal/manager"
+	"github.com/unanet/eve-admin/internal/config"
+	"github.com/unanet/eve-admin/internal/manager"
 )
 
 func InitializeControllers(config config.Config, mgr *manager.Service) ([]Controller, error) {
@@ -15,6 +15,5 @@ func InitializeControllers(config config.Config, mgr *manager.Service) ([]Contro
 		NewEveController(config),
 
 		NewAPIProxyController(config),
-
 	}, nil
 }

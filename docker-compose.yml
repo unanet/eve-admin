@@ -1,7 +1,7 @@
 version: "3.9"
 services:
-  cloud-admin:
-    container_name: cloud-admin
+  eve-admin:
+    container_name: eve-admin
     networks:
       - cloud-net
     env_file:

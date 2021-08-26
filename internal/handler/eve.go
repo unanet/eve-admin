@@ -3,8 +3,6 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/go-chi/jwtauth"
-	"gitlab.unanet.io/devops/go/pkg/mergemap"
 	"net/http"
 	"net/url"
 	"sort"
@@ -12,11 +10,14 @@ import (
 	"strings"
 	"time"
 
-	"gitlab.unanet.io/devops/cloud-admin/internal/config"
-	"gitlab.unanet.io/devops/cloud-admin/internal/models"
-	"gitlab.unanet.io/devops/eve/pkg/eve"
-	"gitlab.unanet.io/devops/go/pkg/errors"
-	"gitlab.unanet.io/devops/go/pkg/middleware"
+	"github.com/go-chi/jwtauth"
+	"github.com/unanet/go/pkg/mergemap"
+
+	"github.com/unanet/eve-admin/internal/config"
+	"github.com/unanet/eve-admin/internal/models"
+	"github.com/unanet/eve/pkg/eve"
+	"github.com/unanet/go/pkg/errors"
+	"github.com/unanet/go/pkg/middleware"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
@@ -125,7 +126,6 @@ func (c EveController) dashboardMetrics(w http.ResponseWriter, r *http.Request) 
 		},
 	}
 
-
 	for i, metadata := range types {
 		var itemArray []interface{}
 
@@ -215,14 +215,13 @@ func (c EveController) getNamespaceMetadataLayers(w http.ResponseWriter, r *http
 			}
 
 			layers = append(layers, models.LayerMap{
-				Description: metadataServiceMap.Description,
-				MetadataID: metadataServiceMap.MetadataID,
+				Description:   metadataServiceMap.Description,
+				MetadataID:    metadataServiceMap.MetadataID,
 				StackingOrder: metadataServiceMap.StackingOrder,
-				ArtifactID: id,
+				ArtifactID:    id,
 
 				Metadata: metadata,
 			})
-
 
 			collectedMetadata = append(collectedMetadata, metadata.Value)
 
@@ -239,15 +238,14 @@ func (c EveController) getNamespaceMetadataLayers(w http.ResponseWriter, r *http
 	}
 
 	response := models.LayerResponse{
-		Model: baseModel,
-		Layers: layers,
+		Model:     baseModel,
+		Layers:    layers,
 		EndResult: mergedMetadata,
 	}
 
 	render.Status(r, http.StatusOK)
 	render.Respond(w, r, response)
 }
-
 
 func (c EveController) getArtifactMetadataLayers(w http.ResponseWriter, r *http.Request) {
 	idStr := chi.URLParam(r, "id")
@@ -292,14 +290,13 @@ func (c EveController) getArtifactMetadataLayers(w http.ResponseWriter, r *http.
 			}
 
 			layers = append(layers, models.LayerMap{
-				Description: metadataServiceMap.Description,
-				MetadataID: metadataServiceMap.MetadataID,
+				Description:   metadataServiceMap.Description,
+				MetadataID:    metadataServiceMap.MetadataID,
 				StackingOrder: metadataServiceMap.StackingOrder,
-				ArtifactID: id,
+				ArtifactID:    id,
 
 				Metadata: metadata,
 			})
-
 
 			collectedMetadata = append(collectedMetadata, metadata.Value)
 
@@ -316,8 +313,8 @@ func (c EveController) getArtifactMetadataLayers(w http.ResponseWriter, r *http.
 	}
 
 	response := models.LayerResponse{
-		Model: baseModel,
-		Layers: layers,
+		Model:     baseModel,
+		Layers:    layers,
 		EndResult: mergedMetadata,
 	}
 
@@ -369,14 +366,13 @@ func (c EveController) getClusterMetadataLayers(w http.ResponseWriter, r *http.R
 			}
 
 			layers = append(layers, models.LayerMap{
-				Description: metadataServiceMap.Description,
-				MetadataID: metadataServiceMap.MetadataID,
+				Description:   metadataServiceMap.Description,
+				MetadataID:    metadataServiceMap.MetadataID,
 				StackingOrder: metadataServiceMap.StackingOrder,
-				ClusterID: id,
+				ClusterID:     id,
 
 				Metadata: metadata,
 			})
-
 
 			collectedMetadata = append(collectedMetadata, metadata.Value)
 
@@ -393,8 +389,8 @@ func (c EveController) getClusterMetadataLayers(w http.ResponseWriter, r *http.R
 	}
 
 	response := models.LayerResponse{
-		Model: baseModel,
-		Layers: layers,
+		Model:     baseModel,
+		Layers:    layers,
 		EndResult: mergedMetadata,
 	}
 
@@ -493,7 +489,6 @@ func (c EveController) getMetadata(path string, model interface{}) error {
 	return nil
 }
 
-
 // We can update this method to accept an enum or something to determine which api to go to and what to strip off
 func (c EveController) makeRequest(r *http.Request, path string, model interface{}) error {
 
@@ -505,7 +500,7 @@ func (c EveController) makeRequest(r *http.Request, path string, model interface
 	}
 
 	authToken := jwtauth.TokenFromHeader(r)
-	req.Header.Set("Authorization", "BEARER " + authToken)
+	req.Header.Set("Authorization", "BEARER "+authToken)
 
 	resp, err := client.Do(req)
 	if err != nil {
@@ -519,6 +514,3 @@ func (c EveController) makeRequest(r *http.Request, path string, model interface
 
 	return nil
 }
-
-
-

@@ -3,22 +3,23 @@ package api
 import (
 	"context"
 	"fmt"
-	"gitlab.unanet.io/devops/cloud-admin/internal/manager"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
+	"github.com/unanet/eve-admin/internal/manager"
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"go.uber.org/zap"
 
-	"gitlab.unanet.io/devops/cloud-admin/internal/config"
-	"gitlab.unanet.io/devops/cloud-admin/internal/handler"
-	"gitlab.unanet.io/devops/go/pkg/log"
-	"gitlab.unanet.io/devops/go/pkg/metrics"
-	"gitlab.unanet.io/devops/go/pkg/middleware"
+	"github.com/unanet/eve-admin/internal/config"
+	"github.com/unanet/eve-admin/internal/handler"
+	"github.com/unanet/go/pkg/log"
+	"github.com/unanet/go/pkg/metrics"
+	"github.com/unanet/go/pkg/middleware"
 )
 
 var (
@@ -37,7 +38,7 @@ type Api struct {
 	mgr         *manager.Service
 }
 
-func NewApi(controllers []handler.Controller, c config.Config, mgr *manager.Service) (*Api, error) {
+func NewApi(controllers []handler.Controller, c config.Config, mgr *manager.Service) *Api {
 	router := chi.NewMux()
 	return &Api{
 		r:           router,
@@ -53,7 +54,7 @@ func NewApi(controllers []handler.Controller, c config.Config, mgr *manager.Serv
 		done:       make(chan bool),
 		sigChannel: make(chan os.Signal, 1024),
 		mgr:        mgr,
-	}, nil
+	}
 }
 
 // Handle SIGNALS

@@ -2,13 +2,14 @@ package handler
 
 import (
 	"encoding/json"
-	"github.com/go-chi/jwtauth"
-	"github.com/go-chi/render"
-	"gitlab.unanet.io/devops/cloud-admin/internal/manager"
-	"gitlab.unanet.io/devops/go/pkg/identity"
-	"gitlab.unanet.io/devops/go/pkg/middleware"
 	"net/http"
 	"time"
+
+	"github.com/go-chi/jwtauth"
+	"github.com/go-chi/render"
+	"github.com/unanet/eve-admin/internal/manager"
+	"github.com/unanet/go/pkg/identity"
+	"github.com/unanet/go/pkg/middleware"
 )
 
 // AuthController is the Controller/Handler for oidc callback route
@@ -48,7 +49,6 @@ func (c AuthController) auth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
 	var idTokenClaims = new(json.RawMessage)
 	if err := verifiedToken.Claims(&idTokenClaims); err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -56,14 +56,13 @@ func (c AuthController) auth(w http.ResponseWriter, r *http.Request) {
 	}
 
 	render.JSON(w, r, TokenResponse{
-		AccessToken:  unknownToken,
-		Expiry:       verifiedToken.Expiry,
-		Claims:       idTokenClaims,
+		AccessToken: unknownToken,
+		Expiry:      verifiedToken.Expiry,
+		Claims:      idTokenClaims,
 	})
 
 	//render.Respond(w, r, fmt.Sprintf("hello %s %s", verifiedToken.Subject, verifiedToken.Audience))
 }
-
 
 func (c AuthController) callback(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Query().Get("state") != c.state {

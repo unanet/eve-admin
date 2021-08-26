@@ -3,21 +3,22 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/go-chi/jwtauth"
-	"gitlab.unanet.io/devops/go/pkg/log"
-	"go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
 
-	"gitlab.unanet.io/devops/cloud-admin/internal/config"
+	"github.com/go-chi/jwtauth"
+	"github.com/unanet/go/pkg/log"
+	"go.uber.org/zap"
+
+	"github.com/unanet/eve-admin/internal/config"
 
 	"github.com/go-chi/render"
 )
 
 type APIProxyController struct {
-	cfg     config.Config
+	cfg config.Config
 }
 
 func NewAPIProxyController(cfg config.Config) *APIProxyController {
@@ -61,7 +62,7 @@ func (c APIProxyController) get(w http.ResponseWriter, r *http.Request) {
 	resp, err := client.Do(req)
 
 	if err != nil {
-		log.Logger.Error("unable to get from proxy " + r.URL.String(), zap.Error(err))
+		log.Logger.Error("unable to get from proxy "+r.URL.String(), zap.Error(err))
 		render.Status(r, http.StatusNotFound)
 		render.Respond(w, r, "something went wrong")
 		return
@@ -86,7 +87,6 @@ func (c APIProxyController) get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-
 	render.JSON(w, r, returnValue)
 }
 
@@ -95,7 +95,7 @@ func (c APIProxyController) put(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c APIProxyController) post(w http.ResponseWriter, r *http.Request) {
-	c.makeRequest( w, r)
+	c.makeRequest(w, r)
 }
 
 func (c APIProxyController) delete(w http.ResponseWriter, r *http.Request) {
@@ -139,9 +139,7 @@ func (c APIProxyController) makeRequest(w http.ResponseWriter, r *http.Request) 
 	render.Respond(w, r, jsonBody)
 }
 
-
-
 func (c APIProxyController) forwardHeaders(req *http.Request, newRequest *http.Request) {
 	authToken := jwtauth.TokenFromHeader(req)
-	newRequest.Header.Set("Authorization", "BEARER " + authToken)
+	newRequest.Header.Set("Authorization", "BEARER "+authToken)
 }

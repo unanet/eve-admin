@@ -31,7 +31,6 @@ docker-scanner-exec = docker run --rm \
 	--user="${DOCKER_UID}:${DOCKER_GID}" \
 	sonarsource/sonar-scanner-cli sonar-scanner -Dsonar.projectKey=${PROJECT_NAME} -Dsonar.exclusions=**/*_test.go,**/*mock*.go,**/_theme/**
 
-
 docker-go-exec = docker run --rm \
 	-e DOCKER_UID=${DOCKER_UID} \
 	-e DOCKER_GID=${DOCKER_GID} \
@@ -41,7 +40,6 @@ docker-go-exec = docker run --rm \
 	-w /src \
 	${GO_BUILD_IMAGE}
 
-
 docker-node-exec = docker run --rm \
 	-e DOCKER_UID=${DOCKER_UID} \
 	-e DOCKER_GID=${DOCKER_GID} \
@@ -49,7 +47,6 @@ docker-node-exec = docker run --rm \
 	-v ${HOME}/.ssh/id_rsa:/home/unanet/.ssh/id_rsa \
 	-w /app \
 	${NODE_BUILD_IMAGE}
-
 
 check-tag = !(git rev-parse -q --verify "refs/tags/v${PATCH_VERSION}" > /dev/null 2>&1) || \
 	(echo "the version: ${PATCH_VERSION} has been released already" && exit 1)
@@ -65,7 +62,7 @@ build-client:
 build-server: 
 	docker pull ${GO_BUILD_IMAGE}
 	mkdir -p bin
-	$(docker-go-exec) go build -ldflags="-X 'gitlab.unanet.io/devops/${PROJECT_NAME}/internal/handler.Version=${VERSION}'" \
+	$(docker-go-exec) go build -ldflags="-X 'github.com/unanet/${PROJECT_NAME}/internal/handler.Version=${VERSION}'" \
 		-o ./bin/${PROJECT_NAME} ./cmd/${PROJECT_NAME}/main.go
 
 build: check_version build-client build-server

@@ -4,8 +4,8 @@ import (
 	"sync"
 
 	"github.com/kelseyhightower/envconfig"
-	"gitlab.unanet.io/devops/go/pkg/identity"
-	"gitlab.unanet.io/devops/go/pkg/log"
+	"github.com/unanet/go/pkg/identity"
+	"github.com/unanet/go/pkg/log"
 	"go.uber.org/zap"
 )
 
@@ -33,9 +33,9 @@ type Config struct {
 	ReadOnly                      bool   `split_words:"true" default:"true"`
 	Port                          int    `split_words:"true" default:"8080"`
 	MetricsPort                   int    `split_words:"true" default:"3001"`
-	ServiceName                   string `split_words:"true" default:"cloud-admin"`
+	ServiceName                   string `split_words:"true" default:"eve-admin"`
 	RouteMount                    string `split_words:"true" default:"admin"`
-	EveAPIUrl                     string `split_words:"true" default:"https://eve-api.unanet.io"`
+	EveAPIUrl                     string `split_words:"true" required:"true"`
 	DashboardCacheDurationSeconds int    `split_words:"true" default:"15"`
 }
 

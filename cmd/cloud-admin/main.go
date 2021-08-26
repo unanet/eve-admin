@@ -1,15 +1,16 @@
 package main
 
 import (
-	"gitlab.unanet.io/devops/cloud-admin/internal/manager"
 	"net/http"
 
-	"gitlab.unanet.io/devops/cloud-admin/internal/api"
-	"gitlab.unanet.io/devops/cloud-admin/internal/config"
-	"gitlab.unanet.io/devops/cloud-admin/internal/handler"
-	evehttp "gitlab.unanet.io/devops/go/pkg/http"
-	"gitlab.unanet.io/devops/go/pkg/identity"
-	"gitlab.unanet.io/devops/go/pkg/log"
+	"github.com/unanet/eve-admin/internal/manager"
+
+	"github.com/unanet/eve-admin/internal/api"
+	"github.com/unanet/eve-admin/internal/config"
+	"github.com/unanet/eve-admin/internal/handler"
+	evehttp "github.com/unanet/go/pkg/http"
+	"github.com/unanet/go/pkg/identity"
+	"github.com/unanet/go/pkg/log"
 	"go.uber.org/zap"
 )
 
@@ -35,14 +36,8 @@ func main() {
 		log.Logger.Panic("Unable to Initialize the Controllers", zap.Error(err))
 	}
 
-	// Create the App (API Server/Listener)
-	app, err := api.NewApi(controllers, cfg, mgr)
-	if err != nil {
-		log.Logger.Panic("Failed to Create Cloud-Admind API", zap.Error(err))
-	}
-
-	// Start the app (listen for requests)
-	app.Start()
+	// Create and Start the app (listen for requests)
+	api.NewApi(controllers, cfg, mgr).Start()
 }
 
 // This is required for the HTTP Client Request/Response Logging

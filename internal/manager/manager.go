@@ -2,16 +2,17 @@ package manager
 
 import (
 	"context"
+	"net/http"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/go-chi/jwtauth"
 	"github.com/go-chi/render"
-	"gitlab.unanet.io/devops/cloud-admin/internal/config"
-	"gitlab.unanet.io/devops/go/pkg/errors"
-	"gitlab.unanet.io/devops/go/pkg/identity"
-	"gitlab.unanet.io/devops/go/pkg/log"
-	"gitlab.unanet.io/devops/go/pkg/middleware"
+	"github.com/unanet/eve-admin/internal/config"
+	"github.com/unanet/go/pkg/errors"
+	"github.com/unanet/go/pkg/identity"
+	"github.com/unanet/go/pkg/log"
+	"github.com/unanet/go/pkg/middleware"
 	"go.uber.org/zap"
-	"net/http"
 )
 
 // Key to use when setting the request ID.
@@ -39,7 +40,7 @@ func (s *Service) OpenIDService() *identity.Service {
 }
 
 func NewService(cfg *config.Config, opts ...Option) *Service {
-	svc := &Service{cfg: cfg, cbstate: "unanet-cloud-admin"}
+	svc := &Service{cfg: cfg, cbstate: "unanet-eve-admin"}
 
 	for _, opt := range opts {
 		opt(svc)
