@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {defineComponent} from "vue";
 import JsonEditor from "@/components/JsonEditor/index.vue"
 import {getObjectValueByKey} from "@/utils/helpers";
@@ -14,19 +15,21 @@ export default defineComponent({
         JsonEditor
     },
     data() {
-      return {
-          layeringSliderValue: "0;2"
-      }
+        return {
+            layeringSliderValue: "0;2"
+        }
     },
     mounted() {
 
         let title = this.layerData.model.name;
 
         if (this.layerData.model.namespace_name) {
+            // @ts-ignore
             title = `${title} in ${this.layerData.model.namespace_name}`
         }
 
         (store as Record<string, any>).commit('changePage', `Layer Details: ${title}`);
+        // @ts-ignore
         this.initSlider();
     },
     methods: {
@@ -49,7 +52,7 @@ export default defineComponent({
             $('#layering_slider').ionRangeSlider({
                 type: 'double',
                 postfix: ' Layer',
-                values: ["A","B","C"],
+                values: ["A", "B", "C"],
                 keyboard: true,
                 onChange: function (obj: {}) {
                     console.log("on change", obj)

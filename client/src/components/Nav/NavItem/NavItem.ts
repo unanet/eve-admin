@@ -9,11 +9,13 @@ export default defineComponent({
         NavItem,
     },
     props: ["item"],
+    // @ts-ignore
     methods: {
         isTree(item: INavItem): boolean {
             return item.children && item.children.length > 0;
         },
         isRouteActive(item: INavItem): boolean {
+            // @ts-ignore
             return findIn(item.url, this.$route.path)
             // const chunks = this.$route.path.split("/").shift()
             // console.log(this.$route.path)

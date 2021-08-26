@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {defineComponent} from "vue";
 
 import "./third-party/chart.js/Chart.bundle.min.js";
@@ -11,6 +12,7 @@ export default defineComponent({
     props: {
         chartConfig: {},
     },
+    // @ts-ignore
     mounted() {
         const self = (this as Record<string, any>);
 

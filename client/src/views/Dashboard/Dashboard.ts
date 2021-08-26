@@ -10,6 +10,7 @@ export default defineComponent({
         AdminLayout,
         ChartComponent
     },
+    // @ts-ignore
     created() {
         const self = (this as Record<string, any>);
         service.getInformation().then((response: any) => {
@@ -26,8 +27,8 @@ export default defineComponent({
     data() {
         return {
             chartConfig: {
-              labels: Array<String>(),
-              values: Array<Number>()
+                labels: Array<String>(),
+                values: Array<Number>()
             },
             loaded: false,
             items: [] as type[]

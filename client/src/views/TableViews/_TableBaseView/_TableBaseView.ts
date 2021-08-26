@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {defineComponent} from "vue";
 import config from "@/config";
 
@@ -19,6 +20,7 @@ const _TableBaseViewMixin = defineComponent({
         JsGrid,
         ModalComponent
     },
+    // @ts-ignore
     mixins: [
         _GrowlMixin
     ],
@@ -27,14 +29,16 @@ const _TableBaseViewMixin = defineComponent({
         (this as Record<string, any>).refreshGrid();
     },
     methods: {
-        checkURLForQueryParamAndOpenModalIfSet: function(responseData: any[]) {
+        checkURLForQueryParamAndOpenModalIfSet: function (responseData: any[]) {
             // Make this call non blocking, not the best way to do it, but it works
             setTimeout(() => {
                 const queryParamIDField = "id";
+                // @ts-ignore
                 const queryParams = this.$route.query;
                 if (queryParamIDField in queryParams) {
                     const idToOpen = getObjectValueByKey(queryParams, queryParamIDField)
-                    for(const item of responseData) {
+                    for (const item of responseData) {
+                        // @ts-ignore
                         if (item[this.idField] == Number(idToOpen) || item[this.idField] == idToOpen) {
                             // simulate a row click on the item
                             this.onRowClick({
@@ -47,15 +51,17 @@ const _TableBaseViewMixin = defineComponent({
                 }
             }, 0)
         },
-        refreshGrid: function() {
+        refreshGrid: function () {
             const self = this as Record<string, any>;
             self.getData();
             self.formConfig.formFields = self.service.getFormFields();
         },
+        // @ts-ignore
         getData: function () {
             const self = this as Record<string, any>;
 
             const service = self.service
+            // @ts-ignore
             return service[this.getDataFunction]().then((response: any) => {
                 // Catch all to make sure we render the table appropriately, This should probably be fixed on the API side
                 if (response == null) {
@@ -90,7 +96,8 @@ const _TableBaseViewMixin = defineComponent({
                 editItemConfig: self.formConfig.editItemConfig,
             });
 
-            this.$router.push({ query: { id: item[this.idField] }})
+            // @ts-ignore
+            this.$router.push({query: {id: item[this.idField]}})
 
             this.openModal();
         },
@@ -111,6 +118,7 @@ const _TableBaseViewMixin = defineComponent({
         },
         _onSubmit: function (item: any, msg: string) {
             return new Promise((resolve, reject) => {
+                // @ts-ignore
                 const method = this.formConfig.isCreate ? "create" : "update"
 
                 // @ts-ignore ignore potential null
@@ -124,7 +132,7 @@ const _TableBaseViewMixin = defineComponent({
                         // Hacky way to do this, sorry!
                         // Insert our new item in the grid if we are calling create
                         // if (self.selectedItem[self.idField] != (resp.data as any)[self.idField]) {
-                            $("#jsGrid").jsGrid("insertItem", resp);
+                        $("#jsGrid").jsGrid("insertItem", resp);
                         // }
                     }
 
@@ -138,34 +146,40 @@ const _TableBaseViewMixin = defineComponent({
             });
         },
         clickedAddNew: function () {
+            // @ts-ignore
             this.selectedItem = null
 
             // @ts-ignore Object
             this.formConfig = Object.assign(this.formConfig, {
                 // Apply decorators
+                // @ts-ignore
                 title: this.getModalName(this.selectedItem),
                 isCreate: true,
+                // @ts-ignore
                 createNewItemConfig: this.formConfig.createNewItemConfig
             } as IForm);
 
             this.openModal();
         },
-        getModalName: function(_: any) {
+        getModalName: function (_: any) {
             // noop
             return
         },
-        openModal: function() {
+        openModal: function () {
+            // @ts-ignore
             this.enableModal = true;
             $('#modal-xl').modal('show');
         },
         closeModal: function () {
+            // @ts-ignore
             this.enableModal = false;
             $('#modal-xl').modal('hide');
 
             // Clear ID out of url
-            this.$router.push({ query: { id: null }})
+            // @ts-ignore
+            this.$router.push({query: {id: null}})
         },
-        isForcedReadOnly: function(): boolean {
+        isForcedReadOnly: function (): boolean {
             return config.READ_ONLY;
         }
     },
@@ -202,7 +216,7 @@ const _TableBaseViewMixin = defineComponent({
     }
 })
 
-function NewTableBaseView(name: string, service: any, options?: { modelIDField?: string, mixin?: Record<string, any>}) {
+function NewTableBaseView(name: string, service: any, options?: {modelIDField?: string, mixin?: Record<string, any>}) {
 
     const idField = options?.modelIDField || "id"
 

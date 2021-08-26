@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {defineComponent} from "vue";
 import {IFormField} from "@/components/Form/FormProps";
 
@@ -8,22 +9,23 @@ export default defineComponent({
         value: Object as () => {}
     },
     watch: {
-        config: function(newVal: IFormField) {
+        config: function (newVal: IFormField) {
             if (newVal != null) {
                 (this as Record<string, any>).initializeForm(newVal);
             }
         },
-        value: function(newVal: {}) {
+        value: function (newVal: {}) {
             if (newVal != null) {
                 (this as Record<string, any>).initializeForm(newVal);
             }
         }
     },
     mounted() {
+        // @ts-ignore
         (this as Record<string, any>).initializeForm(this.config || this.value);
     },
     methods: {
-        initializeForm(data: IFormField|{}) {
+        initializeForm(data: IFormField | {}) {
             (this as Record<string, any>).jsonDisplayValue = this.syntaxHighlight(("value" in data) ? data.value : data)
         },
         syntaxHighlight(data: any) {
@@ -34,25 +36,25 @@ export default defineComponent({
             }
             return data.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
                 .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match: any) {
-                let cls = 'number';
-                if (/^"/.test(match)) {
-                    if (/:$/.test(match)) {
-                        cls = `${fieldPrefix}-key`;
-                    } else {
-                        cls = `${fieldPrefix}-string`;
+                    let cls = 'number';
+                    if (/^"/.test(match)) {
+                        if (/:$/.test(match)) {
+                            cls = `${fieldPrefix}-key`;
+                        } else {
+                            cls = `${fieldPrefix}-string`;
+                        }
+                    } else if (/true|false/.test(match)) {
+                        cls = `${fieldPrefix}-boolean`;
+                    } else if (/null/.test(match)) {
+                        cls = `${fieldPrefix}-null`;
                     }
-                } else if (/true|false/.test(match)) {
-                    cls = `${fieldPrefix}-boolean`;
-                } else if (/null/.test(match)) {
-                    cls = `${fieldPrefix}-null`;
-                }
-                return '<span class="' + cls + '">' + match + '</span>';
-            });
+                    return '<span class="' + cls + '">' + match + '</span>';
+                });
         }
     },
     data() {
-      return {
-          jsonDisplayValue: {},
-      }
+        return {
+            jsonDisplayValue: {},
+        }
     },
 });

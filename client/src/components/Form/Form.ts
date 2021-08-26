@@ -1,3 +1,4 @@
+// @ts-nocheck
 import {defineComponent} from "vue";
 import {FormFieldType, FormSubmitResponse, IForm, IFormField} from "@/components/Form/FormProps";
 import {_GrowlMixin} from "@/components/Growl/Growl";
@@ -26,7 +27,7 @@ export default defineComponent({
         extraConfig: Object as () => {},
     },
     mounted() {
-        if(this.extraConfig) {
+        if (this.extraConfig) {
             this._config = merge(this.config, this.extraConfig);
         } else {
             this._config = this.config as Record<string, any>
@@ -86,6 +87,7 @@ export default defineComponent({
         getFieldConfig(): Record<any, any> {
             const defaultOmissionsArray = ["created_at"];
 
+            // @ts-ignore
             const cfg = (this._config as Record<string, any>)
             return (cfg?.isCreate) ?
                 cfg?.createNewItemConfig || defaultOmissionsArray :

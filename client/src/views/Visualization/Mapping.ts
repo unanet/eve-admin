@@ -11,6 +11,7 @@ export default defineComponent({
         ChartComponent,
         LayerVisualizer
     },
+    // @ts-ignore
     data() {
         return {
             fetchedData: false,
@@ -26,10 +27,13 @@ export default defineComponent({
         const {id, model, type} = self.$route.params;
 
         if (type === "metadata") {
+            // @ts-ignore
             this.layerDataKey = "metadata"
         }
 
+        // @ts-ignore
         this.modelType = model
+        // @ts-ignore
         this.layerType = type
 
         // @ts-ignore

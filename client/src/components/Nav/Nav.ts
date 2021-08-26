@@ -15,6 +15,7 @@ export default defineComponent({
     components: {
         NavItem
     },
+    // @ts-ignore
     data() {
         return {
             items: [
