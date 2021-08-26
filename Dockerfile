@@ -1,4 +1,4 @@
-FROM unanet-docker.jfrog.io/alpine-base
+FROM alpine
 
 ENV LOG_LEVEL info
 ENV PORT 8080
