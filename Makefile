@@ -12,8 +12,11 @@ DOCKER_GID = $(shell id -g)
 PROJECT_NAME := $(shell basename $(CURDIR))
 CUR_DIR := $(shell pwd)
 NPMCACHE ?= ${CUR_DIR}/node_modules
-NODE_BUILD_IMAGE := node
-GO_BUILD_IMAGE := golang
+# NODE_BUILD_IMAGE := node
+# GO_BUILD_IMAGE := golang
+NODE_BUILD_IMAGE := unanet-docker.jfrog.io/node
+GO_BUILD_IMAGE := unanet-docker.jfrog.io/golang
+
 IMAGE_NAME := ${PROJECT_NAME}
 
 docker-go-exec = docker run --rm \
